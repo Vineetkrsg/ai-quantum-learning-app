@@ -49,14 +49,14 @@ export const DashboardPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+            <h2 className="text-2xl font-bold text-[var(--fg-main)] tracking-tight">
               Welcome back, {USER_OVERVIEW.name}
             </h2>
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 font-mono">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[var(--surface-sunken)] text-sciteal-700 dark:text-sciteal-300 border border-[var(--border-card)] font-mono font-semibold">
               {userRank}
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-[var(--fg-muted)] mt-1">
             Pick up right where you left off in your quantum mechanics and circuit journey.
           </p>
         </div>
@@ -111,16 +111,16 @@ export const DashboardPage: React.FC = () => {
         {/* Left 2 Columns: Active Module, Lab Card, Recommended Lesson */}
         <div className="lg:col-span-2 space-y-6">
           {/* Current Active Module Card */}
-          <Card variant="glass" className="p-6 relative overflow-hidden">
+          <Card variant="default" className="p-6 relative overflow-hidden">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <Badge variant="cyan" dot>Active Module</Badge>
-                  <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                  <Badge variant="teal" dot>Active Module</Badge>
+                  <span className="text-xs text-[var(--fg-muted)] font-mono">
                     Module {(activeModuleIndex >= 0 ? activeModuleIndex : 0) + 1} of 7
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                <h3 className="text-lg font-bold text-[var(--fg-main)]">
                   {currentModule.title}
                 </h3>
               </div>
@@ -131,24 +131,24 @@ export const DashboardPage: React.FC = () => {
               </Link>
             </div>
 
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mb-4">
+            <p className="text-xs text-[var(--fg-muted)] leading-relaxed max-w-2xl mb-4">
               {currentModule.description}
             </p>
 
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs font-mono">
-                <span className="text-slate-500 dark:text-slate-400">Current Progress</span>
-                <span className="text-cyan-600 dark:text-cyan-300 font-bold">{currentModuleProgress}% Completed</span>
+                <span className="text-[var(--fg-muted)]">Current Progress</span>
+                <span className="text-sciteal-700 dark:text-sciteal-400 font-bold">{currentModuleProgress}% Completed</span>
               </div>
               <ProgressBar value={currentModuleProgress} variant="cyan" size="md" />
             </div>
 
             {/* Next lesson teaser */}
-            <div className="mt-5 pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
-              <span className="text-slate-600 dark:text-slate-400">
-                Up next: <span className="text-slate-900 dark:text-white font-medium">{currentModule.lessons[0]?.title || 'Introduction'}</span>
+            <div className="mt-5 pt-4 border-t border-[var(--border-card)] flex items-center justify-between text-xs">
+              <span className="text-[var(--fg-muted)]">
+                Up next: <span className="text-[var(--fg-main)] font-medium">{currentModule.lessons[0]?.title || 'Introduction'}</span>
               </span>
-              <span className="text-slate-500 font-mono">{currentModule.estimatedTime}</span>
+              <span className="text-[var(--fg-muted)] font-mono">{currentModule.estimatedTime}</span>
             </div>
           </Card>
 

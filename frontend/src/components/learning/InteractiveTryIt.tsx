@@ -5,26 +5,59 @@ import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Play, RotateCcw, BarChart3, Clock, CheckCircle2, HelpCircle, Cpu, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useProgress } from '../../context/ProgressContext';
+
+export interface InteractiveTryState {
+  selectedPredictionId: string | null;
+  hasRun: boolean;
+  results: {
+    counts: Record<string, number>;
+    percentages: Record<string, number>;
+    executionTimeMs: number;
+  } | null;
+}
+
+const DEFAULT_STATE: InteractiveTryState = {
+  selectedPredictionId: null,
+  hasRun: false,
+  results: null
+};
 
 interface InteractiveTryItProps {
+  moduleId?: string;
+  lessonId?: string;
+  activityId?: string;
+  scopedKey?: string;
   data: InteractiveTryData;
   onRunSuccess?: () => void;
 }
 
 export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
+  moduleId,
+  lessonId,
+  activityId = 'interactive-try-1',
+  scopedKey,
   data,
   onRunSuccess
 }) => {
-  const [selectedPredictionId, setSelectedPredictionId] = useState<string | null>(null);
-  const [isRunning, setIsRunning] = useState(false);
-  const [hasRun, setHasRun] = useState(false);
-  const [results, setResults] = useState<{
-    counts: Record<string, number>;
-    percentages: Record<string, number>;
-    executionTimeMs: number;
-  } | null>(null);
+  const progress = useProgress();
+  const effectiveKey = scopedKey || `${moduleId || 'module'}/${lessonId || 'lesson'}/${activityId}`;
+  const currentState = progress.getActivityState<InteractiveTryState>(effectiveKey, DEFAULT_STATE);
 
+  const selectedPredictionId = currentState.selectedPredictionId;
+  const hasRun = currentState.hasRun;
+  const results = currentState.results;
+
+  const [isRunning, setIsRunning] = useState(false);
   const navigate = useNavigate();
+
+  const handleSelectPrediction = (id: string) => {
+    if (hasRun) return;
+    progress.setActivityState<InteractiveTryState>(effectiveKey, {
+      ...currentState,
+      selectedPredictionId: id
+    });
+  };
 
   const handleRun = () => {
     setIsRunning(true);
@@ -55,14 +88,19 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
         });
       }
 
-      setResults({
+      const simResults = {
         counts,
         percentages,
         executionTimeMs: Number((35 + Math.random() * 15).toFixed(1))
+      };
+
+      progress.setActivityState<InteractiveTryState>(effectiveKey, {
+        selectedPredictionId,
+        hasRun: true,
+        results: simResults
       });
 
       setIsRunning(false);
-      setHasRun(true);
       if (onRunSuccess) {
         onRunSuccess();
       }
@@ -70,69 +108,67 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
   };
 
   const handleReset = () => {
-    setSelectedPredictionId(null);
-    setHasRun(false);
-    setResults(null);
+    progress.setActivityState<InteractiveTryState>(effectiveKey, DEFAULT_STATE);
   };
 
   const selectedPrediction = data.predictionOptions.find((p) => p.id === selectedPredictionId);
 
   return (
-    <Card variant="glass" className="overflow-hidden border-cyan-500/40">
-      <CardHeader className="pb-3 border-b border-slate-300/80 dark:border-slate-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+    <Card variant="default" className="overflow-hidden">
+      <CardHeader className="pb-3 border-b border-[var(--border-card)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center font-bold">
+          <div className="w-7 h-7 rounded-lg bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-400 flex items-center justify-center font-bold">
             <Play className="w-3.5 h-3.5 fill-current" />
           </div>
           <div>
             <CardTitle className="text-sm sm:text-base">{data.title}</CardTitle>
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{data.instruction}</p>
+            <p className="text-xs text-[var(--fg-muted)] mt-0.5">{data.instruction}</p>
           </div>
         </div>
 
-        <Badge variant="cyan" size="sm">
+        <Badge variant="teal" size="sm">
           Interactive Activity
         </Badge>
       </CardHeader>
 
       <CardContent className="p-6 space-y-5">
         {/* Circuit Diagram Preview */}
-        <div className="p-4 rounded-xl bg-slate-900 dark:bg-slate-950 border border-slate-700 dark:border-slate-800/80 font-mono text-xs text-cyan-300 overflow-x-auto shadow-inner">
-          <div className="text-[10px] text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1.5 font-sans">
+        <div className="p-4 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-card)] font-mono text-xs text-[var(--fg-main)] overflow-x-auto shadow-inner">
+          <div className="text-[10px] text-[var(--fg-muted)] uppercase tracking-wider mb-1.5 font-sans font-semibold">
             Circuit Blueprint
           </div>
-          <div className="p-2 rounded bg-slate-950/90 dark:bg-slate-900/90 border border-slate-800 font-bold whitespace-pre">
+          <div className="p-2.5 rounded-lg bg-[var(--surface-card)] border border-[var(--border-card)] font-bold whitespace-pre text-[var(--fg-main)]">
             {data.circuitPreview}
           </div>
         </div>
 
         {/* Prediction Question Section */}
         <div className="space-y-2.5">
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-900 dark:text-white">
-            <HelpCircle className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+          <div className="flex items-center gap-2 text-xs font-semibold text-[var(--fg-main)]">
+            <HelpCircle className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
             <span>{data.predictionPrompt}</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {data.predictionOptions.map((opt) => {
               const isSelected = selectedPredictionId === opt.id;
-              let btnStyle = 'bg-slate-100 dark:bg-slate-900/80 border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-850';
+              let btnStyle = 'bg-[var(--surface-subtle)] border-[var(--border-card)] text-[var(--fg-main)] hover:border-[var(--border-highlight)] hover:bg-[var(--surface-hover)]';
 
               if (hasRun) {
                 if (opt.isCorrect) {
-                  btnStyle = 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500 text-emerald-900 dark:text-emerald-200 font-semibold';
+                  btnStyle = 'bg-emerald-500/10 border-emerald-600 dark:border-emerald-500 text-[var(--fg-main)] font-semibold';
                 } else if (isSelected && !opt.isCorrect) {
-                  btnStyle = 'bg-rose-50 dark:bg-rose-950/40 border-rose-500 text-rose-900 dark:text-rose-300';
+                  btnStyle = 'bg-rose-500/10 border-rose-600 dark:border-rose-500 text-[var(--fg-main)]';
                 }
               } else if (isSelected) {
-                btnStyle = 'bg-cyan-50 dark:bg-cyan-950/50 border-cyan-500 text-cyan-900 dark:text-cyan-200 font-semibold shadow-sm shadow-cyan-500/10';
+                btnStyle = 'bg-sciteal-500/10 border-sciteal-600 dark:border-sciteal-500 text-[var(--fg-main)] font-semibold ring-1 ring-sciteal-500/30';
               }
 
               return (
                 <button
                   key={opt.id}
                   disabled={hasRun}
-                  onClick={() => setSelectedPredictionId(opt.id)}
+                  onClick={() => handleSelectPrediction(opt.id)}
                   className={`p-3 rounded-xl border text-xs text-left transition-all flex items-center justify-between ${btnStyle}`}
                 >
                   <span>{opt.text}</span>
@@ -146,8 +182,8 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
         </div>
 
         {/* Run / Reset Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-slate-300/80 dark:border-slate-800/60">
-          <span className="text-[11px] font-mono text-slate-600 dark:text-slate-500">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-[var(--border-card)]">
+          <span className="text-[11px] font-mono text-[var(--fg-muted)]">
             Shots: {data.shots} • Simulated Engine
           </span>
 
@@ -169,7 +205,7 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
               onClick={handleRun}
               isLoading={isRunning}
               disabled={!selectedPredictionId}
-              leftIcon={<Play className="w-3.5 h-3.5 fill-slate-950" />}
+              leftIcon={<Play className="w-3.5 h-3.5 fill-current" />}
             >
               {hasRun ? 'Run Again' : 'Run Example'}
             </Button>
@@ -178,15 +214,15 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
 
         {/* Results & Explanation */}
         {results && (
-          <div className="p-5 rounded-xl bg-slate-50 dark:bg-slate-950/90 border border-slate-300 dark:border-slate-800 space-y-4 animate-in fade-in duration-200">
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-300/80 dark:border-slate-800">
+          <div className="p-5 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-card)] space-y-4 animate-in fade-in duration-200">
+            <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[var(--border-card)]">
               <div className="flex items-center gap-2">
-                <BarChart3 className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-                <span className="text-xs font-semibold text-slate-900 dark:text-white">
+                <BarChart3 className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
+                <span className="text-xs font-semibold text-[var(--fg-main)]">
                   Observed Measurement Results ({data.shots} Shots)
                 </span>
               </div>
-              <span className="text-[11px] text-slate-600 dark:text-slate-500 font-mono">
+              <span className="text-[11px] text-[var(--fg-muted)] font-mono">
                 {results.executionTimeMs} ms
               </span>
             </div>
@@ -198,17 +234,17 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
                 return (
                   <div key={state} className="space-y-1">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="font-mono font-bold text-cyan-800 dark:text-cyan-300 bg-slate-200 dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-300 dark:border-slate-800">
+                      <span className="font-mono font-bold text-[var(--fg-main)] bg-[var(--surface-card)] px-2 py-0.5 rounded border border-[var(--border-card)]">
                         |{state}⟩
                       </span>
                       <div className="flex items-center gap-2 font-mono text-xs">
-                        <span className="text-slate-600 dark:text-slate-400">{count} counts</span>
-                        <span className="text-slate-900 dark:text-white font-bold">{pct}%</span>
+                        <span className="text-[var(--fg-muted)]">{count} counts</span>
+                        <span className="text-[var(--fg-main)] font-bold">{pct}%</span>
                       </div>
                     </div>
-                    <div className="w-full bg-slate-200 dark:bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-300 dark:border-slate-800">
+                    <div className="w-full bg-[var(--surface-subtle)] h-2.5 rounded-full overflow-hidden border border-[var(--border-card)]">
                       <div
-                        className="h-full bg-gradient-to-r from-cyan-500 via-teal-400 to-indigo-500 rounded-full transition-all duration-500"
+                        className="h-full bg-[var(--visualization-bar)] rounded-full transition-all duration-500"
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -218,12 +254,12 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
             </div>
 
             {/* Explanation of WHY */}
-            <div className="p-3.5 rounded-lg bg-slate-100 dark:bg-slate-900/60 border border-slate-300 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 leading-relaxed space-y-1">
-              <div className="font-semibold text-cyan-700 dark:text-cyan-300 flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
+            <div className="p-3.5 rounded-lg bg-[var(--surface-card)] border border-[var(--border-card)] text-xs text-[var(--fg-muted)] leading-relaxed space-y-1">
+              <div className="font-semibold text-sciteal-700 dark:text-sciteal-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
                 <span>Why This Happened:</span>
               </div>
-              <p>{data.whyExplanation}</p>
+              <p className="text-[var(--fg-main)]">{data.whyExplanation}</p>
             </div>
           </div>
         )}

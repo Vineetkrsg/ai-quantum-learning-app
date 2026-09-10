@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-type Theme = 'light' | 'dark';
+export type Theme = 'dark' | 'light' | 'high-contrast';
 
 interface ThemeContextType {
   theme: Theme;
+  setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
+  cycleTheme: () => void;
 }
 
 const THEME_STORAGE_KEY = 'qulearn_ui_theme';
@@ -15,25 +17,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [theme, setTheme] = useState<Theme>(() => {
     try {
       const saved = localStorage.getItem(THEME_STORAGE_KEY);
-      if (saved === 'light' || saved === 'dark') {
-        return saved;
+      if (saved === 'light' || saved === 'dark' || saved === 'high-contrast') {
+        return saved as Theme;
       }
     } catch (e) {
       console.warn('Failed to read theme preference from localStorage', e);
     }
-    // Default to dark for quantum computing aesthetic
+    // Default to dark scientific theme
     return 'dark';
   });
 
   useEffect(() => {
     const root = document.documentElement;
+    root.classList.remove('dark', 'light', 'high-contrast');
+    root.classList.add(theme);
+    root.setAttribute('data-theme', theme);
+
     if (theme === 'dark') {
-      root.classList.add('dark');
-      root.classList.remove('light');
       root.style.colorScheme = 'dark';
     } else {
-      root.classList.remove('dark');
-      root.classList.add('light');
       root.style.colorScheme = 'light';
     }
 
@@ -44,12 +46,21 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [theme]);
 
+  const cycleTheme = () => {
+    setTheme((prev) => {
+      if (prev === 'dark') return 'light';
+      if (prev === 'light') return 'high-contrast';
+      return 'dark';
+    });
+  };
+
+  // Keep toggleTheme for backwards compatibility, cycling through themes
   const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+    cycleTheme();
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme, cycleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
@@ -62,3 +73,4 @@ export const useTheme = () => {
   }
   return context;
 };
+

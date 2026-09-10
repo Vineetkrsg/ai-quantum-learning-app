@@ -19,21 +19,21 @@ export const MasteryMeter: React.FC = () => {
   const getStatusBadgeVariant = (status: string) => {
     switch (status) {
       case 'Mastered': return 'emerald' as const;
-      case 'Proficient': return 'cyan' as const;
-      case 'Learning': return 'indigo' as const;
+      case 'Proficient': return 'teal' as const;
+      case 'Learning': return 'slate' as const;
       default: return 'slate' as const;
     }
   };
 
   return (
-    <Card variant="glass">
+    <Card variant="default">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm">
-            <Award className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
+            <Award className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
             <span>Concept Mastery Breakdown</span>
           </CardTitle>
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">8 Core Dimensions</span>
+          <span className="text-xs text-[var(--fg-muted)] font-mono">8 Core Dimensions</span>
         </div>
       </CardHeader>
       <CardContent className="space-y-4 pt-1">
@@ -44,12 +44,12 @@ export const MasteryMeter: React.FC = () => {
           return (
             <div key={item.concept} className="space-y-1.5">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-slate-800 dark:text-slate-200 font-medium">{item.concept}</span>
+                <span className="text-[var(--fg-main)] font-medium">{item.concept}</span>
                 <div className="flex items-center gap-2">
                   <Badge variant={getStatusBadgeVariant(currentStatus)} size="sm">
                     {currentStatus}
                   </Badge>
-                  <span className="font-mono text-cyan-600 dark:text-cyan-300 font-bold w-9 text-right">
+                  <span className="font-mono text-sciteal-700 dark:text-sciteal-400 font-bold w-9 text-right">
                     {currentLevel}%
                   </span>
                 </div>
@@ -57,7 +57,7 @@ export const MasteryMeter: React.FC = () => {
               <ProgressBar
                 value={currentLevel}
                 size="sm"
-                variant={currentLevel >= 80 ? 'emerald' : currentLevel >= 50 ? 'cyan' : 'indigo'}
+                variant={currentLevel >= 80 ? 'emerald' : currentLevel >= 50 ? 'cyan' : 'slate'}
               />
             </div>
           );

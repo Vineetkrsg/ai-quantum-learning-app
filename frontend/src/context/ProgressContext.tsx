@@ -29,6 +29,7 @@ export interface ProgressState {
   recentActivities: RecentActivity[];
   conceptMastery: Record<string, number>;
   quizStats: QuizRecord[];
+  activityStates: Record<string, any>;
 }
 
 interface ProgressContextType extends ProgressState {
@@ -39,6 +40,9 @@ interface ProgressContextType extends ProgressState {
   recordCircuitRun: (circuitName: string) => void;
   recordChallengeComplete: (challengeId: string, xp: number) => void;
   resetProgress: () => void;
+  getActivityState: <T>(key: string, defaultValue: T) => T;
+  setActivityState: <T>(key: string, value: T | ((prev: T) => T)) => void;
+  clearActivityState: (key: string) => void;
 }
 
 const STORAGE_KEY = 'qulearn_student_progress_v2';
@@ -80,7 +84,8 @@ const INITIAL_STATE: ProgressState = {
     'Two-Qubit Entanglement': 0,
     'Interference & Algorithms': 0,
     'Error Mitigation & Noise': 0,
-  }
+  },
+  activityStates: {}
 };
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
@@ -124,7 +129,8 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           completedLessonsByModule: completedByModule,
           moduleProgress: updatedModuleProgress,
           overallProgress: recalculatedOverall,
-          quizStats: parsed.quizStats || []
+          quizStats: parsed.quizStats || [],
+          activityStates: parsed.activityStates || {}
         };
       }
     } catch (e) {
@@ -307,6 +313,59 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
+  const getActivityState = <T,>(key: string, defaultValue: T): T => {
+    if (state.activityStates && key in state.activityStates) {
+      return state.activityStates[key] as T;
+    }
+    return defaultValue;
+  };
+
+  const setActivityState = <T,>(key: string, value: T | ((prev: T) => T)) => {
+    setState((prev) => {
+      const currentVal = (prev.activityStates?.[key] !== undefined)
+        ? (prev.activityStates[key] as T)
+        : undefined;
+      const nextVal = typeof value === 'function'
+        ? (value as (prevVal: T) => T)(currentVal as T)
+        : value;
+
+      const nextActivityStates = {
+        ...prev.activityStates,
+        [key]: nextVal
+      };
+
+      const next = {
+        ...prev,
+        activityStates: nextActivityStates
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed to save activity state to localStorage', e);
+      }
+
+      return next;
+    });
+  };
+
+  const clearActivityState = (key: string) => {
+    setState((prev) => {
+      const nextActivityStates = { ...prev.activityStates };
+      delete nextActivityStates[key];
+      const next = {
+        ...prev,
+        activityStates: nextActivityStates
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed to clear activity state in localStorage', e);
+      }
+      return next;
+    });
+  };
+
   return (
     <ProgressContext.Provider
       value={{
@@ -317,7 +376,10 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         recordQuizResult,
         recordCircuitRun,
         recordChallengeComplete,
-        resetProgress
+        resetProgress,
+        getActivityState,
+        setActivityState,
+        clearActivityState
       }}
     >
       {children}

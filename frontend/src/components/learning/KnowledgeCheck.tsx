@@ -1,40 +1,72 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SelfCheckData } from '../../types/learning';
 import { CheckCircle2, XCircle, HelpCircle, ArrowRight, RotateCcw } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
+import { useProgress } from '../../context/ProgressContext';
+
+export interface KnowledgeCheckState {
+  selectedAnswer: string | null;
+  answered: boolean;
+  isCorrect: boolean;
+  explanationVisible?: boolean;
+  isCompleted?: boolean;
+}
+
+const DEFAULT_STATE: KnowledgeCheckState = {
+  selectedAnswer: null,
+  answered: false,
+  isCorrect: false,
+  explanationVisible: false,
+  isCompleted: false
+};
 
 interface KnowledgeCheckProps {
+  moduleId?: string;
+  lessonId?: string;
+  activityId?: string;
+  scopedKey?: string;
   data: SelfCheckData;
   onComplete?: (isCorrect: boolean) => void;
   onContinue?: () => void;
 }
 
 export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
+  moduleId,
+  lessonId,
+  activityId = 'knowledge-check-1',
+  scopedKey,
   data,
   onComplete,
   onContinue
 }) => {
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [hasAnswered, setHasAnswered] = useState(false);
+  const progress = useProgress();
+  const effectiveKey = scopedKey || `${moduleId || 'module'}/${lessonId || 'lesson'}/${activityId}`;
+  const currentState = progress.getActivityState<KnowledgeCheckState>(effectiveKey, DEFAULT_STATE);
 
-  const isCorrect = selectedOptionId === data.correctOptionId;
+  const selectedOptionId = currentState.selectedAnswer;
+  const hasAnswered = currentState.answered;
+  const isCorrect = currentState.isCorrect;
 
   const handleSelectOption = (optionId: string) => {
     if (hasAnswered) return; // Prevent repeated clicks after evaluation
 
-    setSelectedOptionId(optionId);
-    setHasAnswered(true);
-
     const correct = optionId === data.correctOptionId;
+    progress.setActivityState<KnowledgeCheckState>(effectiveKey, {
+      selectedAnswer: optionId,
+      answered: true,
+      isCorrect: correct,
+      explanationVisible: true,
+      isCompleted: correct
+    });
+
     if (onComplete) {
       onComplete(correct);
     }
   };
 
   const handleRetry = () => {
-    setSelectedOptionId(null);
-    setHasAnswered(false);
+    progress.setActivityState<KnowledgeCheckState>(effectiveKey, DEFAULT_STATE);
   };
 
   return (
@@ -51,24 +83,24 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
           const isSelected = selectedOptionId === opt.id;
           const isThisCorrect = opt.id === data.correctOptionId;
 
-          let optionStyle = 'bg-white dark:bg-slate-900/70 border-slate-300 dark:border-slate-800 text-slate-800 dark:text-slate-200 hover:border-cyan-500 hover:bg-slate-50 dark:hover:bg-slate-850';
-          let badgeStyle = 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-400 border-slate-300 dark:border-slate-700';
+          let optionStyle = 'bg-white dark:bg-[#151e2b] border-slate-200 dark:border-[#223043] text-slate-800 dark:text-[#e6edf4] hover:border-teal-600 dark:hover:border-teal-500 hover:bg-slate-50 dark:hover:bg-[#1b2636]';
+          let badgeStyle = 'bg-slate-100 dark:bg-[#1b2636] text-slate-700 dark:text-slate-300 border-slate-300 dark:border-[#2b3a4f]';
 
           if (hasAnswered) {
             if (isSelected) {
               if (isCorrect) {
-                optionStyle = 'bg-emerald-100/80 dark:bg-emerald-950/40 border-emerald-600 dark:border-emerald-500 text-emerald-950 dark:text-emerald-200 font-semibold ring-1 ring-emerald-500/50 shadow-sm';
-                badgeStyle = 'bg-emerald-600 dark:bg-emerald-500 text-white font-bold border-transparent';
+                optionStyle = 'bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-600 dark:border-emerald-500 text-emerald-950 dark:text-emerald-200 font-semibold shadow-sm';
+                badgeStyle = 'bg-emerald-700 dark:bg-emerald-600 text-white font-bold border-transparent';
               } else {
-                optionStyle = 'bg-rose-100/80 dark:bg-rose-950/40 border-rose-600 dark:border-rose-500 text-rose-950 dark:text-rose-200 font-semibold ring-1 ring-rose-500/50 shadow-sm';
-                badgeStyle = 'bg-rose-600 dark:bg-rose-500 text-white font-bold border-transparent';
+                optionStyle = 'bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-600 dark:border-rose-500 text-rose-950 dark:text-rose-200 font-semibold shadow-sm';
+                badgeStyle = 'bg-rose-700 dark:bg-rose-600 text-white font-bold border-transparent';
               }
             } else if (isThisCorrect) {
               // Highlight the correct answer if user picked wrong
-              optionStyle = 'bg-emerald-50/60 dark:bg-emerald-950/20 border-emerald-500/50 text-emerald-900 dark:text-emerald-300 font-medium';
-              badgeStyle = 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 font-bold';
+              optionStyle = 'bg-emerald-50/70 dark:bg-emerald-950/30 border-2 border-emerald-600 dark:border-emerald-500 text-emerald-950 dark:text-emerald-200 font-medium';
+              badgeStyle = 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-400 font-bold';
             } else {
-              optionStyle = 'opacity-40 bg-slate-100 dark:bg-slate-900/30 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed';
+              optionStyle = 'opacity-50 bg-slate-100/70 dark:bg-[#0c111a]/40 border-slate-200 dark:border-[#1e2a3b] text-slate-500 dark:text-slate-500 cursor-not-allowed';
             }
           }
 
@@ -81,7 +113,7 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
               onClick={() => handleSelectOption(opt.id)}
               className={`
                 w-full p-3.5 rounded-xl border text-xs sm:text-sm text-left transition-all duration-150 flex items-center justify-between gap-3 shadow-sm
-                focus:outline-none focus:ring-2 focus:ring-cyan-500/50
+                focus:outline-none focus:ring-2 focus:ring-teal-500
                 ${optionStyle}
               `}
             >
@@ -107,7 +139,7 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
                     </span>
                   )}
                   {!isSelected && isThisCorrect && (
-                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30">
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/40 font-semibold">
                       Correct Answer
                     </span>
                   )}
@@ -121,10 +153,10 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
       {/* Evaluated Feedback & Explanation */}
       {hasAnswered && (
         <div className={`
-          p-4 rounded-xl border animate-in fade-in duration-200 space-y-3
+          p-4 rounded-xl border animate-in fade-in duration-150 space-y-3
           ${isCorrect 
-            ? 'bg-emerald-50/80 dark:bg-emerald-950/30 border-emerald-500/40 text-emerald-950 dark:text-emerald-200' 
-            : 'bg-rose-50/80 dark:bg-rose-950/30 border-rose-500/40 text-rose-950 dark:text-rose-200'}
+            ? 'bg-emerald-50/90 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-500/40 text-emerald-950 dark:text-emerald-200' 
+            : 'bg-rose-50/90 dark:bg-rose-950/30 border-rose-300 dark:border-rose-500/40 text-rose-950 dark:text-rose-200'}
         `}>
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -145,7 +177,7 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
               )}
             </div>
             <Badge variant={isCorrect ? 'emerald' : 'rose'} size="sm">
-              {isCorrect ? '+25 XP' : 'Keep Trying'}
+              {isCorrect ? '+25 XP' : 'Review & Retry'}
             </Badge>
           </div>
 
@@ -154,7 +186,7 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
           </p>
 
           {/* Action Row */}
-          <div className="pt-2 flex items-center justify-between border-t border-current/10">
+          <div className="pt-2 flex items-center justify-between border-t border-slate-200 dark:border-[#223043]">
             {!isCorrect ? (
               <Button
                 variant="outline"
@@ -165,14 +197,14 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
                 Try Again
               </Button>
             ) : (
-              <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400">
+              <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
                 Topic Mastery Verified
               </span>
             )}
 
             {onContinue && (
               <Button
-                variant={isCorrect ? 'quantum' : 'secondary'}
+                variant="primary"
                 size="sm"
                 onClick={onContinue}
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
@@ -183,6 +215,7 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
           </div>
         </div>
       )}
+
     </div>
   );
 };

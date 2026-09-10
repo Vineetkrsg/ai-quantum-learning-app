@@ -29,13 +29,13 @@ export const CircuitGrid: React.FC<CircuitGridProps> = ({
   };
 
   return (
-    <div className="overflow-x-auto p-4 bg-slate-50 dark:bg-slate-950/80 rounded-xl border border-slate-300 dark:border-slate-800 shadow-inner">
+    <div className="overflow-x-auto p-4 bg-slate-50 dark:bg-[#0c111a] rounded-xl border border-slate-200 dark:border-[#223043] shadow-inner">
       {/* Time Step Header */}
       <div className="flex items-center mb-2 pl-24">
         {steps.map((step) => (
           <div
             key={step}
-            className="w-16 text-center font-mono text-[10px] text-slate-600 dark:text-slate-500 font-semibold"
+            className="w-16 text-center font-mono text-[10px] text-slate-500 dark:text-slate-400 font-semibold"
           >
             t = {step}
           </div>
@@ -48,8 +48,8 @@ export const CircuitGrid: React.FC<CircuitGridProps> = ({
           <div key={qubitIndex} className="flex items-center group relative">
             {/* Qubit Label & Initial State */}
             <div className="w-24 flex items-center gap-2 pr-3 select-none flex-shrink-0">
-              <span className="font-mono text-xs font-bold text-cyan-700 dark:text-cyan-400">q[{qubitIndex}]</span>
-              <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-400 font-semibold">
+              <span className="font-mono text-xs font-bold text-teal-800 dark:text-teal-300">q[{qubitIndex}]</span>
+              <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-[#1b2636] border border-slate-300 dark:border-[#2b3a4f] text-slate-800 dark:text-slate-200 font-semibold">
                 |0⟩
               </span>
             </div>
@@ -58,7 +58,7 @@ export const CircuitGrid: React.FC<CircuitGridProps> = ({
             <div className="relative flex items-center">
               {/* Continuous horizontal circuit wire */}
               <div 
-                className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-[2px] bg-slate-600 dark:bg-slate-700 pointer-events-none"
+                className="absolute left-0 right-0 top-1/2 -translate-y-1/2 scientific-wire pointer-events-none"
                 style={{ width: `${totalSteps * 64}px` }}
               />
 
@@ -68,7 +68,6 @@ export const CircuitGrid: React.FC<CircuitGridProps> = ({
                   const operation = getGateAt(qubitIndex, stepIndex);
                   const gateDef = operation ? QUANTUM_GATES.find((g) => g.id === operation.gateId) : null;
                   const isControl = operation?.controlQubit === qubitIndex;
-                  const isTarget = operation?.targetQubit === qubitIndex;
 
                   return (
                     <div
@@ -79,8 +78,8 @@ export const CircuitGrid: React.FC<CircuitGridProps> = ({
                         <div className="relative group/gate">
                           {isControl ? (
                             /* CNOT Control dot */
-                            <div className="w-4 h-4 rounded-full bg-purple-500 dark:bg-purple-400 border-2 border-slate-950 flex items-center justify-center shadow-md">
-                              <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                            <div className="w-4 h-4 rounded-full bg-slate-900 dark:bg-slate-100 border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-md">
+                              <div className="w-1.5 h-1.5 rounded-full bg-teal-600 dark:bg-teal-500" />
                             </div>
                           ) : (
                             /* Target gate or single gate */
@@ -88,7 +87,7 @@ export const CircuitGrid: React.FC<CircuitGridProps> = ({
                               onClick={() => onRemoveGate(operation.id)}
                               title={`Click to remove ${gateDef?.name || operation.gateId}`}
                               className={`
-                                w-10 h-10 rounded-lg font-mono font-bold text-xs border flex items-center justify-center shadow-lg transition-transform hover:scale-105
+                                w-10 h-10 rounded-lg font-mono font-bold text-xs border flex items-center justify-center shadow-md transition-transform hover:scale-105
                                 ${gateDef?.color || 'bg-slate-800 text-white border-slate-700'}
                               `}
                             >
@@ -116,11 +115,11 @@ export const CircuitGrid: React.FC<CircuitGridProps> = ({
                           className={`
                             w-10 h-10 rounded-lg border border-dashed transition-all duration-150 flex items-center justify-center
                             ${selectedGate 
-                              ? 'border-cyan-500/60 hover:border-cyan-500 hover:bg-cyan-500/10 cursor-pointer' 
-                              : 'border-slate-300 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-900/40 cursor-default'}
+                              ? 'border-teal-500/80 hover:border-teal-600 hover:bg-teal-50/70 dark:hover:bg-teal-950/40 cursor-pointer bg-white/60 dark:bg-[#131b27]/80' 
+                              : 'border-slate-300 dark:border-[#29384e] hover:border-slate-400 dark:hover:border-slate-600 hover:bg-slate-100 dark:hover:bg-[#1b2636] bg-white/40 dark:bg-[#111823]/60 cursor-default'}
                           `}
                         >
-                          <span className="text-[10px] text-slate-400 dark:text-slate-600 font-mono">+</span>
+                          <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">+</span>
                         </button>
                       )}
                     </div>
@@ -134,3 +133,4 @@ export const CircuitGrid: React.FC<CircuitGridProps> = ({
     </div>
   );
 };
+

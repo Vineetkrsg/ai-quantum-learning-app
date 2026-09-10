@@ -20,15 +20,15 @@ export const TutorPage: React.FC = () => {
       {/* Page Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 font-mono">
+          <span className="text-xs px-2.5 py-0.5 rounded-full bg-[var(--surface-sunken)] text-sciteal-700 dark:text-sciteal-300 border border-[var(--border-card)] font-mono font-semibold">
             Gemini AI Integration Ready
           </span>
         </div>
-        <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-          <Bot className="w-6 h-6 text-cyan-400" />
+        <h2 className="text-2xl font-bold text-[var(--fg-main)] tracking-tight flex items-center gap-2">
+          <Bot className="w-6 h-6 text-sciteal-600 dark:text-sciteal-400" />
           <span>AI Quantum Tutor</span>
         </h2>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
+        <p className="text-xs sm:text-sm text-[var(--fg-muted)] mt-1">
           Pedagogical guidance, circuit debugging, and mathematical derivations tailored to your active quantum state.
         </p>
       </div>
@@ -37,57 +37,57 @@ export const TutorPage: React.FC = () => {
         {/* Left Side: Context & Formula Reference (Span 4) */}
         <div className="lg:col-span-4 space-y-6">
           {/* Active Context Card */}
-          <Card variant="glass">
+          <Card variant="default">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm">
-                <Info className="w-4 h-4 text-cyan-400" />
+                <Info className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
                 <span>Active Learning Context</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 pt-1 text-xs">
-              <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800 space-y-1">
-                <span className="text-[10px] uppercase font-mono text-slate-500">Active Circuit Context</span>
-                <div className="font-semibold text-white flex items-center gap-2">
-                  <Atom className="w-4 h-4 text-cyan-400" />
+              <div className="p-3 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] space-y-1">
+                <span className="text-[10px] uppercase font-mono text-[var(--fg-muted)]">Active Circuit Context</span>
+                <div className="font-semibold text-[var(--fg-main)] flex items-center gap-2">
+                  <Atom className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
                   <span>{selectedCircuit}</span>
                 </div>
-                <div className="text-[11px] text-slate-400 font-mono">
+                <div className="text-[11px] text-[var(--fg-muted)] font-mono">
                   2 Qubits • 4 Gates (H, CNOT, M0, M1)
                 </div>
               </div>
 
-              <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800 space-y-1">
-                <span className="text-[10px] uppercase font-mono text-slate-500">Active Curriculum Context</span>
-                <div className="font-semibold text-white flex items-center gap-2">
-                  <BookOpen className="w-4 h-4 text-indigo-400" />
+              <div className="p-3 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] space-y-1">
+                <span className="text-[10px] uppercase font-mono text-[var(--fg-muted)]">Active Curriculum Context</span>
+                <div className="font-semibold text-[var(--fg-main)] flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
                   <span>{selectedLesson}</span>
                 </div>
-                <div className="text-[11px] text-slate-400">
+                <div className="text-[11px] text-[var(--fg-muted)]">
                   Focus: Probability amplitudes, phase kickback
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 pt-2 text-[11px] text-emerald-400">
+              <div className="flex items-center gap-2 pt-2 text-[11px] text-emerald-600 dark:text-emerald-400">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Context injected into prompt prompt payload</span>
+                <span>Context injected into prompt payload</span>
               </div>
             </CardContent>
           </Card>
 
           {/* Quick Quantum Reference Formulas */}
-          <Card variant="glass">
+          <Card variant="default">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm">
-                <Sparkles className="w-4 h-4 text-amber-400" />
+                <Sparkles className="w-4 h-4 text-amber-500 dark:text-amber-400" />
                 <span>Dirac & State Reference</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 pt-1">
               {quantumFormulas.map((f) => (
-                <div key={f.title} className="p-2.5 rounded-lg bg-slate-950/70 border border-slate-800">
-                  <div className="text-[11px] text-slate-400 font-medium">{f.title}</div>
-                  <div className="text-xs font-mono text-cyan-300 font-bold mt-0.5">{f.formula}</div>
-                  <div className="text-[10px] text-slate-500 mt-1">{f.note}</div>
+                <div key={f.title} className="p-2.5 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)]">
+                  <div className="text-[11px] text-[var(--fg-muted)] font-medium">{f.title}</div>
+                  <div className="text-xs font-mono text-sciteal-700 dark:text-sciteal-400 font-bold mt-0.5">{f.formula}</div>
+                  <div className="text-[10px] text-[var(--fg-muted)] mt-1">{f.note}</div>
                 </div>
               ))}
             </CardContent>

@@ -19,21 +19,21 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.98]';
+  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-[#0e141d] disabled:opacity-50 disabled:cursor-not-allowed select-none active:scale-[0.99]';
 
   const sizeStyles = {
     sm: 'text-xs px-3 py-1.5 gap-1.5',
-    md: 'text-sm px-4 py-2.5 gap-2',
-    lg: 'text-base px-5 py-3 gap-2.5'
+    md: 'text-sm px-4 py-2 gap-2',
+    lg: 'text-base px-5 py-2.5 gap-2.5'
   };
 
   const variantStyles = {
-    primary: 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold shadow-lg shadow-cyan-500/20 focus:ring-cyan-400',
-    secondary: 'bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-700/80 focus:ring-slate-400',
-    outline: 'border border-slate-700 text-slate-300 hover:text-white hover:border-slate-500 hover:bg-slate-800/40 focus:ring-cyan-500',
-    ghost: 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60 focus:ring-slate-600',
-    quantum: 'bg-gradient-to-r from-cyan-500 via-teal-400 to-indigo-500 hover:from-cyan-400 hover:to-indigo-400 text-slate-950 font-semibold shadow-lg shadow-cyan-500/25 border border-cyan-300/30 focus:ring-cyan-400',
-    danger: 'bg-red-500/20 text-red-300 border border-red-500/40 hover:bg-red-500/30 focus:ring-red-500'
+    primary: 'bg-teal-700 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-500 text-white font-semibold shadow-sm focus:ring-teal-500 border border-teal-800 dark:border-teal-500/40',
+    secondary: 'bg-slate-100 hover:bg-slate-200 dark:bg-[#1b2636] dark:hover:bg-[#223145] text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-[#2b3a4f] focus:ring-slate-400',
+    outline: 'border border-slate-300 dark:border-[#2b3a4f] text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1b2636] focus:ring-teal-500',
+    ghost: 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-[#1b2636] focus:ring-slate-500',
+    quantum: 'bg-teal-700 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-500 text-white font-semibold shadow-sm border border-teal-800 dark:border-teal-500/50 focus:ring-teal-500',
+    danger: 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-300 dark:border-rose-500/40 hover:bg-rose-100 dark:hover:bg-rose-950/50 focus:ring-rose-500'
   };
 
   return (
@@ -50,3 +50,4 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+

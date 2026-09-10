@@ -99,29 +99,29 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
   };
 
   return (
-    <Card variant="glass" className={`flex flex-col ${compact ? 'h-[500px]' : 'h-[620px]'}`}>
-      <CardHeader className="py-3 px-5 border-b border-slate-800 flex items-center justify-between">
+    <Card variant="default" className={`flex flex-col ${compact ? 'h-[500px]' : 'h-[620px]'}`}>
+      <CardHeader className="py-3 px-5 border-b border-[var(--border-card)] flex items-center justify-between bg-[var(--surface-sunken)]">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-indigo-600 p-0.5 flex items-center justify-center">
-            <Bot className="w-4 h-4 text-white" />
+          <div className="w-8 h-8 rounded-lg bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 border border-sciteal-500/30 flex items-center justify-center font-bold">
+            <Bot className="w-4 h-4 text-sciteal-700 dark:text-sciteal-300" />
           </div>
           <div>
             <CardTitle className="text-sm">AI Quantum Tutor</CardTitle>
-            <p className="text-[11px] text-slate-400">Powered by Gemini AI Abstraction Layer</p>
+            <p className="text-[11px] text-[var(--fg-muted)]">Pedagogical Assistant powered by Gemini Architecture</p>
           </div>
         </div>
 
         {/* Context Badges */}
         <div className="hidden sm:flex items-center gap-2">
           {context?.currentCircuitName && (
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 flex items-center gap-1">
-              <Atom className="w-3 h-3 text-cyan-400" />
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-subtle)] border border-[var(--border-card)] text-[var(--fg-main)] flex items-center gap-1 font-semibold">
+              <Atom className="w-3 h-3 text-sciteal-600 dark:text-sciteal-400" />
               <span>Circuit: {context.currentCircuitName}</span>
             </span>
           )}
           {context?.activeLessonTitle && (
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-indigo-950/60 border border-indigo-500/30 text-indigo-300 flex items-center gap-1">
-              <BookOpen className="w-3 h-3 text-indigo-400" />
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-subtle)] border border-[var(--border-card)] text-[var(--fg-main)] flex items-center gap-1 font-semibold">
+              <BookOpen className="w-3 h-3 text-sciteal-600 dark:text-sciteal-400" />
               <span>{context.activeLessonTitle}</span>
             </span>
           )}
@@ -129,16 +129,16 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
       </CardHeader>
 
       {/* Suggested prompts strip */}
-      <div className="px-4 py-2.5 bg-slate-950/50 border-b border-slate-800/80 overflow-x-auto flex items-center gap-2">
-        <span className="text-[10px] uppercase font-mono text-slate-500 flex items-center gap-1 flex-shrink-0">
-          <Lightbulb className="w-3 h-3 text-amber-400" />
+      <div className="px-4 py-2.5 bg-[var(--surface-sunken)] border-b border-[var(--border-card)] overflow-x-auto flex items-center gap-2">
+        <span className="text-[10px] uppercase font-mono text-[var(--fg-muted)] flex items-center gap-1 flex-shrink-0 font-semibold">
+          <Lightbulb className="w-3 h-3 text-amber-500 dark:text-amber-400" />
           Prompt:
         </span>
         {suggestedPrompts.map((p) => (
           <button
             key={p.id}
             onClick={() => handleSend(p.query)}
-            className="text-xs px-2.5 py-1 rounded-full bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 border border-slate-800 hover:border-cyan-500/30 whitespace-nowrap transition-colors flex-shrink-0"
+            className="text-xs px-2.5 py-1 rounded-full bg-[var(--surface-subtle)] hover:bg-[var(--surface-hover)] text-[var(--fg-muted)] hover:text-[var(--fg-main)] border border-[var(--border-card)] hover:border-[var(--border-highlight)] whitespace-nowrap transition-colors flex-shrink-0"
           >
             {p.label}
           </button>
@@ -156,7 +156,7 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
             >
               <div className={`
                 w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-semibold
-                ${isUser ? 'bg-cyan-600 text-slate-950' : 'bg-slate-800 text-cyan-400 border border-slate-700'}
+                ${isUser ? 'bg-sciteal-600 text-white' : 'bg-[var(--surface-subtle)] text-sciteal-600 dark:text-sciteal-400 border border-[var(--border-card)]'}
               `}>
                 {isUser ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
               </div>
@@ -164,26 +164,26 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
               <div className={`
                 max-w-[85%] rounded-xl p-3 text-xs leading-relaxed
                 ${isUser 
-                  ? 'bg-cyan-600/90 text-slate-950 font-medium rounded-tr-none' 
-                  : 'bg-slate-900/90 border border-slate-800 text-slate-200 rounded-tl-none shadow-md'}
+                  ? 'bg-sciteal-600 dark:bg-sciteal-700 text-white font-medium rounded-tr-none shadow-sm' 
+                  : 'bg-[var(--surface-sunken)] border border-[var(--border-card)] text-[var(--fg-main)] rounded-tl-none shadow-sm'}
               `}>
                 <p>{msg.text}</p>
 
                 {/* Concepts tags if tutor */}
                 {msg.referencedConcepts && msg.referencedConcepts.length > 0 && (
-                  <div className="mt-2.5 pt-2 border-t border-slate-800/80 flex flex-wrap gap-1">
+                  <div className="mt-2.5 pt-2 border-t border-[var(--border-card)] flex flex-wrap gap-1">
                     {msg.referencedConcepts.map((c) => (
                       <span
                         key={c}
-                        className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-950/40 text-cyan-400 border border-cyan-500/20"
+                        className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[var(--surface-card)] text-sciteal-700 dark:text-sciteal-400 border border-[var(--border-card)] font-semibold"
                       >
-                        {c}
+                        #{c}
                       </span>
                     ))}
                   </div>
                 )}
 
-                <div className={`text-[9px] mt-1.5 ${isUser ? 'text-slate-800 text-right' : 'text-slate-500'}`}>
+                <div className={`text-[9px] mt-1.5 font-mono ${isUser ? 'text-white/80 text-right' : 'text-[var(--fg-muted)]'}`}>
                   {msg.timestamp}
                 </div>
               </div>
@@ -192,17 +192,17 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
         })}
 
         {isTyping && (
-          <div className="flex items-center gap-2 text-xs text-slate-400 pl-9">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce" />
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.2s]" />
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-bounce [animation-delay:0.4s]" />
-            <span className="text-[11px] text-slate-400 font-mono">Tutor is synthesizing explanation...</span>
+          <div className="flex items-center gap-2 text-xs text-[var(--fg-muted)] pl-9">
+            <span className="w-2 h-2 rounded-full bg-sciteal-500 animate-bounce" />
+            <span className="w-2 h-2 rounded-full bg-sciteal-500 animate-bounce [animation-delay:0.2s]" />
+            <span className="w-2 h-2 rounded-full bg-sciteal-500 animate-bounce [animation-delay:0.4s]" />
+            <span className="text-[11px] text-[var(--fg-muted)] font-mono">Tutor is synthesizing explanation...</span>
           </div>
         )}
       </CardContent>
 
       {/* Input bar */}
-      <div className="p-3 bg-slate-950/80 border-t border-slate-800">
+      <div className="p-3 bg-[var(--surface-sunken)] border-t border-[var(--border-card)]">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -215,7 +215,7 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask anything about qubits, gates, circuits, or algorithms..."
-            className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors"
+            className="flex-1 bg-[var(--surface-card)] border border-[var(--border-card)] rounded-xl px-4 py-2.5 text-xs text-[var(--fg-main)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-sciteal-500 transition-colors shadow-sm"
           />
           <Button
             type="submit"

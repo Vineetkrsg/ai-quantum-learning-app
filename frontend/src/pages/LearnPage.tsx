@@ -41,40 +41,40 @@ export const LearnPage: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/20 font-mono">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[var(--surface-sunken)] text-sciteal-700 dark:text-sciteal-300 border border-[var(--border-card)] font-mono font-semibold">
               Core Curriculum
             </span>
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-2xl font-bold text-[var(--fg-main)] tracking-tight">
             Interactive Quantum Learning Modules
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-[var(--fg-muted)] mt-1">
             Master quantum computing from foundational Dirac notation to advanced multi-qubit algorithms.
           </p>
         </div>
 
         {/* Search bar */}
         <div className="relative w-full md:w-72">
-          <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-[var(--fg-muted)] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search concepts or gates..."
-            className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-colors shadow-sm"
+            className="w-full bg-[var(--surface-card)] border border-[var(--border-card)] rounded-xl pl-9 pr-4 py-2 text-xs text-[var(--fg-main)] placeholder-[var(--fg-muted)] focus:outline-none focus:border-sciteal-500 transition-colors shadow-sm"
           />
         </div>
       </div>
 
       {/* Curriculum Completion Banner */}
-      <Card variant="glass" className="p-5">
+      <Card variant="default" className="p-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
+            <h3 className="text-sm font-semibold text-[var(--fg-main)] flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
               <span>Curriculum Completion Status</span>
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400">
+            <p className="text-xs text-[var(--fg-muted)]">
               {completedCount} of {totalLessons} interactive lessons completed across 7 modules
             </p>
           </div>

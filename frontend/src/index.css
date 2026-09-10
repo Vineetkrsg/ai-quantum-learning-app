@@ -3,93 +3,180 @@
 @tailwind utilities;
 
 @layer base {
+  /* Default: Dark Theme (Modern Scientific Notebook / Slate Research Lab) */
   :root {
     color-scheme: dark;
-    --circuit-wire: #475569;
-    --circuit-wire-active: #06B6D4;
-    --circuit-grid-border: #1E293B;
-    --card-border: #1E293B;
-    --border-contrast: #334155;
+    --bg-canvas: #0e141d;
+    --fg-main: #e6edf4;
+    --fg-muted: #8b9bb0;
+    --fg-subtle: #5f718a;
+    --surface-card: #151e2b;
+    --surface-card-elevated: #1b2636;
+    --surface-subtle: #111823;
+    --border-card: #223043;
+    --border-strong: #2f4059;
+    --divider: #1e2a3b;
+    --primary: #0d9488;
+    --primary-hover: #14b8a6;
+    --primary-fg: #ffffff;
+    --primary-subtle: rgba(13, 148, 136, 0.14);
+    --accent-amber: #d97706;
+    --accent-amber-subtle: rgba(217, 119, 6, 0.14);
+    --accent-amber-fg: #fbbf24;
+    --circuit-wire: #45566f;
+    --circuit-wire-active: #14b8a6;
+    --circuit-grid-border: #223043;
+    --circuit-slot-empty: #131b27;
+    --circuit-slot-border: #29384e;
+    --visualization-bar: #0d9488;
+    --visualization-axis: #2a3a50;
+    --code-bg: #0b0f16;
+    --code-fg: #d8e2ed;
+    --focus-ring: #14b8a6;
   }
 
+  /* Light Theme (Academic Journal / University Platform) */
   html.light {
     color-scheme: light;
+    --bg-canvas: #f6f8fa;
+    --fg-main: #0f172a;
+    --fg-muted: #475569;
+    --fg-subtle: #64748b;
+    --surface-card: #ffffff;
+    --surface-card-elevated: #f8fafc;
+    --surface-subtle: #f1f5f9;
+    --border-card: #d2d9e2;
+    --border-strong: #94a3b8;
+    --divider: #e2e8f0;
+    --primary: #0f766e;
+    --primary-hover: #0d9488;
+    --primary-fg: #ffffff;
+    --primary-subtle: #f0fdfa;
+    --accent-amber: #b45309;
+    --accent-amber-subtle: #fef3c7;
+    --accent-amber-fg: #92400e;
     --circuit-wire: #334155;
-    --circuit-wire-active: #0891B2;
-    --circuit-grid-border: #CBD5E1;
-    --card-border: #CBD5E1;
-    --border-contrast: #94A3B8;
+    --circuit-wire-active: #0f766e;
+    --circuit-grid-border: #cbd5e1;
+    --circuit-slot-empty: #f8fafc;
+    --circuit-slot-border: #cbd5e1;
+    --visualization-bar: #0f766e;
+    --visualization-axis: #94a3b8;
+    --code-bg: #1e293b;
+    --code-fg: #f1f5f9;
+    --focus-ring: #0f766e;
+  }
+
+  /* High Contrast Theme (High-Contrast Scientific Precision) */
+  html.high-contrast {
+    color-scheme: light;
+    --bg-canvas: #fbfcfd;
+    --fg-main: #000000;
+    --fg-muted: #1e293b;
+    --fg-subtle: #334155;
+    --surface-card: #ffffff;
+    --surface-card-elevated: #f8fafc;
+    --surface-subtle: #f1f5f9;
+    --border-card: #000000;
+    --border-strong: #000000;
+    --divider: #000000;
+    --primary: #044e47;
+    --primary-hover: #000000;
+    --primary-fg: #ffffff;
+    --primary-subtle: #e6f7f5;
+    --accent-amber: #78350f;
+    --accent-amber-subtle: #fef3c7;
+    --accent-amber-fg: #451a03;
+    --circuit-wire: #000000;
+    --circuit-wire-active: #000000;
+    --circuit-grid-border: #000000;
+    --circuit-slot-empty: #ffffff;
+    --circuit-slot-border: #000000;
+    --visualization-bar: #044e47;
+    --visualization-axis: #000000;
+    --code-bg: #000000;
+    --code-fg: #ffffff;
+    --focus-ring: #000000;
   }
 
   body {
-    @apply bg-[#070B13] text-slate-100 font-sans antialiased selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden min-h-screen transition-colors duration-200;
+    background-color: var(--bg-canvas);
+    color: var(--fg-main);
+    @apply font-sans antialiased selection:bg-teal-500/25 selection:text-teal-900 overflow-x-hidden min-h-screen transition-colors duration-150;
   }
 
-  html.light body {
-    @apply bg-[#F8FAFC] text-slate-900 selection:bg-cyan-500/20 selection:text-cyan-900;
+  .dark body {
+    @apply selection:bg-teal-500/30 selection:text-teal-200;
+  }
+
+  .high-contrast body {
+    @apply selection:bg-black selection:text-white font-medium;
   }
 }
 
-/* Custom quantum aesthetic scrollbar */
+/* Scientific Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090D16;
-}
-
-html.light ::-webkit-scrollbar-track {
-  background: #F1F5F9;
+  background: var(--bg-canvas);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: var(--border-card);
   border-radius: 9999px;
 }
 
-html.light ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
-}
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--border-strong);
 }
 
-html.light ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+html.high-contrast ::-webkit-scrollbar-thumb {
+  background: #000000;
 }
 
-/* Glassmorphism panel styles */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.4);
+/* Scientific Notebook card styles */
+.sci-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-card);
+  color: var(--fg-main);
 }
 
-html.light .glass-panel {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(203, 213, 225, 0.95);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);
+html.high-contrast .sci-card {
+  border: 2px solid #000000 !important;
+  box-shadow: 2px 2px 0px rgba(0, 0, 0, 1) !important;
 }
 
-.glass-panel-hover:hover {
-  border-color: rgba(6, 182, 212, 0.4);
-  box-shadow: 0 0 20px -5px rgba(6, 182, 212, 0.15);
+html.high-contrast button,
+html.high-contrast input,
+html.high-contrast select {
+  border-color: #000000 !important;
 }
 
-/* Quantum circuit wire styling */
-.quantum-wire {
-  background: linear-gradient(90deg, #334155 0%, #475569 50%, #334155 100%);
+html.high-contrast .high-contrast-thick-border {
+  border-width: 2px !important;
+  border-color: #000000 !important;
+}
+
+/* Scientific circuit wire styles */
+.scientific-wire {
+  background-color: var(--circuit-wire);
   height: 2px;
 }
 
-html.light .quantum-wire {
-  background: linear-gradient(90deg, #475569 0%, #1E293B 50%, #475569 100%);
-  height: 2px;
+html.high-contrast .scientific-wire {
+  background-color: #000000;
+  height: 3px;
 }
+
+/* Restrained Scientific Diagram Grid */
+.sci-diagram-grid {
+  background-size: 20px 20px;
+  background-image: 
+    linear-gradient(to right, var(--divider) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--divider) 1px, transparent 1px);
+}
+
 

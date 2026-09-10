@@ -229,6 +229,84 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
           expectedDistribution: { '1': 100 },
           whyExplanation: 'The Pauli-X gate acts as a complete bit-flip. Since the input was |0⟩, the state became pure |1⟩. Every single shot measured 1 with zero uncertainty!'
         },
+        codeConnection: {
+          title: 'From Circuit to Python: The Pauli-X Gate',
+          whatAreWeCoding: 'In classical Python, toggling a bit looks like `bit = not bit` or `bit = 1 - bit`. In quantum programming with Qiskit, we instantiate a `QuantumCircuit`, apply the `.x()` gate operation to our qubit wire, and measure the result.',
+          circuitPreview: 'q[0]: |0⟩ ─── [ X ] ─── [ M ] ──> c[0]',
+          codeSnippet: `from qiskit import QuantumCircuit
+
+# Initialize circuit with 1 qubit and 1 classical bit
+qc = QuantumCircuit(1, 1)
+
+# Apply Pauli-X (quantum bit-flip) to qubit 0
+qc.x(0)
+
+# Measure qubit 0 into classical bit 0
+qc.measure(0, 0)`,
+          language: 'python',
+          lineExplanations: [
+            {
+              codeSnippet: 'from qiskit import QuantumCircuit',
+              explanation: 'Imports Qiskit’s core quantum circuit builder to create quantum programs.',
+              circuitMapping: 'Circuit Framework'
+            },
+            {
+              codeSnippet: 'qc = QuantumCircuit(1, 1)',
+              explanation: 'Allocates 1 quantum wire (starts at |0⟩) and 1 classical bit for readout.',
+              circuitMapping: 'q[0] and c[0] wires'
+            },
+            {
+              codeSnippet: 'qc.x(0)',
+              explanation: 'Applies the Pauli-X gate to qubit wire 0, inverting state |0⟩ to |1⟩.',
+              circuitMapping: '[ X Gate ]'
+            },
+            {
+              codeSnippet: 'qc.measure(0, 0)',
+              explanation: 'Measures quantum state of qubit 0 and stores the collapsed bit in c[0].',
+              circuitMapping: '[ M Measure ]'
+            }
+          ],
+          simulatedOutput: {
+            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            description: 'The Pauli-X gate rotated the state vector 180° to south pole |1⟩. Measurement collapses 100% of runs into outcome 1.',
+            counts: { '1': 1024 },
+            percentages: { '1': 100 },
+            shots: 1024,
+            stateDescription: '|ψ⟩ = 1.00|1⟩ (Pure State)'
+          }
+        },
+        codingPractice: {
+          title: 'Write Your First Quantum Gate: Pauli-X',
+          taskDescription: 'Complete the script below by applying the Pauli-X gate to qubit 0 before the measurement step.',
+          starterCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# TODO: Apply the Pauli-X gate to qubit 0
+
+
+qc.measure(0, 0)`,
+          hint: 'Call qc.x(0) on the circuit to apply the Pauli-X gate to qubit 0.',
+          solutionCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# Apply the Pauli-X gate to qubit 0
+qc.x(0)
+
+qc.measure(0, 0)`,
+          validationRules: {
+            requiredOperations: ['qc.x(0)'],
+            forbiddenOperations: ['qc.h(', 'qc.z('],
+            successMessage: 'Well done! You coded the Pauli-X gate. Running 1,024 shots confirmed 100% measurement of state 1.',
+            failureHint: 'Make sure you add `qc.x(0)` before `qc.measure(0, 0)`.'
+          },
+          simulatedRun: {
+            expectedState: '|1⟩',
+            counts: { '1': 1024 },
+            explanation: '1,024 shots measured: 100% outcome 1. The bit-flip was successfully executed!'
+          }
+        },
         selfCheck: {
           question: 'If a qubit is in state |1⟩ and you apply an X gate, what state does it become?',
           options: [
@@ -388,6 +466,79 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
         conceptExplanation: 'How do we put a qubit into superposition? We use the Hadamard gate (symbol: H). When applied to the ground state |0⟩, the H gate creates an equal superposition: |+⟩ = (|0⟩ + |1⟩)/√2. Geometrically on the Bloch sphere, the H gate rotates the state from the north pole |0⟩ down to the equator along the positive X-axis.',
         analogy: 'If the north pole is |0⟩ and south is |1⟩, applying H is like traveling down to the equator: you are exactly midway between the poles.',
         visualNote: '|0⟩ (North Pole) ──[ H Gate ]──> |+⟩ (Equator)',
+        codeConnection: {
+          title: 'From Circuit to Python: Creating Superposition with Hadamard',
+          whatAreWeCoding: 'To place a qubit into an equal superposition of |0⟩ and |1⟩, we apply the Hadamard gate using `qc.h(0)`. When measured, the qubit randomly collapses to 0 or 1 with equal 50% probability.',
+          circuitPreview: 'q[0]: |0⟩ ─── [ H ] ─── [ M ] ──> c[0]',
+          codeSnippet: `from qiskit import QuantumCircuit
+
+# 1 qubit, 1 classical bit
+qc = QuantumCircuit(1, 1)
+
+# Apply Hadamard gate to qubit 0
+qc.h(0)
+
+# Measure qubit 0 into classical bit 0
+qc.measure(0, 0)`,
+          language: 'python',
+          lineExplanations: [
+            {
+              codeSnippet: 'qc = QuantumCircuit(1, 1)',
+              explanation: 'Allocates a single qubit wire initialized to |0⟩.',
+              circuitMapping: 'q[0] wire'
+            },
+            {
+              codeSnippet: 'qc.h(0)',
+              explanation: 'Rotates the state vector to the equator of the Bloch sphere, forming (|0⟩ + |1⟩)/√2.',
+              circuitMapping: '[ H Gate ]'
+            },
+            {
+              codeSnippet: 'qc.measure(0, 0)',
+              explanation: 'Forces the superposition to collapse into a definite classical bit (0 or 1).',
+              circuitMapping: '[ M Measure ]'
+            }
+          ],
+          simulatedOutput: {
+            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            description: 'Equal superposition produces roughly equal 0 and 1 outcomes due to quantum statistical sampling noise.',
+            counts: { '0': 518, '1': 506 },
+            percentages: { '0': 50.6, '1': 49.4 },
+            shots: 1024,
+            stateDescription: '|ψ⟩ = 0.707|0⟩ + 0.707|1⟩ (Equal Superposition)'
+          }
+        },
+        codingPractice: {
+          title: 'Generate Quantum Superposition',
+          taskDescription: 'Put qubit 0 into equal superposition by applying the Hadamard gate `qc.h(0)`.',
+          starterCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# TODO: Apply Hadamard gate to qubit 0
+
+
+qc.measure(0, 0)`,
+          hint: 'Use qc.h(0) to apply the Hadamard gate to qubit 0.',
+          solutionCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# Apply Hadamard gate to qubit 0
+qc.h(0)
+
+qc.measure(0, 0)`,
+          validationRules: {
+            requiredOperations: ['qc.h(0)'],
+            forbiddenOperations: ['qc.x('],
+            successMessage: 'Brilliant! You placed the qubit into superposition. Simulator shots show balanced ~50/50 distribution.',
+            failureHint: 'Add `qc.h(0)` before `qc.measure(0, 0)`.'
+          },
+          simulatedRun: {
+            expectedState: '(|0⟩ + |1⟩)/√2',
+            counts: { '0': 512, '1': 512 },
+            explanation: '1,024 shots measured: ~50% outcome 0 and ~50% outcome 1. True quantum randomness demonstrated!'
+          }
+        },
         selfCheck: {
           question: 'What state is produced when a Hadamard gate acts on |0⟩?',
           options: [
@@ -452,6 +603,82 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
           shots: 1024,
           expectedDistribution: { '0': 100 },
           whyExplanation: 'Hadamard is its own inverse: H · H = I. The second Hadamard rotates the equator state vector back to the north pole |0⟩. This proves that quantum superposition is not random destruction of information; it is fully reversible!'
+        },
+        codeConnection: {
+          title: 'From Circuit to Python: Proving H · H = Identity',
+          whatAreWeCoding: 'In quantum mechanics, all gate operations are reversible. Applying two consecutive Hadamard gates (`qc.h(0)` followed by `qc.h(0)`) cancels out the superposition and returns the state directly back to |0⟩.',
+          circuitPreview: 'q[0]: |0⟩ ─── [ H ] ─── [ H ] ─── [ M ] ──> c[0]',
+          codeSnippet: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# First Hadamard: creates superposition |+>
+qc.h(0)
+
+# Second Hadamard: reverses superposition back to |0>
+qc.h(0)
+
+qc.measure(0, 0)`,
+          language: 'python',
+          lineExplanations: [
+            {
+              codeSnippet: 'qc.h(0)  # First',
+              explanation: 'Takes the qubit from |0⟩ into the equal superposition state |+⟩.',
+              circuitMapping: 'First [ H Gate ]'
+            },
+            {
+              codeSnippet: 'qc.h(0)  # Second',
+              explanation: 'Because H is Hermitian and unitary (H² = I), this reverses the rotation back to |0⟩.',
+              circuitMapping: 'Second [ H Gate ]'
+            },
+            {
+              codeSnippet: 'qc.measure(0, 0)',
+              explanation: 'Because the state returned to pure |0⟩, 100% of measurements yield 0.',
+              circuitMapping: '[ M Measure ]'
+            }
+          ],
+          simulatedOutput: {
+            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            description: '100% of shots measured outcome 0. The second Hadamard gate completely un-did the first!',
+            counts: { '0': 1024 },
+            percentages: { '0': 100 },
+            shots: 1024,
+            stateDescription: '|ψ⟩ = 1.00|0⟩ (Reversible Restoration)'
+          }
+        },
+        codingPractice: {
+          title: 'Prove Quantum Reversibility (H · H)',
+          taskDescription: 'The starter code already applies one Hadamard gate. Add a second `qc.h(0)` to reverse the superposition back to state |0⟩.',
+          starterCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+qc.h(0)
+
+# TODO: Add the second Hadamard gate to reverse the state back to |0>
+
+
+qc.measure(0, 0)`,
+          hint: 'Add another qc.h(0) right below the first one.',
+          solutionCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+qc.h(0)
+
+# Add the second Hadamard gate
+qc.h(0)
+
+qc.measure(0, 0)`,
+          validationRules: {
+            requiredOperations: ['qc.h(0)'],
+            minLines: 7,
+            successMessage: 'Excellent! Two consecutive Hadamards act as the Identity operation. 100% of shots returned 0.',
+            failureHint: 'Add another `qc.h(0)` before measuring.'
+          },
+          simulatedRun: {
+            expectedState: '|0⟩',
+            counts: { '0': 1024 },
+            explanation: '1,024 shots measured: 100% outcome 0. H · H = Identity confirmed!'
+          }
         },
         selfCheck: {
           question: 'If you apply H to |0⟩, then apply H again, what is the final state?',
@@ -647,6 +874,87 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
         durationMinutes: 10,
         conceptExplanation: 'The Pauli-Z gate leaves state |0⟩ unchanged, but flips the phase of state |1⟩: Z|0⟩ = |0⟩ and Z|1⟩ = -|1⟩. It performs a 180° rotation around the Z-axis of the Bloch sphere. Pauli-Y combines both a bit flip and a phase flip with an imaginary unit i: Y|0⟩ = i|1⟩ and Y|1⟩ = -i|0⟩.',
         visualNote: 'Z Gate: |0⟩ → |0⟩, |1⟩ → -|1⟩',
+        codeConnection: {
+          title: 'From Circuit to Python: The Pauli-Z Phase Flip',
+          whatAreWeCoding: 'The Pauli-Z gate leaves |0⟩ untouched but multiplies |1⟩ by -1. By sandwiching a Z gate between two Hadamards (H-Z-H), the phase flip is converted into an amplitude flip, effectively creating a Pauli-X bit-flip!',
+          circuitPreview: 'q[0]: |0⟩ ─── [ H ] ─── [ Z ] ─── [ H ] ─── [ M ] ──> c[0]',
+          codeSnippet: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# Step 1: Create superposition |+> = (|0> + |1>)/√2
+qc.h(0)
+
+# Step 2: Flip relative phase -> |-> = (|0> - |1>)/√2
+qc.z(0)
+
+# Step 3: Interference rotates |-> into |1>
+qc.h(0)
+
+qc.measure(0, 0)`,
+          language: 'python',
+          lineExplanations: [
+            {
+              codeSnippet: 'qc.h(0)',
+              explanation: 'Prepares the equal superposition state |+⟩.',
+              circuitMapping: 'Initial [ H Gate ]'
+            },
+            {
+              codeSnippet: 'qc.z(0)',
+              explanation: 'Multiplies the |1⟩ component by -1, transforming |+⟩ into |-⟩.',
+              circuitMapping: '[ Z Gate ]'
+            },
+            {
+              codeSnippet: 'qc.h(0)',
+              explanation: 'Maps |-⟩ directly to |1⟩ through quantum interference.',
+              circuitMapping: 'Readout [ H Gate ]'
+            }
+          ],
+          simulatedOutput: {
+            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            description: 'The H-Z-H sequence converts relative phase into observable measurement outcome 1.',
+            counts: { '1': 1024 },
+            percentages: { '1': 100 },
+            shots: 1024,
+            stateDescription: '|ψ⟩ = 1.00|1⟩ (Phase-to-Amplitude Conversion)'
+          }
+        },
+        codingPractice: {
+          title: 'Apply a Phase Flip with Pauli-Z',
+          taskDescription: 'Insert the Pauli-Z gate `qc.z(0)` between the two Hadamard gates to flip the phase of the qubit.',
+          starterCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+qc.h(0)
+
+# TODO: Apply Pauli-Z gate to flip the relative phase
+
+
+qc.h(0)
+qc.measure(0, 0)`,
+          hint: 'Use qc.z(0) between the two Hadamards.',
+          solutionCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+qc.h(0)
+
+# Apply Pauli-Z gate
+qc.z(0)
+
+qc.h(0)
+qc.measure(0, 0)`,
+          validationRules: {
+            requiredOperations: ['qc.z(0)'],
+            forbiddenOperations: ['qc.x('],
+            successMessage: 'Great work! The phase flip was converted to an amplitude flip via interference, measuring 100% 1.',
+            failureHint: 'Insert `qc.z(0)` between the first and second `qc.h(0)`.'
+          },
+          simulatedRun: {
+            expectedState: '|1⟩',
+            counts: { '1': 1024 },
+            explanation: '1,024 shots measured: 100% outcome 1. H · Z · H = X verified!'
+          }
+        },
         selfCheck: {
           question: 'Does the Pauli-Z gate alter the probability of measuring 0 or 1 on state |0⟩?',
           options: [
@@ -678,6 +986,89 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
           shots: 1024,
           expectedDistribution: { '11': 100 },
           whyExplanation: 'Because control qubit q[0] was in state |1⟩, the CNOT gate triggered and flipped target qubit q[1] from |0⟩ to |1⟩, yielding outcome |11⟩.'
+        },
+        codeConnection: {
+          title: 'From Circuit to Python: The Two-Qubit CNOT Gate',
+          whatAreWeCoding: 'In Qiskit, Controlled-NOT is called via `qc.cx(control_index, target_index)`. When control qubit 0 is set to |1⟩ with an X gate, the CNOT gate triggers and flips target qubit 1 to |1⟩.',
+          circuitPreview: `q[0]: |0⟩ ─── [ X ] ─── ● ─── [ M ] ──> c[0]
+q[1]: |0⟩ ───────────── ⊕ ─── [ M ] ──> c[1]`,
+          codeSnippet: `from qiskit import QuantumCircuit
+
+# 2 qubits and 2 classical bits
+qc = QuantumCircuit(2, 2)
+
+# Set control qubit 0 to |1>
+qc.x(0)
+
+# Apply CNOT: control is 0, target is 1
+qc.cx(0, 1)
+
+# Measure both qubits: [q0, q1] -> [c0, c1]
+qc.measure([0, 1], [0, 1])`,
+          language: 'python',
+          lineExplanations: [
+            {
+              codeSnippet: 'qc = QuantumCircuit(2, 2)',
+              explanation: 'Allocates a 2-qubit register (q0, q1) and 2 classical bits (c0, c1).',
+              circuitMapping: '2-qubit circuit'
+            },
+            {
+              codeSnippet: 'qc.x(0)',
+              explanation: 'Flips control qubit 0 from |0⟩ to |1⟩.',
+              circuitMapping: '[ X Gate ] on q[0]'
+            },
+            {
+              codeSnippet: 'qc.cx(0, 1)',
+              explanation: 'Controlled-NOT: since control q0 is 1, target q1 is inverted to 1.',
+              circuitMapping: '● on q[0], ⊕ on q[1]'
+            },
+            {
+              codeSnippet: 'qc.measure([0, 1], [0, 1])',
+              explanation: 'Reads out both qubits into their corresponding classical bits.',
+              circuitMapping: 'Dual [ M ] Readouts'
+            }
+          ],
+          simulatedOutput: {
+            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            description: 'Because control was 1, target was flipped. Outcome is 100% |11⟩.',
+            counts: { '11': 1024 },
+            percentages: { '11': 100 },
+            shots: 1024,
+            stateDescription: '|ψ⟩ = 1.00|11⟩ (Both Qubits High)'
+          }
+        },
+        codingPractice: {
+          title: 'Connect Two Qubits with CNOT',
+          taskDescription: 'The control qubit 0 has been prepared in state |1⟩. Add a CNOT gate with control 0 and target 1 using `qc.cx(0, 1)`.',
+          starterCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(2, 2)
+qc.x(0)  # Prepare control qubit in |1>
+
+# TODO: Apply CNOT gate with control=0 and target=1
+
+
+qc.measure([0, 1], [0, 1])`,
+          hint: 'Use qc.cx(0, 1) to connect control qubit 0 to target qubit 1.',
+          solutionCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(2, 2)
+qc.x(0)  # Prepare control qubit in |1>
+
+# Apply CNOT gate
+qc.cx(0, 1)
+
+qc.measure([0, 1], [0, 1])`,
+          validationRules: {
+            requiredOperations: ['qc.cx(0, 1)'],
+            successMessage: 'Spot on! The CNOT gate flipped target qubit 1 because control qubit 0 was |1⟩.',
+            failureHint: 'Add `qc.cx(0, 1)` before the measurement.'
+          },
+          simulatedRun: {
+            expectedState: '|11⟩',
+            counts: { '11': 1024 },
+            explanation: '1,024 shots measured: 100% outcome 11. Controlled-NOT successfully triggered!'
+          }
         },
         selfCheck: {
           question: 'If the control qubit is in state |0⟩ and target is |0⟩, what is the output of CNOT?',
@@ -808,6 +1199,87 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
           shots: 1024,
           expectedDistribution: { '0': 50, '1': 50 },
           whyExplanation: 'H produces (|0⟩+|1⟩)/√2. The X gate swaps amplitudes, giving (|1⟩+|0⟩)/√2. Both states still carry 50% probability upon measurement.'
+        },
+        codeConnection: {
+          title: 'From Circuit to Python: Assembling Sequential Gates',
+          whatAreWeCoding: 'In quantum programming, gates are appended chronologically to the circuit. In this script, we apply Hadamard to create superposition, followed immediately by Pauli-X.',
+          circuitPreview: 'q[0]: |0⟩ ─── [ H ] ─── [ X ] ─── [ M ] ──> c[0]',
+          codeSnippet: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# Step 1: Create superposition
+qc.h(0)
+
+# Step 2: Bit-flip the superposition components
+qc.x(0)
+
+# Step 3: Readout
+qc.measure(0, 0)`,
+          language: 'python',
+          lineExplanations: [
+            {
+              codeSnippet: 'qc.h(0)',
+              explanation: 'Gate 1 (Time Step 0): Rotates |0⟩ into (|0⟩ + |1⟩)/√2.',
+              circuitMapping: '[ H Gate ] at t=0'
+            },
+            {
+              codeSnippet: 'qc.x(0)',
+              explanation: 'Gate 2 (Time Step 1): Swaps the 0 and 1 amplitude coefficients.',
+              circuitMapping: '[ X Gate ] at t=1'
+            },
+            {
+              codeSnippet: 'qc.measure(0, 0)',
+              explanation: 'Step 3: Measures the resulting state into classical bit 0.',
+              circuitMapping: '[ M Measure ]'
+            }
+          ],
+          simulatedOutput: {
+            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            description: 'Sequential operations executed in order. The outcome remains a balanced 50/50 superposition.',
+            counts: { '0': 508, '1': 516 },
+            percentages: { '0': 49.6, '1': 50.4 },
+            shots: 1024,
+            stateDescription: '|ψ⟩ = 0.707|1⟩ + 0.707|0⟩ (Depth = 2)'
+          }
+        },
+        codingPractice: {
+          title: 'Assemble a Two-Step Circuit: H then X',
+          taskDescription: 'Assemble a 2-gate sequential circuit on qubit 0: first apply `qc.h(0)`, then apply `qc.x(0)`.',
+          starterCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# TODO: Step 1 - Apply Hadamard gate to qubit 0
+
+
+# TODO: Step 2 - Apply Pauli-X gate to qubit 0
+
+
+qc.measure(0, 0)`,
+          hint: 'First line: qc.h(0). Second line: qc.x(0).',
+          solutionCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(1, 1)
+
+# Step 1 - Apply Hadamard gate
+qc.h(0)
+
+# Step 2 - Apply Pauli-X gate
+qc.x(0)
+
+qc.measure(0, 0)`,
+          validationRules: {
+            requiredOperations: ['qc.h(0)', 'qc.x(0)'],
+            minLines: 8,
+            successMessage: 'Great job! You assembled a 2-step quantum circuit in sequence.',
+            failureHint: 'Make sure both `qc.h(0)` and `qc.x(0)` are included in your code.'
+          },
+          simulatedRun: {
+            expectedState: 'Balanced Superposition',
+            counts: { '0': 512, '1': 512 },
+            explanation: '1,024 shots measured: ~50% 0 and ~50% 1. Circuit depth = 2 successfully evaluated.'
+          }
         },
         selfCheck: {
           question: 'What is the circuit depth of a circuit containing 2 sequential gates on one wire?',
@@ -958,6 +1430,89 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
         durationMinutes: 10,
         conceptExplanation: 'Here is the canonical recipe to build the Bell State |Φ⁺⟩: 1) Initialize |00⟩. 2) Apply an H gate to qubit 0: (|00⟩ + |10⟩)/√2. 3) Apply CNOT with qubit 0 as control and qubit 1 as target: (|00⟩ + |11⟩)/√2. Notice: |01⟩ and |10⟩ have vanished!',
         visualNote: '|00⟩ ──[ H on q0 ]──> (|00⟩+|10⟩)/√2 ──[ CNOT ]──> (|00⟩+|11⟩)/√2',
+        codeConnection: {
+          title: 'From Circuit to Python: Coding the Canonical Bell State',
+          whatAreWeCoding: 'To create the maximally entangled Bell state (|00⟩ + |11⟩)/√2 in code, we combine a Hadamard gate on qubit 0 followed by a CNOT from qubit 0 to qubit 1. Measurement of both qubits reveals 100% quantum correlation.',
+          circuitPreview: `q[0]: |0⟩ ─── [ H ] ─── ● ─── [ M ] ──> c[0]
+q[1]: |0⟩ ───────────── ⊕ ─── [ M ] ──> c[1]`,
+          codeSnippet: `from qiskit import QuantumCircuit
+
+# 2 qubits and 2 classical bits
+qc = QuantumCircuit(2, 2)
+
+# Step 1: Put qubit 0 into equal superposition
+qc.h(0)
+
+# Step 2: Entangle qubit 1 with qubit 0
+qc.cx(0, 1)
+
+# Step 3: Measure both qubits
+qc.measure([0, 1], [0, 1])`,
+          language: 'python',
+          lineExplanations: [
+            {
+              codeSnippet: 'qc.h(0)',
+              explanation: 'Places control qubit 0 into equal superposition (|00⟩ + |10⟩)/√2.',
+              circuitMapping: '[ H Gate ] on q[0]'
+            },
+            {
+              codeSnippet: 'qc.cx(0, 1)',
+              explanation: 'CNOT acts on the |10⟩ component to flip target to |11⟩, producing (|00⟩ + |11⟩)/√2.',
+              circuitMapping: 'CNOT (● on q0, ⊕ on q1)'
+            },
+            {
+              codeSnippet: 'qc.measure([0, 1], [0, 1])',
+              explanation: 'Collapses both entangled qubits into classical bits.',
+              circuitMapping: 'Dual [ M ] Readouts'
+            }
+          ],
+          simulatedOutput: {
+            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            description: 'Outcomes 01 and 10 NEVER appear! Whenever qubit 0 is 0, qubit 1 is 0. Whenever qubit 0 is 1, qubit 1 is 1.',
+            counts: { '00': 514, '11': 510 },
+            percentages: { '00': 50.2, '11': 49.8 },
+            shots: 1024,
+            stateDescription: '|Φ⁺⟩ = (|00⟩ + |11⟩)/√2 (Maximally Entangled Bell Pair)'
+          }
+        },
+        codingPractice: {
+          title: 'Build the Canonical Bell State |Φ⁺⟩',
+          taskDescription: 'Complete the Bell state script by applying `qc.h(0)` to create superposition, followed by `qc.cx(0, 1)` to entangle the pair.',
+          starterCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(2, 2)
+
+# TODO: Step 1: Put qubit 0 into superposition
+
+
+# TODO: Step 2: Entangle qubit 1 with qubit 0 using CNOT
+
+
+qc.measure([0, 1], [0, 1])`,
+          hint: 'First call qc.h(0), then call qc.cx(0, 1).',
+          solutionCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(2, 2)
+
+# Step 1: Put qubit 0 into superposition
+qc.h(0)
+
+# Step 2: Entangle qubit 1 with qubit 0 using CNOT
+qc.cx(0, 1)
+
+qc.measure([0, 1], [0, 1])`,
+          validationRules: {
+            requiredOperations: ['qc.h(0)', 'qc.cx(0, 1)'],
+            minLines: 8,
+            successMessage: 'Outstanding! You generated the maximally entangled Bell state. Simulation verifies 00 and 11 correlation!',
+            failureHint: 'Make sure you apply `qc.h(0)` first, followed by `qc.cx(0, 1)`.'
+          },
+          simulatedRun: {
+            expectedState: '|Φ⁺⟩ = (|00⟩ + |11⟩)/√2',
+            counts: { '00': 512, '11': 512 },
+            explanation: '1,024 shots measured: ~50% 00 and ~50% 11. Zero cross-terms (01 or 10)! Perfect correlation achieved.'
+          }
+        },
         selfCheck: {
           question: 'In the Bell state (|00⟩ + |11⟩)/√2, what is the probability of measuring state |01⟩?',
           options: [
@@ -1165,6 +1720,107 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
           shots: 1024,
           expectedDistribution: { '1': 100 },
           whyExplanation: 'Destructive interference completely wiped out the probability of measuring 0. Measuring 1 with 100% certainty proves in a single query that the function is balanced!'
+        },
+        codeConnection: {
+          title: 'From Circuit to Python: Deutsch-Jozsa Interference Transform',
+          whatAreWeCoding: 'In the Deutsch-Jozsa algorithm, we set up quantum interference using phase kickback. Target qubit 1 is initialized to |1⟩ with `qc.x(1)` and placed into superposition with `qc.h(1)`. After the CNOT query, a final `qc.h(0)` on qubit 0 causes destructive interference for |0⟩ and constructive interference for |1⟩.',
+          circuitPreview: `q[0]: |0⟩ ─── [ H ] ─── ● ─── [ H ] ─── [ M ] ──> c[0]
+q[1]: |0⟩ ─── [ X ] ─── [ H ] ─── ⊕ ───`,
+          codeSnippet: `from qiskit import QuantumCircuit
+
+# 2 qubits, 1 measurement bit
+qc = QuantumCircuit(2, 1)
+
+# Step 1: Initialize target qubit 1 to |1>
+qc.x(1)
+
+# Step 2: Put both qubits into superposition
+qc.h(0)
+qc.h(1)
+
+# Step 3: Balanced Oracle (CNOT kicks back negative phase to q0)
+qc.cx(0, 1)
+
+# Step 4: Interference transform on query qubit q0
+qc.h(0)
+
+# Step 5: Measure query qubit q0
+qc.measure(0, 0)`,
+          language: 'python',
+          lineExplanations: [
+            {
+              codeSnippet: 'qc.x(1)',
+              explanation: 'Sets auxiliary qubit 1 to |1⟩ so that subsequent Hadamard creates |-⟩.',
+              circuitMapping: '[ X Gate ] on q1'
+            },
+            {
+              codeSnippet: 'qc.h(0)\nqc.h(1)',
+              explanation: 'Places query and target qubits into superposition.',
+              circuitMapping: 'Parallel [ H Gate ]s'
+            },
+            {
+              codeSnippet: 'qc.cx(0, 1)',
+              explanation: 'Query oracle: CNOT against |-⟩ kicks back a (-1) phase to q0.',
+              circuitMapping: 'CNOT Oracle'
+            },
+            {
+              codeSnippet: 'qc.h(0)',
+              explanation: 'Interference transform: converts the kicked-back phase into destructive interference for 0, yielding pure 1.',
+              circuitMapping: 'Final [ H Gate ] on q0'
+            }
+          ],
+          simulatedOutput: {
+            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            description: '100% of shots measured outcome 1 in a single query! Destructive interference canceled 0 completely.',
+            counts: { '1': 1024 },
+            percentages: { '1': 100 },
+            shots: 1024,
+            stateDescription: '|ψ⟩ = 1.00|1⟩ (Deterministic Single-Query Result)'
+          }
+        },
+        codingPractice: {
+          title: 'Complete the Interference Readout Gate',
+          taskDescription: 'The Deutsch-Jozsa oracle and phase kickback are prepared. Insert the final interference transform gate `qc.h(0)` before measurement.',
+          starterCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(2, 1)
+qc.x(1)
+qc.h(0)
+qc.h(1)
+
+# Balanced Oracle
+qc.cx(0, 1)
+
+# TODO: Add the final Hadamard gate on q0 to complete interference
+
+
+qc.measure(0, 0)`,
+          hint: 'Call qc.h(0) right before the measurement step.',
+          solutionCode: `from qiskit import QuantumCircuit
+
+qc = QuantumCircuit(2, 1)
+qc.x(1)
+qc.h(0)
+qc.h(1)
+
+# Balanced Oracle
+qc.cx(0, 1)
+
+# Add the final Hadamard gate on q0
+qc.h(0)
+
+qc.measure(0, 0)`,
+          validationRules: {
+            requiredOperations: ['qc.h(0)'],
+            minLines: 12,
+            successMessage: 'Brilliant! The final Hadamard transformed phase kickback into destructive interference. 100% outcome 1 proves the function is balanced in 1 query!',
+            failureHint: 'Make sure to add `qc.h(0)` after `qc.cx(0, 1)` and before `qc.measure(0, 0)`.'
+          },
+          simulatedRun: {
+            expectedState: '|1⟩ (Balanced Function Detected)',
+            counts: { '1': 1024 },
+            explanation: '1,024 shots measured: 100% outcome 1. Destructive interference eliminated outcome 0 with mathematical certainty!'
+          }
         },
         selfCheck: {
           question: 'What quantum property cancels out the unwanted outcome in this algorithm?',

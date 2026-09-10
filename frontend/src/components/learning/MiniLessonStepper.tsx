@@ -16,7 +16,7 @@ export const MiniLessonStepper: React.FC<MiniLessonStepperProps> = ({
   onSelectLesson
 }) => {
   return (
-    <div className="bg-white/90 dark:bg-slate-900/60 backdrop-blur-md rounded-xl border border-slate-300 dark:border-slate-800/80 p-3 overflow-x-auto shadow-sm">
+    <div className="bg-white dark:bg-[#151e2b] rounded-xl border border-slate-200 dark:border-[#223043] p-2.5 overflow-x-auto shadow-sm">
       <div className="flex items-center gap-2 min-w-max">
         {lessons.map((lesson, idx) => {
           const isActive = lesson.id === activeLessonId;
@@ -27,19 +27,19 @@ export const MiniLessonStepper: React.FC<MiniLessonStepperProps> = ({
               key={lesson.id}
               onClick={() => onSelectLesson(lesson.id)}
               className={`
-                px-3.5 py-2 rounded-lg text-xs font-medium transition-all flex items-center gap-2 border text-left
+                px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-2 border text-left
                 ${isActive
-                  ? 'bg-cyan-50 dark:bg-gradient-to-r dark:from-cyan-500/15 dark:to-indigo-500/15 border-cyan-500 text-cyan-900 dark:text-cyan-300 font-bold shadow-sm shadow-cyan-500/10'
+                  ? 'bg-teal-50 dark:bg-teal-950/50 border-teal-600 dark:border-teal-500 text-teal-900 dark:text-teal-200 font-bold shadow-sm'
                   : isCompleted
-                  ? 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-500/40 text-emerald-900 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-950/40'
-                  : 'bg-slate-100 dark:bg-slate-950/40 border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-900'}
+                  ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-400 dark:border-emerald-500/40 text-emerald-900 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-950/50'
+                  : 'bg-slate-50 dark:bg-[#111823] border-slate-200 dark:border-[#223043] text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#1b2636]'}
               `}
             >
               {isCompleted ? (
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
               ) : (
                 <span className={`w-4 h-4 rounded-full border text-[10px] font-mono flex items-center justify-center flex-shrink-0 ${
-                  isActive ? 'border-cyan-600 dark:border-cyan-400 text-cyan-700 dark:text-cyan-300 font-bold' : 'border-slate-400 dark:border-slate-700 text-slate-600 dark:text-slate-500'
+                  isActive ? 'border-teal-700 dark:border-teal-400 text-teal-800 dark:text-teal-300 font-bold' : 'border-slate-300 dark:border-[#2b3a4f] text-slate-500 dark:text-slate-400'
                 }`}>
                   {idx + 1}
                 </span>
@@ -57,3 +57,4 @@ export const MiniLessonStepper: React.FC<MiniLessonStepperProps> = ({
     </div>
   );
 };
+

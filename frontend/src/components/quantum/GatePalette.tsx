@@ -22,12 +22,12 @@ export const GatePalette: React.FC<GatePaletteProps> = ({
   ];
 
   return (
-    <Card variant="glass" className="p-4">
+    <Card variant="default" className="p-4">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
           Gate Palette
         </h4>
-        <span className="text-[11px] text-slate-400">
+        <span className="text-[11px] text-slate-500 dark:text-slate-400">
           {selectedGate ? `Selected: ${selectedGate.name}` : 'Select a gate then click a wire slot'}
         </span>
       </div>
@@ -39,7 +39,7 @@ export const GatePalette: React.FC<GatePaletteProps> = ({
 
           return (
             <div key={cat.id} className="space-y-1.5">
-              <div className="text-[10px] font-mono text-slate-400 uppercase">
+              <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase">
                 {cat.label}
               </div>
               <div className="flex flex-wrap gap-2">
@@ -57,5 +57,6 @@ export const GatePalette: React.FC<GatePaletteProps> = ({
         })}
       </div>
     </Card>
+
   );
 };

@@ -27,21 +27,21 @@ export const GateButton: React.FC<GateButtonProps> = ({
         className={`
           ${sizeClasses} rounded-lg font-mono font-bold border transition-all duration-150 flex flex-col items-center justify-center
           ${gate.color}
-          ${isSelected ? 'ring-2 ring-cyan-400 scale-105 shadow-md shadow-cyan-500/30' : 'opacity-90 hover:opacity-100 hover:scale-105 active:scale-95'}
+          ${isSelected ? 'ring-2 ring-teal-600 dark:ring-teal-400 scale-105 shadow-sm' : 'opacity-90 hover:opacity-100 hover:scale-105 active:scale-95'}
         `}
       >
         <span>{gate.symbol}</span>
       </button>
 
       {/* Mini hover tooltip */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block z-50 pointer-events-none w-48 p-2 rounded-lg bg-slate-950 border border-slate-700/80 shadow-2xl text-[11px] text-slate-300">
-        <div className="font-semibold text-white flex items-center justify-between">
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 hidden group-hover:block z-50 pointer-events-none w-48 p-2.5 rounded-lg bg-white dark:bg-[#151e2b] border border-slate-300 dark:border-[#2b3a4f] shadow-xl text-[11px] text-slate-700 dark:text-slate-300">
+        <div className="font-semibold text-slate-900 dark:text-[#e6edf4] flex items-center justify-between">
           <span>{gate.name}</span>
-          <span className="text-[10px] text-cyan-400 font-mono">{gate.numberOfQubits}Q</span>
+          <span className="text-[10px] text-teal-700 dark:text-teal-400 font-mono">{gate.numberOfQubits}Q</span>
         </div>
-        <p className="mt-1 text-slate-400 leading-snug">{gate.description}</p>
+        <p className="mt-1 text-slate-600 dark:text-slate-400 leading-snug">{gate.description}</p>
         {gate.matrixLabel && (
-          <div className="mt-1.5 p-1 rounded bg-slate-900 font-mono text-[10px] text-cyan-300 border border-slate-800">
+          <div className="mt-1.5 p-1 rounded bg-slate-100 dark:bg-[#111823] font-mono text-[10px] text-teal-800 dark:text-teal-300 border border-slate-200 dark:border-[#223043]">
             {gate.matrixLabel}
           </div>
         )}
@@ -49,3 +49,4 @@ export const GateButton: React.FC<GateButtonProps> = ({
     </div>
   );
 };
+

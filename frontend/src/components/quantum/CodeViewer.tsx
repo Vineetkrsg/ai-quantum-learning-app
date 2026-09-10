@@ -93,21 +93,21 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({ circuit }) => {
   };
 
   return (
-    <Card variant="glass">
+    <Card variant="default">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="text-sm">
-          <Code className="w-4 h-4 text-cyan-400" />
+          <Code className="w-4 h-4 text-teal-700 dark:text-teal-400" />
           <span>Circuit Code Export</span>
         </CardTitle>
         <div className="flex items-center gap-2">
           {/* Format Switcher */}
-          <div className="flex rounded-lg bg-slate-950 p-1 border border-slate-800">
+          <div className="flex rounded-lg bg-slate-100 dark:bg-[#0c111a] p-1 border border-slate-300 dark:border-[#223043]">
             <button
               onClick={() => setFormat('qiskit')}
               className={`px-2.5 py-1 text-xs font-mono rounded ${
                 format === 'qiskit'
-                  ? 'bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/40'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-teal-700 text-white font-semibold shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               Qiskit (Python)
@@ -116,8 +116,8 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({ circuit }) => {
               onClick={() => setFormat('qasm')}
               className={`px-2.5 py-1 text-xs font-mono rounded ${
                 format === 'qasm'
-                  ? 'bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/40'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-teal-700 text-white font-semibold shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               OpenQASM 2.0
@@ -127,17 +127,17 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({ circuit }) => {
           {/* Copy Button */}
           <button
             onClick={handleCopy}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors"
+            className="p-1.5 rounded-lg text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white bg-slate-100 dark:bg-[#151e2b] border border-slate-300 dark:border-[#2b3a4f] transition-colors"
             title="Copy code"
           >
-            {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+            {copied ? <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-4 h-4" />}
           </button>
         </div>
       </CardHeader>
 
       <CardContent className="pt-2">
         <div className="relative">
-          <pre className="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed max-h-72">
+          <pre className="p-4 rounded-xl bg-slate-900 dark:bg-[#0b0f16] border border-slate-300 dark:border-[#223043] font-mono text-xs text-teal-100 dark:text-[#d8e2ed] overflow-x-auto leading-relaxed max-h-72">
             <code>{codeText}</code>
           </pre>
         </div>
@@ -145,3 +145,4 @@ export const CodeViewer: React.FC<CodeViewerProps> = ({ circuit }) => {
     </Card>
   );
 };
+

@@ -43,18 +43,18 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
       <div className="fixed inset-0" onClick={onClose} />
-      <div className={`relative w-full ${maxWidths[maxWidth]} z-10 animate-in zoom-in-95 duration-200`}>
-        <Card variant="glass" className="border-slate-700/80 shadow-2xl bg-slate-900/95">
-          <div className="flex items-center justify-between p-5 border-b border-slate-800">
+      <div className={`relative w-full ${maxWidths[maxWidth]} z-10 animate-in zoom-in-95 duration-150`}>
+        <Card variant="default" className="border-slate-300 dark:border-[#2b3a4f] shadow-2xl bg-white dark:bg-[#151e2b]">
+          <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-[#223043]">
             <div>
-              <h3 className="text-base font-semibold text-white">{title}</h3>
-              {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
+              <h3 className="text-base font-semibold text-slate-900 dark:text-[#e6edf4]">{title}</h3>
+              {description && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{description}</p>}
             </div>
             <button
               onClick={onClose}
-              className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#1b2636] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -65,3 +65,4 @@ export const Modal: React.FC<ModalProps> = ({
     </div>
   );
 };
+

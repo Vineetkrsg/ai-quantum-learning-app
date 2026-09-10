@@ -26,17 +26,17 @@ export const LessonNavigation: React.FC<LessonNavigationProps> = ({
   };
 
   return (
-    <Card variant="glass" className="p-6 space-y-6">
+    <Card variant="default" className="p-6 space-y-6">
       {/* Top action: Open in Quantum Lab banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-gradient-to-r from-cyan-50 via-indigo-50/60 to-slate-100 dark:from-cyan-950/40 dark:via-indigo-950/30 dark:to-slate-900 border border-cyan-300 dark:border-cyan-500/30 shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-card)]">
         <div>
           <div className="flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
-            <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
+            <Cpu className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
+            <h4 className="text-sm sm:text-base font-bold text-[var(--fg-main)]">
               Ready for Open-Ended Experimentation?
             </h4>
           </div>
-          <p className="text-xs text-slate-700 dark:text-slate-300 mt-1 max-w-xl leading-relaxed">
+          <p className="text-xs text-[var(--fg-muted)] mt-1 max-w-xl leading-relaxed">
             Transfer this example circuit directly into the full Quantum Circuit Studio to append gates, inspect Python Qiskit code, and run custom shots.
           </p>
         </div>
@@ -53,17 +53,17 @@ export const LessonNavigation: React.FC<LessonNavigationProps> = ({
       </div>
 
       {/* Completion & Next/Prev Navigation */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-slate-300/80 dark:border-slate-800/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-[var(--border-card)]">
         {/* Mark complete toggle */}
         <button
           onClick={onToggleComplete}
           className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold border transition-all ${
             isCompleted
               ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-800 dark:text-emerald-300'
-              : 'bg-slate-100 dark:bg-slate-900 border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-700'
+              : 'bg-[var(--surface-subtle)] border-[var(--border-card)] text-[var(--fg-muted)] hover:text-[var(--fg-main)] hover:border-[var(--border-highlight)]'
           }`}
         >
-          <CheckCircle2 className={`w-4 h-4 ${isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-600'}`} />
+          <CheckCircle2 className={`w-4 h-4 ${isCompleted ? 'text-emerald-600 dark:text-emerald-400' : 'text-[var(--fg-muted)]'}`} />
           <span>{isCompleted ? 'Module Completed!' : 'Mark Module Complete'}</span>
         </button>
 

@@ -38,31 +38,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       {/* Mobile backdrop */}
       {isOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
           onClick={onClose}
         />
       )}
 
       <aside className={`
-        fixed top-0 bottom-0 left-0 z-40 w-64 bg-white/95 dark:bg-[#090D16]/95 backdrop-blur-xl border-r border-slate-200 dark:border-slate-800/80 
+        fixed top-0 bottom-0 left-0 z-40 w-64 bg-white/95 dark:bg-[#0e141d]/95 backdrop-blur-xl border-r border-slate-200 dark:border-[#223043] 
         flex flex-col transition-transform duration-300 ease-in-out
         lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Brand Header */}
-        <div className="h-16 px-5 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80">
+        <div className="h-16 px-5 flex items-center justify-between border-b border-slate-200 dark:border-[#223043]">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 to-indigo-600 p-0.5 shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-              <div className="w-full h-full bg-slate-100 dark:bg-slate-950 rounded-[10px] flex items-center justify-center text-cyan-600 dark:text-cyan-400">
-                <Atom className="w-5 h-5 animate-spin-slow" />
-              </div>
+            <div className="w-9 h-9 rounded-xl bg-teal-800 dark:bg-teal-700 text-white p-0.5 shadow-sm border border-teal-900 dark:border-teal-500/40 group-hover:scale-105 transition-transform flex items-center justify-center">
+              <Atom className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-bold text-base tracking-tight text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors">
+                <span className="font-bold text-base tracking-tight text-slate-900 dark:text-[#e6edf4] group-hover:text-teal-700 dark:group-hover:text-teal-300 transition-colors">
                   QuLearn
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 font-semibold border border-cyan-500/30">
-                  AI
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 font-semibold border border-teal-200 dark:border-teal-500/30">
+                  Lab
                 </span>
               </div>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">SIH Quantum Platform</p>
@@ -73,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           {onClose && (
             <button
               onClick={onClose}
-              className="lg:hidden p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+              className="lg:hidden p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-[#1b2636]"
             >
               <X className="w-5 h-5" />
             </button>
@@ -83,7 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {/* Navigation Links */}
         <div className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
           <div className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-            Navigation
+            Curriculum & Tools
           </div>
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -93,18 +91,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 to={item.to}
                 onClick={onClose}
                 className={({ isActive }) => `
-                  group flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
+                  group flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150
                   ${isActive 
-                    ? 'bg-gradient-to-r from-cyan-500/15 to-indigo-500/10 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30 shadow-sm shadow-cyan-500/10 font-semibold' 
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100/80 dark:hover:bg-slate-800/50 border border-transparent'}
+                    ? 'bg-teal-50 dark:bg-teal-950/50 text-teal-900 dark:text-teal-200 border border-teal-300 dark:border-teal-500/40 shadow-sm font-semibold' 
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-[#1b2636]/60 border border-transparent'}
                 `}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
+                  <Icon className="w-4 h-4 transition-transform group-hover:scale-105" />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700/60">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#1b2636] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-[#2b3a4f]">
                     {item.badge}
                   </span>
                 )}
@@ -112,17 +110,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             );
           })}
 
-          {/* External links / Quick actions */}
+          {/* Quick Launch */}
           <div className="pt-5 px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             Quick Launch
           </div>
           <Link
             to="/lab"
             onClick={onClose}
-            className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-900/80 hover:bg-slate-100 dark:hover:bg-slate-800/80 border border-slate-200 dark:border-slate-800 transition-colors"
+            className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-[#151e2b] hover:bg-slate-100 dark:hover:bg-[#1b2636] border border-slate-200 dark:border-[#223043] transition-colors"
           >
             <div className="flex items-center gap-2.5">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
+              <Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
               <span>Launch Bell State Lab</span>
             </div>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
@@ -130,7 +128,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           <Link
             to="/"
             onClick={onClose}
-            className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/40 transition-colors"
+            className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-[#1b2636]/40 transition-colors"
           >
             <div className="flex items-center gap-2.5">
               <ExternalLink className="w-3.5 h-3.5" />
@@ -140,18 +138,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* User XP & Simulation Status Footer */}
-        <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/40 space-y-2">
-          <div className="p-3 rounded-xl bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800/80 shadow-sm">
+        <div className="p-3 border-t border-slate-200 dark:border-[#223043] bg-slate-50/60 dark:bg-[#0c111a]/60 space-y-2">
+          <div className="p-3 rounded-xl bg-white dark:bg-[#151e2b] border border-slate-200 dark:border-[#223043] shadow-sm">
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-300 font-medium">
-                <Zap className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400 fill-current" />
+              <div className="flex items-center gap-1.5 text-amber-700 dark:text-amber-300 font-medium">
+                <Zap className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 fill-current" />
                 <span>{xp} XP</span>
               </div>
               <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">{streakDays} Day Streak</span>
             </div>
-            <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-slate-200 dark:bg-[#0c111a] h-1.5 rounded-full overflow-hidden">
               <div 
-                className="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-full transition-all duration-300" 
+                className="bg-amber-600 dark:bg-amber-500 h-full rounded-full transition-all duration-300" 
                 style={{ width: `${Math.min(100, Math.max(0, overallProgress))}%` }} 
               />
             </div>
@@ -162,10 +160,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
               <span>Simulator Ready</span>
             </div>
-            <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">v1.0 MVP</span>
+            <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">Qiskit Aer</span>
           </div>
         </div>
       </aside>
     </>
   );
 };
+

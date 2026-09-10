@@ -48,6 +48,55 @@ export interface SelfCheckData {
   explanationIncorrect: string;
 }
 
+export interface CodeLineExplanation {
+  lineRange?: string;
+  codeSnippet: string;
+  explanation: string;
+  circuitMapping?: string;
+}
+
+export interface SimulatedOutputData {
+  outputTitle?: string;
+  description: string;
+  counts: Record<string, number>;
+  percentages?: Record<string, number>;
+  shots?: number;
+  stateDescription?: string;
+}
+
+export interface CodeConnectionData {
+  title?: string;
+  whatAreWeCoding: string;
+  circuitPreview: string;
+  codeSnippet: string;
+  language?: string;
+  lineExplanations: CodeLineExplanation[];
+  simulatedOutput?: SimulatedOutputData;
+}
+
+export interface CodingValidationRules {
+  requiredOperations?: string[];
+  forbiddenOperations?: string[];
+  minLines?: number;
+  customValidatorId?: string;
+  successMessage: string;
+  failureHint: string;
+}
+
+export interface CodingPracticeData {
+  title: string;
+  taskDescription: string;
+  starterCode: string;
+  hint?: string;
+  solutionCode?: string;
+  validationRules: CodingValidationRules;
+  simulatedRun: {
+    expectedState: string;
+    counts: Record<string, number>;
+    explanation: string;
+  };
+}
+
 export interface MiniLesson {
   id: string;
   title: string;
@@ -57,6 +106,11 @@ export interface MiniLesson {
   visualNote?: string;
   interactiveTry?: InteractiveTryData;
   selfCheck?: SelfCheckData;
+  initialCircuit?: string[];
+  availableGates?: string[];
+  hasCircuitPractice?: boolean;
+  codeConnection?: CodeConnectionData;
+  codingPractice?: CodingPracticeData;
 }
 
 export interface PracticeTaskData {

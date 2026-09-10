@@ -1,35 +1,70 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AssessmentData } from '../../types/learning';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Badge } from '../ui/Badge';
 import { Trophy, CheckCircle2, XCircle, HelpCircle, RotateCcw, ArrowRight } from 'lucide-react';
+import { useProgress } from '../../context/ProgressContext';
+
+export interface QuickAssessmentState {
+  selectedOptionId: string | null;
+  isSubmitted: boolean;
+  isCorrect: boolean;
+}
+
+const DEFAULT_STATE: QuickAssessmentState = {
+  selectedOptionId: null,
+  isSubmitted: false,
+  isCorrect: false
+};
 
 interface QuickAssessmentProps {
+  moduleId?: string;
+  lessonId?: string;
+  activityId?: string;
+  scopedKey?: string;
   assessment: AssessmentData;
   onPass?: () => void;
 }
 
 export const QuickAssessment: React.FC<QuickAssessmentProps> = ({
+  moduleId,
+  lessonId,
+  activityId = 'assessment-1',
+  scopedKey,
   assessment,
   onPass
 }) => {
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const progress = useProgress();
+  const effectiveKey = scopedKey || `${moduleId || 'module'}/${lessonId || 'assessment'}/${activityId}`;
+  const currentState = progress.getActivityState<QuickAssessmentState>(effectiveKey, DEFAULT_STATE);
 
+  const selectedOptionId = currentState.selectedOptionId;
+  const isSubmitted = currentState.isSubmitted;
   const isCorrect = selectedOptionId === assessment.correctOptionId;
+
+  const setSelectedOptionId = (id: string | null) => {
+    progress.setActivityState<QuickAssessmentState>(effectiveKey, {
+      ...currentState,
+      selectedOptionId: id
+    });
+  };
 
   const handleSubmit = () => {
     if (!selectedOptionId) return;
-    setIsSubmitted(true);
-    if (selectedOptionId === assessment.correctOptionId && onPass) {
+    const correct = selectedOptionId === assessment.correctOptionId;
+    progress.setActivityState<QuickAssessmentState>(effectiveKey, {
+      selectedOptionId,
+      isSubmitted: true,
+      isCorrect: correct
+    });
+    if (correct && onPass) {
       onPass();
     }
   };
 
   const handleReset = () => {
-    setSelectedOptionId(null);
-    setIsSubmitted(false);
+    progress.setActivityState<QuickAssessmentState>(effectiveKey, DEFAULT_STATE);
   };
 
   return (

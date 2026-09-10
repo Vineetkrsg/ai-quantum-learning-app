@@ -13,26 +13,26 @@ export const QuizStatsCard: React.FC = () => {
     : '0.0% Avg';
 
   return (
-    <Card variant="glass">
+    <Card variant="default">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm">
             <Trophy className="w-4 h-4 text-amber-500 dark:text-amber-400" />
             <span>Quiz & Assessment Performance</span>
           </CardTitle>
-          <span className="text-xs text-amber-600 dark:text-amber-300 font-mono font-semibold">
+          <span className="text-xs text-amber-600 dark:text-amber-400 font-mono font-semibold">
             {averageScore}
           </span>
         </div>
       </CardHeader>
       <CardContent className="space-y-3 pt-1">
         {displayStats.length === 0 ? (
-          <div className="text-center py-6 px-4 rounded-xl border border-dashed border-slate-350 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/30">
+          <div className="text-center py-6 px-4 rounded-xl border border-dashed border-[var(--border-card)] bg-[var(--surface-sunken)]">
             <Sparkles className="w-6 h-6 mx-auto mb-2 text-amber-500 dark:text-amber-400" />
-            <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+            <p className="text-xs font-semibold text-[var(--fg-main)]">
               No quiz attempts yet
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-[11px] text-[var(--fg-muted)] mt-1">
               Complete the self-check questions in any lesson or take an assessment to log your performance.
             </p>
           </div>
@@ -42,14 +42,14 @@ export const QuizStatsCard: React.FC = () => {
             return (
               <div
                 key={quiz.id}
-                className="flex items-center justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800"
+                className="flex items-center justify-between p-3 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)]"
               >
                 <div>
-                  <h5 className="text-xs font-semibold text-slate-900 dark:text-white">{quiz.topic}</h5>
-                  <span className="text-[10px] text-slate-500 font-mono">{quiz.date}</span>
+                  <h5 className="text-xs font-semibold text-[var(--fg-main)]">{quiz.topic}</h5>
+                  <span className="text-[10px] text-[var(--fg-muted)] font-mono">{quiz.date}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-cyan-600 dark:text-cyan-300 font-bold">
+                  <span className="text-xs font-mono text-sciteal-700 dark:text-sciteal-400 font-bold">
                     {quiz.score}/{quiz.totalQuestions} ({scorePercent}%)
                   </span>
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />

@@ -195,15 +195,15 @@ export const LabPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 font-mono">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[var(--surface-sunken)] text-sciteal-700 dark:text-sciteal-300 border border-[var(--border-card)] font-mono font-semibold">
               Qiskit Aer Simulator
             </span>
-            <span className="text-xs text-slate-400 font-mono">
+            <span className="text-xs text-[var(--fg-muted)] font-mono">
               {circuit.numberOfQubits} Qubits • {circuit.gates.length} Gates
             </span>
           </div>
-          <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <Atom className="w-6 h-6 text-cyan-400" />
+          <h2 className="text-2xl font-bold text-[var(--fg-main)] tracking-tight flex items-center gap-2">
+            <Atom className="w-6 h-6 text-sciteal-600 dark:text-sciteal-400" />
             <span>Quantum Circuit Studio</span>
           </h2>
         </div>
@@ -214,7 +214,7 @@ export const LabPage: React.FC = () => {
             variant={isTutorOpen ? 'secondary' : 'primary'}
             size="sm"
             onClick={() => setIsTutorOpen(!isTutorOpen)}
-            leftIcon={<Bot className="w-4 h-4 text-cyan-400" />}
+            leftIcon={<Bot className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />}
           >
             {isTutorOpen ? 'Hide AI Tutor' : 'Open AI Tutor'}
           </Button>
@@ -259,10 +259,10 @@ export const LabPage: React.FC = () => {
           {/* Conditional View Content: Canvas / Code / Visualization */}
           {activeTab === 'canvas' && (
             <div className="space-y-6">
-              <Card variant="glass" className="p-4">
-                <div className="flex items-center justify-between mb-3 text-xs text-slate-400">
+              <Card variant="default" className="p-4">
+                <div className="flex items-center justify-between mb-3 text-xs text-[var(--fg-muted)]">
                   <span>Interactive Qubit Wires (Click wire slot to place selected {selectedGate?.symbol} gate)</span>
-                  <span className="font-mono text-cyan-300">{circuit.gates.length} Operations Placed</span>
+                  <span className="font-mono text-sciteal-700 dark:text-sciteal-400 font-semibold">{circuit.gates.length} Operations Placed</span>
                 </div>
                 <CircuitGrid
                   circuit={circuit}
