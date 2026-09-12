@@ -12,6 +12,8 @@ import { KnowledgeCheck } from '../components/learning/KnowledgeCheck';
 import { LessonTutor } from '../components/learning/LessonTutor';
 import { PracticeChallenge } from '../components/learning/PracticeChallenge';
 import { LessonNavigation } from '../components/learning/LessonNavigation';
+import { VisualExplanation } from '../components/learning/VisualExplanation';
+import { LessonCompletionSummary } from '../components/learning/LessonCompletionSummary';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -115,7 +117,7 @@ export const LessonPage: React.FC = () => {
       </div>
 
       {/* 3. Active Mini-Lesson Body */}
-      <div className="space-y-6 animate-in fade-in duration-200">
+      <div className="space-y-6 animate-in fade-in duration-200" data-tour="lesson-pattern">
         {/* Core Lesson Card */}
         <Card variant="default">
           <CardHeader className="pb-3 border-b border-[var(--border-card)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -169,6 +171,15 @@ export const LessonPage: React.FC = () => {
           </CardContent>
         </Card>
 
+        {/* Visual Explanation if defined for this lesson */}
+        {activeLesson.visualExplanation && (
+          <VisualExplanation
+            title={activeLesson.visualExplanation.title}
+            description={activeLesson.visualExplanation.description}
+            steps={activeLesson.visualExplanation.steps}
+          />
+        )}
+
         {/* 4. Interactive "Try It Yourself" Prediction Activity if present */}
         {activeLesson.interactiveTry && (
           <InteractiveTryIt
@@ -183,20 +194,23 @@ export const LessonPage: React.FC = () => {
           />
         )}
 
-        {/* 5. Interactive Circuit Practice */}
-        <CircuitPractice
-          key={`${slug}-${activeLesson.id}-circuit-practice`}
-          moduleId={slug || 'module'}
-          lessonId={activeLesson.id}
-          activityId="circuit-practice-1"
-          title={`${activeLesson.title} — Circuit Practice`}
-          instruction={`Interactive circuit wire for ${activeLesson.title}. Add gates (e.g. [H Gate]) or arrange operations on the wire to observe how the state evolves.`}
-          initialCircuit={activeLesson.initialCircuit || []}
-          availableGates={activeLesson.availableGates || ['H', 'X', 'Y', 'Z', 'M']}
-          onComplete={() => {
-            progress.recordCircuitRun(`${activeLesson.title} Circuit Practice`);
-          }}
-        />
+        {/* 5. Interactive Circuit Practice (only when educationally relevant) */}
+        {(activeLesson.hasCircuitPractice || (activeLesson.initialCircuit && activeLesson.initialCircuit.length > 0) || activeLesson.practiceObjective) && (
+          <CircuitPractice
+            key={`${slug}-${activeLesson.id}-circuit-practice`}
+            moduleId={slug || 'module'}
+            lessonId={activeLesson.id}
+            activityId="circuit-practice-1"
+            title={`${activeLesson.title} — Circuit Practice`}
+            instruction={activeLesson.practiceObjective || `Interactive circuit wire for ${activeLesson.title}. Add gates (e.g. [H Gate]) or arrange operations on the wire to observe how the state evolves.`}
+            initialCircuit={activeLesson.initialCircuit || []}
+            availableGates={activeLesson.availableGates || ['H', 'X', 'Y', 'Z', 'M']}
+            targetOutcome={activeLesson.targetOutcome}
+            onComplete={() => {
+              progress.recordCircuitRun(`${activeLesson.title} Circuit Practice`);
+            }}
+          />
+        )}
 
         {/* 6. Code Connection: Theory & Circuit to Quantum Code */}
         {activeLesson.codeConnection && (
@@ -296,6 +310,39 @@ export const LessonPage: React.FC = () => {
             </Button>
           </div>
         </div>
+
+        {/* Lesson Completion Summary when active topic is completed */}
+        {isCurrentLessonComplete && (
+          <LessonCompletionSummary
+            moduleTitle={lessonContent.title}
+            moduleSlug={slug || 'module'}
+            lessonTitle={activeLesson.title}
+            learnedConcepts={[
+              activeLesson.title,
+              'Probability amplitudes & state transformations',
+              'Quantum gate semantics & reversible logic'
+            ]}
+            practicedItems={[
+              activeLesson.interactiveTry ? 'Interactive Prediction Simulator' : undefined,
+              (activeLesson.hasCircuitPractice || (activeLesson.initialCircuit && activeLesson.initialCircuit.length > 0) || activeLesson.practiceObjective) ? 'Circuit Wire Construction' : undefined,
+              activeLesson.codeConnection ? 'Qiskit Python Code Mapping' : undefined,
+              activeLesson.codingPractice ? 'Hands-on Code Practice' : undefined,
+              activeLesson.selfCheck ? 'Knowledge Check Self-Assessment' : undefined
+            ].filter(Boolean) as string[]}
+            canNowSkills={[
+              'Reason confidently about state evolution through quantum operations',
+              'Validate circuits against expected output distributions',
+              'Translate visual circuit wire layouts directly into Qiskit Python'
+            ]}
+            nextLesson={!isLastLesson ? {
+              slug: slug || 'module',
+              title: lessonContent.miniLessons[activeLessonIndex + 1].title
+            } : lessonContent.nextLesson}
+            labPresetId={lessonContent.labPresetId}
+            lessonId={activeLesson.id}
+            onReviewAgain={() => setSelectedLessonId(lessonContent.miniLessons[0].id)}
+          />
+        )}
       </div>
 
       {/* 8. Practice Challenge */}
@@ -325,6 +372,8 @@ export const LessonPage: React.FC = () => {
       <section id="lesson-navigation" className="pt-4">
         <LessonNavigation
           labPresetId={lessonContent.labPresetId}
+          moduleId={slug}
+          lessonId={activeLesson.id}
           isCompleted={isModuleComplete}
           onToggleComplete={() => {
             if (slug) {

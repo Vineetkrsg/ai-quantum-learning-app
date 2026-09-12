@@ -6,14 +6,29 @@ import { ArrowRight, ArrowLeft, Cpu, CheckCircle2, BookOpen } from 'lucide-react
 
 interface LessonNavigationProps {
   labPresetId: string;
+  moduleId?: string;
+  lessonId?: string;
   isCompleted: boolean;
   onToggleComplete: () => void;
   prevLesson?: { slug: string; title: string };
   nextLesson?: { slug: string; title: string };
 }
 
+const PRESET_EXPERIMENT_MAP: Record<string, string> = {
+  'measurement-demo': 'exp-measurement',
+  'single-qubit-x': 'exp-x-gate',
+  'single-qubit-h': 'exp-h-gate',
+  'superposition-demo': 'exp-h-gate',
+  'phase-gate-demo': 'exp-phase-flip',
+  'circuit-order-demo': 'exp-gate-order',
+  'bell-state': 'exp-bell-state',
+  'deutsch-jozsa-intro': 'exp-deutsch-jozsa'
+};
+
 export const LessonNavigation: React.FC<LessonNavigationProps> = ({
   labPresetId,
+  moduleId,
+  lessonId,
   isCompleted,
   onToggleComplete,
   prevLesson,
@@ -22,7 +37,11 @@ export const LessonNavigation: React.FC<LessonNavigationProps> = ({
   const navigate = useNavigate();
 
   const handleOpenInLab = () => {
-    navigate(`/lab?preset=${labPresetId}`);
+    const expId = PRESET_EXPERIMENT_MAP[labPresetId] || 'exp-h-gate';
+    let url = `/lab?experiment=${expId}&preset=${labPresetId}`;
+    if (moduleId) url += `&moduleId=${moduleId}`;
+    if (lessonId) url += `&lessonId=${lessonId}`;
+    navigate(url);
   };
 
   return (

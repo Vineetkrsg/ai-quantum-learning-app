@@ -196,6 +196,36 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
         conceptExplanation: 'A single qubit has two standard basis states: |0⟩ and |1⟩. In physical terms, these might represent an electron with spin pointing Up (|0⟩) or spin pointing Down (|1⟩). Any state can be represented geometrically on a unit sphere called the Bloch sphere. State |0⟩ is at the north pole, and state |1⟩ is at the south pole.',
         analogy: 'Think of the Earth. The North Pole is |0⟩ and the South Pole is |1⟩. Any point on the globe is a valid quantum state, but when you ask a sensor "Is it North or South?", it forces the position to one pole.',
         visualNote: 'North Pole = |0⟩ | South Pole = |1⟩',
+        visualExplanation: {
+          title: 'Bloch Sphere Geometry & State Vectors',
+          description: 'A visual breakdown of how quantum states live on the unit 3D sphere surface.',
+          steps: [
+            {
+              label: 'Ground State |0⟩',
+              stateNotation: '|ψ⟩ = |0⟩',
+              description: 'Points straight up at the north pole (θ = 0). Projective measurement always yields 0.',
+              colorVariant: 'cyan'
+            },
+            {
+              label: 'Superposition |+⟩',
+              stateNotation: '(|0⟩ + |1⟩)/√2',
+              description: 'Equator point along +X axis (θ = π/2, φ = 0). Equal 50/50 probability amplitudes.',
+              colorVariant: 'indigo'
+            },
+            {
+              label: 'Excited State |1⟩',
+              stateNotation: '|ψ⟩ = |1⟩',
+              description: 'Points straight down at the south pole (θ = π). Projective measurement always yields 1.',
+              colorVariant: 'purple'
+            },
+            {
+              label: 'Phase State |i⟩',
+              stateNotation: '(|0⟩ + i|1⟩)/√2',
+              description: 'Equator point along +Y axis with π/2 relative phase. Demonstrates complex amplitudes.',
+              colorVariant: 'amber'
+            }
+          ]
+        },
         selfCheck: {
           question: 'On the Bloch sphere representation, where is state |0⟩ located?',
           options: [
@@ -215,6 +245,11 @@ export const LESSONS_DATA: Record<string, LessonContent> = {
         conceptExplanation: 'How do we flip a qubit from |0⟩ to |1⟩? In classical computing, we use a NOT gate. In quantum computing, the equivalent operation is the Pauli-X gate. Applying an X gate rotates the qubit 180° around the X-axis of the Bloch sphere: X|0⟩ = |1⟩ and X|1⟩ = |0⟩.',
         analogy: 'Imagine a light switch toggle. Flipping the switch (X gate) turns OFF (|0⟩) into ON (|1⟩).',
         visualNote: '|0⟩ ─── [ X Gate ] ───> |1⟩',
+        hasCircuitPractice: true,
+        practiceObjective: 'Place the Pauli-X gate on wire q0 to flip the state from ground state |0⟩ to excited state |1⟩.',
+        targetOutcome: '100% |1⟩ (1024/1024 shots)',
+        initialCircuit: [],
+        availableGates: ['X', 'H', 'Z', 'M'],
         interactiveTry: {
           title: 'Try It: Predict & Run the Pauli-X Gate',
           instruction: 'Qubit q[0] starts in state |0⟩. We apply an X gate, followed by measurement. Predict what the measurement outcomes will look like.',

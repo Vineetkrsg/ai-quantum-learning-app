@@ -23,6 +23,8 @@ export interface ProgressState {
   completedLessonsByModule: Record<string, string[]>; // moduleSlug -> completed lesson IDs
   completedLessons: string[]; // List of mini-lesson IDs completed across all modules
   completedChallenges: string[];
+  experimentsCompleted: string[];
+  predictionsMade: number;
   circuitsRun: number;
   xp: number;
   streakDays: number;
@@ -39,6 +41,8 @@ interface ProgressContextType extends ProgressState {
   recordQuizResult: (topic: string, score: number, total: number) => void;
   recordCircuitRun: (circuitName: string) => void;
   recordChallengeComplete: (challengeId: string, xp: number) => void;
+  recordExperimentComplete: (experimentId: string, experimentTitle: string) => void;
+  recordPredictionMade: (isCorrect: boolean) => void;
   resetProgress: () => void;
   getActivityState: <T>(key: string, defaultValue: T) => T;
   setActivityState: <T>(key: string, value: T | ((prev: T) => T)) => void;
@@ -70,6 +74,8 @@ const INITIAL_STATE: ProgressState = {
   },
   completedLessons: [],
   completedChallenges: [],
+  experimentsCompleted: [],
+  predictionsMade: 0,
   circuitsRun: 0,
   xp: 0,
   streakDays: 0,
@@ -129,6 +135,8 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           completedLessonsByModule: completedByModule,
           moduleProgress: updatedModuleProgress,
           overallProgress: recalculatedOverall,
+          experimentsCompleted: parsed.experimentsCompleted || [],
+          predictionsMade: parsed.predictionsMade || 0,
           quizStats: parsed.quizStats || [],
           activityStates: parsed.activityStates || {}
         };
@@ -304,6 +312,52 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     });
   };
 
+  const recordExperimentComplete = (experimentId: string, experimentTitle: string) => {
+    setState((prev) => {
+      if (prev.experimentsCompleted?.includes(experimentId)) return prev;
+
+      const newActivity: RecentActivity = {
+        id: `act-${Date.now()}`,
+        type: 'circuit',
+        title: `Completed Experiment: ${experimentTitle}`,
+        detail: 'Finished quantum lab experimentation & challenge',
+        time: 'Just now'
+      };
+
+      const next = {
+        ...prev,
+        experimentsCompleted: [...(prev.experimentsCompleted || []), experimentId],
+        xp: prev.xp + 35,
+        recentActivities: [newActivity, ...prev.recentActivities.slice(0, 9)]
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed to save to localStorage', e);
+      }
+
+      return next;
+    });
+  };
+
+  const recordPredictionMade = (isCorrect: boolean) => {
+    setState((prev) => {
+      const xpBoost = isCorrect ? 10 : 5;
+      const next = {
+        ...prev,
+        predictionsMade: (prev.predictionsMade || 0) + 1,
+        xp: prev.xp + xpBoost
+      };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed to save to localStorage', e);
+      }
+      return next;
+    });
+  };
+
   const resetProgress = () => {
     setState(INITIAL_STATE);
     try {
@@ -376,6 +430,8 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         recordQuizResult,
         recordCircuitRun,
         recordChallengeComplete,
+        recordExperimentComplete,
+        recordPredictionMade,
         resetProgress,
         getActivityState,
         setActivityState,

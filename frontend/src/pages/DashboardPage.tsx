@@ -16,6 +16,7 @@ import { ProgressBar } from '../components/ui/ProgressBar';
 import { QuickLabCard } from '../components/dashboard/QuickLabCard';
 import { RecommendedLessonCard } from '../components/dashboard/RecommendedLessonCard';
 import { RecentActivityCard } from '../components/dashboard/RecentActivityCard';
+import { NewUserOnboardingCard } from '../components/dashboard/NewUserOnboardingCard';
 import { TutorPanel } from '../components/tutor/TutorPanel';
 import { USER_OVERVIEW } from '../mock/progressData';
 import { LEARNING_MODULES } from '../mock/modulesData';
@@ -44,7 +45,10 @@ export const DashboardPage: React.FC = () => {
     : '0.0%';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-tour="dashboard-overview">
+      {/* Onboarding / Demo Launch Card */}
+      <NewUserOnboardingCard />
+
       {/* Welcome & Overview Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
         <div>

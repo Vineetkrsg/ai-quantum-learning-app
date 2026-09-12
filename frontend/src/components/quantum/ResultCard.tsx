@@ -1,14 +1,15 @@
 import React from 'react';
 import { SimulationResult } from '../../types/quantum';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
-import { BarChart3, Clock, Zap, CheckCircle2 } from 'lucide-react';
+import { BarChart3, Clock, Zap, CheckCircle2, Sparkles } from 'lucide-react';
 
 interface ResultCardProps {
   result: SimulationResult | null;
   isLoading?: boolean;
+  onExplainWithAI?: () => void;
 }
 
-export const ResultCard: React.FC<ResultCardProps> = ({ result, isLoading = false }) => {
+export const ResultCard: React.FC<ResultCardProps> = ({ result, isLoading = false, onExplainWithAI }) => {
   if (isLoading) {
     return (
       <Card variant="default" className="p-8 text-center flex flex-col items-center justify-center min-h-[220px]">
@@ -53,11 +54,21 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, isLoading = fals
             </span>
             <span>•</span>
             <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
-              <CheckCircle2 className="w-3 h-3" />
+              <CheckCircle2 className="w-3.5 h-3.5" />
               <span>Simulation Converged</span>
             </span>
           </div>
         </div>
+
+        {onExplainWithAI && (
+          <button
+            onClick={onExplainWithAI}
+            className="text-xs px-3 py-1.5 rounded-lg bg-sciteal-500/10 hover:bg-sciteal-500/20 text-sciteal-700 dark:text-sciteal-300 border border-sciteal-500/30 flex items-center gap-1.5 font-medium transition-colors"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+            <span>Explain with AI</span>
+          </button>
+        )}
       </CardHeader>
 
       <CardContent className="space-y-4 pt-3">

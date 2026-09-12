@@ -27,6 +27,7 @@ export const Tabs: React.FC<TabsProps> = ({
         return (
           <button
             key={tab.id}
+            data-tab-id={tab.id}
             onClick={() => onChange(tab.id)}
             className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-150 ${
               isActive

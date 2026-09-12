@@ -104,11 +104,18 @@ export interface MiniLesson {
   conceptExplanation: string;
   analogy?: string;
   visualNote?: string;
+  visualExplanation?: {
+    title: string;
+    description: string;
+    steps: VisualStep[];
+  };
   interactiveTry?: InteractiveTryData;
   selfCheck?: SelfCheckData;
   initialCircuit?: string[];
   availableGates?: string[];
   hasCircuitPractice?: boolean;
+  practiceObjective?: string;
+  targetOutcome?: string;
   codeConnection?: CodeConnectionData;
   codingPractice?: CodingPracticeData;
 }

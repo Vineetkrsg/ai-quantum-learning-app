@@ -9,14 +9,17 @@ import { LEARNING_MODULES } from '../../mock/modulesData';
 
 export const RecommendedLessonCard: React.FC = () => {
   const navigate = useNavigate();
-  const { moduleProgress } = useProgress();
+  const { moduleProgress, completedLessonsByModule } = useProgress();
 
   // Pick first incomplete module
   const nextModule = LEARNING_MODULES.find(
     (m) => (moduleProgress[m.slug] || 0) < 100
   ) || LEARNING_MODULES[0];
 
-  const firstIncompleteLesson = nextModule.lessons[0] || {
+  const completedInModule = completedLessonsByModule[nextModule.slug] || [];
+  const firstIncompleteLesson = nextModule.lessons.find(
+    (l) => !completedInModule.includes(l.id)
+  ) || nextModule.lessons[0] || {
     id: 'les-1-1',
     title: 'Why Quantum Computing Matters',
     durationMinutes: 8

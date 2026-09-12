@@ -11,19 +11,29 @@ import {
   CheckCircle2, 
   XCircle, 
   Sparkles,
-  BarChart3
+  BarChart3,
+  Bot,
+  Bug,
+  Eye,
+  BookOpen
 } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
+import { askAITutor } from '../../services/api';
 
 export interface CodingPracticeState {
   code: string;
   isSubmitted: boolean;
   isPassed: boolean;
+  attempts: number;
   showHint: boolean;
+  hintLevel: number;
+  showSolution: boolean;
   validationFeedback?: {
     isValid: boolean;
     message: string;
   } | null;
+  aiExplanation?: string;
+  aiDebugFeedback?: string;
 }
 
 export interface CodingPracticeProps {
@@ -46,6 +56,9 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
   onComplete
 }) => {
   const [isRunning, setIsRunning] = useState(false);
+  const [isAiExplaining, setIsAiExplaining] = useState(false);
+  const [isAiDebugging, setIsAiDebugging] = useState(false);
+
   const practiceData = propPracticeData || propData;
   const progress = useProgress();
   const effectiveKey = scopedKey || `${moduleId || 'module'}/${lessonId || 'lesson'}/${activityId}`;
@@ -56,7 +69,10 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
     code: practiceData.starterCode,
     isSubmitted: false,
     isPassed: false,
+    attempts: 0,
     showHint: false,
+    hintLevel: 1,
+    showSolution: false,
     validationFeedback: null
   };
 
@@ -64,7 +80,10 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
   const code = currentState.code !== undefined ? currentState.code : practiceData.starterCode;
   const isSubmitted = currentState.isSubmitted;
   const isPassed = currentState.isPassed;
+  const attempts = currentState.attempts || 0;
   const showHint = currentState.showHint;
+  const hintLevel = currentState.hintLevel || 1;
+  const showSolution = currentState.showSolution;
   const feedback = currentState.validationFeedback;
 
   const handleCodeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -145,11 +164,13 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
     setTimeout(() => {
       setIsRunning(false);
       const result = validateCode(code);
+      const newAttempts = attempts + 1;
 
       progress.setActivityState<CodingPracticeState>(effectiveKey, {
         ...currentState,
         isSubmitted: true,
         isPassed: result.isValid,
+        attempts: newAttempts,
         validationFeedback: result
       });
 
@@ -164,8 +185,13 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
       code: practiceData.starterCode,
       isSubmitted: false,
       isPassed: false,
+      attempts: 0,
       showHint: false,
-      validationFeedback: null
+      hintLevel: 1,
+      showSolution: false,
+      validationFeedback: null,
+      aiExplanation: undefined,
+      aiDebugFeedback: undefined
     });
   };
 
@@ -174,6 +200,86 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
       ...currentState,
       showHint: !showHint
     });
+  };
+
+  const handleNextHintTier = () => {
+    const nextLevel = Math.min(hintLevel + 1, 3);
+    progress.setActivityState<CodingPracticeState>(effectiveKey, {
+      ...currentState,
+      showHint: true,
+      hintLevel: nextLevel
+    });
+  };
+
+  const handleExplainCode = async () => {
+    setIsAiExplaining(true);
+    try {
+      const res = await askAITutor({
+        action: 'explain_code',
+        codeContext: {
+          code,
+          taskDescription: practiceData.taskDescription
+        },
+        lessonContext: {
+          moduleId: moduleId || 'module',
+          lessonId: lessonId || 'lesson',
+          currentTopic: practiceData.title
+        }
+      });
+
+      progress.setActivityState<CodingPracticeState>(effectiveKey, {
+        ...currentState,
+        aiExplanation: res.reply
+      });
+    } catch (e) {
+      console.warn('AI code explanation failed', e);
+    } finally {
+      setIsAiExplaining(false);
+    }
+  };
+
+  const handleDebugCode = async () => {
+    setIsAiDebugging(true);
+    try {
+      const res = await askAITutor({
+        action: 'debug_code',
+        codeContext: {
+          code,
+          taskDescription: practiceData.taskDescription
+        },
+        lessonContext: {
+          moduleId: moduleId || 'module',
+          lessonId: lessonId || 'lesson',
+          currentTopic: practiceData.title
+        }
+      });
+
+      progress.setActivityState<CodingPracticeState>(effectiveKey, {
+        ...currentState,
+        aiDebugFeedback: res.reply
+      });
+    } catch (e) {
+      console.warn('AI debug code failed', e);
+    } finally {
+      setIsAiDebugging(false);
+    }
+  };
+
+  const handleRevealSolution = () => {
+    progress.setActivityState<CodingPracticeState>(effectiveKey, {
+      ...currentState,
+      showSolution: true
+    });
+  };
+
+  const getActiveHintText = (): string => {
+    if (hintLevel === 1) {
+      return practiceData.hint || 'Review what quantum gate is needed to achieve the target transformation.';
+    }
+    if (hintLevel === 2) {
+      return `Look at the validation hint: ${practiceData.validationRules.failureHint || 'Check your method names and qubit arguments.'}`;
+    }
+    return `Near-solution: Make sure to declare your circuit, apply the required gate (e.g. qc.h(0)), and measure with qc.measure(0, 0).`;
   };
 
   const lineCount = code.split('\n').length;
@@ -187,9 +293,11 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
             {practiceData.title}
           </CardTitle>
         </div>
-        <Badge variant={isPassed ? "emerald" : "amber"} size="sm">
-          {isPassed ? "Practice Completed" : "Coding Challenge"}
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant={isPassed ? "emerald" : "amber"} size="sm">
+            {isPassed ? "Practice Completed" : "Coding Challenge"}
+          </Badge>
+        </div>
       </CardHeader>
 
       <CardContent className="p-6 space-y-5">
@@ -239,9 +347,9 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
           </div>
         </div>
 
-        {/* Controls & Actions */}
+        {/* Controls & Actions Row */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               variant="primary"
               size="sm"
@@ -251,6 +359,30 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
               leftIcon={<Play className="w-3.5 h-3.5" />}
             >
               {isRunning ? 'Validating & Simulating...' : 'Run & Check Code'}
+            </Button>
+
+            {/* AI Action: Explain This Code */}
+            <Button
+              variant="secondary"
+              size="sm"
+              data-testid="explain-code-btn"
+              onClick={handleExplainCode}
+              disabled={isAiExplaining || !code.trim()}
+              leftIcon={<BookOpen className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />}
+            >
+              {isAiExplaining ? 'Explaining...' : 'Explain This Code'}
+            </Button>
+
+            {/* AI Action: Debug My Code */}
+            <Button
+              variant="secondary"
+              size="sm"
+              data-testid="debug-code-btn"
+              onClick={handleDebugCode}
+              disabled={isAiDebugging || !code.trim()}
+              leftIcon={<Bug className="w-3.5 h-3.5 text-amber-500" />}
+            >
+              {isAiDebugging ? 'Inspecting...' : 'Debug My Code'}
             </Button>
 
             <Button
@@ -264,7 +396,7 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
             </Button>
           </div>
 
-          {practiceData.hint && (
+          <div className="flex items-center gap-2">
             <button
               type="button"
               data-testid="hint-toggle-btn"
@@ -274,20 +406,83 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
               <HelpCircle className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
               <span>{showHint ? 'Hide Hint' : 'Need a hint?'}</span>
             </button>
-          )}
+          </div>
         </div>
 
-        {/* Hint Accordion */}
-        {showHint && practiceData.hint && (
+        {/* 3-Tier Hint Accordion */}
+        {showHint && (
           <div 
             data-testid="hint-box" 
-            className="p-3.5 rounded-xl bg-sciteal-500/10 border border-sciteal-500/30 text-xs text-[var(--fg-main)] leading-relaxed animate-in fade-in duration-150"
+            className="p-4 rounded-xl bg-sciteal-500/10 border border-sciteal-500/30 text-xs text-[var(--fg-main)] leading-relaxed space-y-2 animate-in fade-in duration-150"
           >
-            <div className="flex items-center gap-1.5 font-bold text-sciteal-800 dark:text-sciteal-300 mb-1 font-mono uppercase tracking-wider text-[10px]">
-              <HelpCircle className="w-3 h-3" />
-              <span>Pedagogical Guidance</span>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono font-bold text-sciteal-800 dark:text-sciteal-300 uppercase tracking-wider flex items-center gap-1.5">
+                <HelpCircle className="w-3 h-3" />
+                <span>Pedagogical Hint Tier {hintLevel} of 3</span>
+              </span>
+              {hintLevel < 3 && (
+                <button
+                  type="button"
+                  onClick={handleNextHintTier}
+                  className="text-xs text-sciteal-700 dark:text-sciteal-300 hover:underline font-semibold cursor-pointer"
+                >
+                  Need more help? (Tier {hintLevel + 1}) →
+                </button>
+              )}
             </div>
-            {practiceData.hint}
+
+            <p>{getActiveHintText()}</p>
+
+            {hintLevel >= 2 && !showSolution && practiceData.solutionCode && (
+              <div className="pt-2 border-t border-sciteal-500/20 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleRevealSolution}
+                  className="text-[11px] font-mono text-[var(--fg-muted)] hover:text-[var(--fg-main)] flex items-center gap-1 cursor-pointer"
+                >
+                  <Eye className="w-3 h-3" />
+                  <span>Reveal Reference Solution</span>
+                </button>
+              </div>
+            )}
+
+            {showSolution && practiceData.solutionCode && (
+              <div className="p-3 rounded-lg bg-[var(--surface-card)] border border-sciteal-500/30 font-mono text-xs text-[var(--fg-main)] overflow-x-auto whitespace-pre">
+                {practiceData.solutionCode}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* AI Code Explanation Box */}
+        {currentState.aiExplanation && (
+          <div 
+            data-testid="ai-code-explanation-box"
+            className="p-4 rounded-xl bg-[var(--surface-sunken)] border border-sciteal-500/40 space-y-2 animate-in fade-in duration-200 shadow-sm"
+          >
+            <div className="flex items-center gap-2 text-xs font-bold text-sciteal-800 dark:text-sciteal-300 font-mono">
+              <Bot className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
+              <span>AI Quantum Tutor — Code Line Breakdown</span>
+            </div>
+            <div className="text-xs text-[var(--fg-main)] leading-relaxed whitespace-pre-wrap">
+              {currentState.aiExplanation}
+            </div>
+          </div>
+        )}
+
+        {/* AI Debugger Box */}
+        {currentState.aiDebugFeedback && (
+          <div 
+            data-testid="ai-code-debugger-box"
+            className="p-4 rounded-xl bg-[var(--surface-sunken)] border border-amber-500/40 space-y-2 animate-in fade-in duration-200 shadow-sm"
+          >
+            <div className="flex items-center gap-2 text-xs font-bold text-amber-700 dark:text-amber-300 font-mono">
+              <Bug className="w-4 h-4 text-amber-500" />
+              <span>AI Quantum Tutor — Debugging Inspection</span>
+            </div>
+            <div className="text-xs text-[var(--fg-main)] leading-relaxed whitespace-pre-wrap">
+              {currentState.aiDebugFeedback}
+            </div>
           </div>
         )}
 
@@ -365,8 +560,8 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
 
         {/* Footer Identity */}
         <div className="text-[11px] font-mono text-[var(--fg-muted)] flex items-center justify-between pt-1 border-t border-[var(--border-card)]">
-          <span>Targeted Coding Activity</span>
-          <span className="text-sciteal-700 dark:text-sciteal-400 font-bold">{effectiveKey}</span>
+          <span>Targeted Coding Activity (Attempts: {attempts})</span>
+          <span data-testid="scoped-activity-key" className="text-sciteal-700 dark:text-sciteal-400 font-bold">{effectiveKey}</span>
         </div>
       </CardContent>
     </Card>

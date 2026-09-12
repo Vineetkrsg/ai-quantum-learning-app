@@ -36,7 +36,7 @@ export const LearnPage: React.FC = () => {
   const completedCount = completedLessons.length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-tour="learn-curriculum">
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>

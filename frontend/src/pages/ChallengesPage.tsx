@@ -26,7 +26,7 @@ export const ChallengesPage: React.FC = () => {
   const totalXpAvailable = CHALLENGES_DATA.reduce((sum, c) => sum + c.xp, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-tour="challenges-area">
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

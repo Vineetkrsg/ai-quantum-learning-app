@@ -15,7 +15,7 @@ export const ProgressPage: React.FC = () => {
   const masteredCount = Object.values(moduleProgress).filter((p) => p === 100).length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-tour="progress-analytics">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">

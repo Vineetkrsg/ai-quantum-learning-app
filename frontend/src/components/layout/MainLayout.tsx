@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
+import { TourOverlay } from '../onboarding/TourOverlay';
+import { WelcomeModal } from '../onboarding/WelcomeModal';
+import { DemoModal } from '../onboarding/demo/DemoModal';
 
 export const MainLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--fg-main)] flex transition-colors duration-150">
+      {/* Guided Tour & Demo Modals */}
+      <TourOverlay />
+      <WelcomeModal />
+      <DemoModal />
+
       {/* Sidebar navigation */}
       <Sidebar 
         isOpen={isSidebarOpen} 
@@ -24,5 +32,4 @@ export const MainLayout: React.FC = () => {
       </div>
     </div>
   );
-
 };

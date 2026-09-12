@@ -5,14 +5,17 @@ import {
   Bot, 
   Bell, 
   Search,
-  CheckCircle2,
-  Sun,
-  Moon,
-  Contrast,
-  Zap
+  CheckCircle2, 
+  Sun, 
+  Moon, 
+  Contrast, 
+  Zap,
+  Compass,
+  Sparkles
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useProgress } from '../../context/ProgressContext';
+import { useOnboarding } from '../../context/OnboardingContext';
 import { USER_OVERVIEW } from '../../mock/progressData';
 
 interface HeaderProps {
@@ -23,6 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
   const location = useLocation();
   const { theme, cycleTheme } = useTheme();
   const { xp } = useProgress();
+  const { startTour, startDemo } = useOnboarding();
 
   const getPageTitle = (pathname: string) => {
     switch (pathname) {
@@ -97,6 +101,25 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
             Ctrl+K
           </kbd>
         </div>
+
+        {/* Guided Tour & Demo Quick Actions */}
+        <button
+          onClick={() => startTour(0)}
+          title="Take Guided Platform Tour"
+          className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#1b2636] border border-slate-200 dark:border-[#223043] transition-colors text-xs font-medium cursor-pointer"
+        >
+          <Compass className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+          <span className="hidden xl:inline">Tour</span>
+        </button>
+
+        <button
+          onClick={() => startDemo(0)}
+          title="Try Interactive Quantum Experiment"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-500/30 text-teal-800 dark:text-teal-300 hover:border-teal-500 text-xs font-semibold transition-colors shadow-xs cursor-pointer"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+          <span>Demo</span>
+        </button>
 
         {/* AI Tutor shortcut */}
         <Link

@@ -8,13 +8,15 @@ import {
   TrendingUp, 
   Bot, 
   Atom, 
-  ExternalLink,
-  Zap,
-  Sparkles,
-  ChevronRight,
-  X
+  ExternalLink, 
+  Zap, 
+  Sparkles, 
+  ChevronRight, 
+  X,
+  Compass
 } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
+import { useOnboarding } from '../../context/OnboardingContext';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -23,6 +25,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const { overallProgress, xp, streakDays } = useProgress();
+  const { startTour, startDemo } = useOnboarding();
 
   const navItems = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, badge: undefined },
@@ -112,6 +115,39 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
           {/* Quick Launch */}
           <div className="pt-5 px-3 pb-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+            Guided Learning & Onboarding
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (onClose) onClose();
+              startTour(0);
+            }}
+            className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-[#151e2b] hover:bg-slate-100 dark:hover:bg-[#1b2636] border border-slate-200 dark:border-[#223043] transition-colors cursor-pointer text-left"
+          >
+            <div className="flex items-center gap-2.5">
+              <Compass className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+              <span>Platform Guided Tour</span>
+            </div>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              if (onClose) onClose();
+              startDemo(0);
+            }}
+            className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-teal-900 dark:text-teal-200 bg-teal-50 dark:bg-teal-950/40 hover:bg-teal-100/80 dark:hover:bg-teal-900/40 border border-teal-200 dark:border-teal-500/30 transition-colors cursor-pointer text-left"
+          >
+            <div className="flex items-center gap-2.5">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
+              <span>Try Interactive Demo</span>
+            </div>
+            <ChevronRight className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+          </button>
+
+          <div className="pt-3 px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             Quick Launch
           </div>
           <Link

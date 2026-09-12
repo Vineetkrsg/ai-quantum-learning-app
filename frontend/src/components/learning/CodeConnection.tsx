@@ -13,9 +13,11 @@ import {
   Layers, 
   Cpu, 
   CheckCircle2,
-  Terminal
+  Terminal,
+  Bot
 } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
+import { askAITutor } from '../../services/api';
 
 export interface CodeConnectionState {
   hasRun: boolean;
@@ -215,10 +217,46 @@ export const CodeConnection: React.FC<CodeConnectionProps> = ({
         {/* Section C: Line-by-Line Breakdown */}
         {data.lineExplanations && data.lineExplanations.length > 0 && (
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-bold text-[var(--fg-main)]">
-              <Cpu className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
-              <span>Line-by-Line Breakdown (Beginner Friendly)</span>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-[var(--fg-main)]">
+                <Cpu className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
+                <span>How the Circuit Maps to Code (Beginner Friendly)</span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                data-testid="ai-explain-code-connection-btn"
+                onClick={async () => {
+                  try {
+                    const res = await askAITutor({
+                      action: 'explain_code',
+                      codeContext: { code: data.codeSnippet },
+                      lessonContext: { moduleId: moduleId || 'module', lessonId: lessonId || 'lesson', currentTopic: data.title }
+                    });
+                    progress.setActivityState<any>(effectiveKey, {
+                      ...currentState,
+                      aiExplanation: res.reply
+                    });
+                  } catch (e) {
+                    console.warn(e);
+                  }
+                }}
+                leftIcon={<Bot className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />}
+              >
+                Explain with AI Tutor
+              </Button>
             </div>
+
+            {/* AI Explanation Box if fetched */}
+            {(currentState as any).aiExplanation && (
+              <div className="p-4 rounded-xl bg-[var(--surface-sunken)] border border-sciteal-500/40 text-xs text-[var(--fg-main)] leading-relaxed space-y-2 animate-in fade-in duration-200">
+                <div className="flex items-center gap-1.5 font-bold font-mono text-sciteal-800 dark:text-sciteal-300">
+                  <Bot className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
+                  <span>AI Tutor — Code & Circuit Mapping</span>
+                </div>
+                <div className="whitespace-pre-wrap">{(currentState as any).aiExplanation}</div>
+              </div>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {data.lineExplanations.map((item, idx) => {
