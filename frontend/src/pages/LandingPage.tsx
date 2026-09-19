@@ -17,6 +17,7 @@ import {
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
+import { CircuitLabIcon } from '../components/quantum/CircuitLabIcon';
 import { useTheme } from '../context/ThemeContext';
 
 export const LandingPage: React.FC = () => {
@@ -24,7 +25,7 @@ export const LandingPage: React.FC = () => {
 
   const learningLoop = [
     { step: '01', title: 'Learn', desc: 'Interactive concept modules with mathematical Dirac notation and Bloch sphere visualization.', icon: BookOpen },
-    { step: '02', title: 'Build', desc: 'Drag-and-drop quantum circuit studio with single and multi-qubit unitary gate placement.', icon: Cpu },
+    { step: '02', title: 'Build', desc: 'Drag-and-drop Circuit Lab with single and multi-qubit unitary gate placement.', icon: CircuitLabIcon },
     { step: '03', title: 'Simulate', desc: 'Execute state vector simulation and projective measurement sampling powered by Aer.', icon: Play },
     { step: '04', title: 'Visualize', desc: 'Real-time probability histograms, Dirac state distributions, and phase angles.', icon: BarChart3 },
     { step: '05', title: 'Ask AI', desc: 'AI Quantum Tutor trained on quantum mechanics to unblock conceptual hurdles in real time.', icon: Bot },
@@ -56,7 +57,7 @@ export const LandingPage: React.FC = () => {
           <div className="hidden md:flex items-center gap-6 text-sm text-[var(--fg-muted)] font-medium">
             <Link to="/dashboard" className="hover:text-sciteal-700 dark:hover:text-sciteal-300 transition-colors">Dashboard</Link>
             <Link to="/learn" className="hover:text-sciteal-700 dark:hover:text-sciteal-300 transition-colors">Curriculum</Link>
-            <Link to="/lab" className="hover:text-sciteal-700 dark:hover:text-sciteal-300 transition-colors">Circuit Studio</Link>
+            <Link to="/lab" className="hover:text-sciteal-700 dark:hover:text-sciteal-300 transition-colors">Circuit Lab</Link>
             <Link to="/challenges" className="hover:text-sciteal-700 dark:hover:text-sciteal-300 transition-colors">Challenges</Link>
             <Link to="/tutor" className="hover:text-sciteal-700 dark:hover:text-sciteal-300 transition-colors">AI Tutor</Link>
           </div>
@@ -114,8 +115,8 @@ export const LandingPage: React.FC = () => {
               </Button>
             </Link>
             <Link to="/lab">
-              <Button variant="secondary" size="lg" leftIcon={<Cpu className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />}>
-                Open Quantum Lab
+              <Button variant="secondary" size="lg" leftIcon={<CircuitLabIcon className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />}>
+                Open Circuit Lab
               </Button>
             </Link>
           </div>

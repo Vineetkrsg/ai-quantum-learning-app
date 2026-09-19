@@ -64,14 +64,14 @@ export const TOUR_STEPS: TourStepDefinition[] = [
     actionHint: 'Click a gate from the palette, then click any wire slot to position it.'
   },
 
-  // Step 5 — Quantum Lab 2.0
+  // Step 5 — Circuit Lab
   {
     id: 'tour-lab-studio',
     stepNumber: 5,
     route: '/lab',
     targetSelector: '[data-tour="lab-studio"]',
-    title: 'Quantum Circuit Studio 2.0',
-    badge: 'Step 5: Quantum Lab 2.0',
+    title: 'Circuit Lab',
+    badge: 'Step 5: Circuit Lab',
     content: 'This is the platform\'s powerful experimentation environment. Build custom circuits, explore guided scientific experiments across 4 difficulty tiers, make hypotheses, and understand the deep physics of what happened.',
     position: 'bottom',
     actionHint: 'Features full statevector simulation, step-by-step hints, and AI tutor assistance.'
@@ -139,7 +139,7 @@ export const TOUR_STEPS: TourStepDefinition[] = [
     targetSelector: '[data-tour="dashboard-overview"]',
     title: "You're Ready to Begin!",
     badge: 'Step 10: Complete',
-    content: 'You now know how QuLearn AI works! Start with the Fundamentals in the curriculum, test what quantum computing actually feels like in the Interactive Demo, or experiment freely in Quantum Lab 2.0.',
+    content: 'You now know how QuLearn AI works! Start with the Fundamentals in the curriculum, test what quantum computing actually feels like in the Interactive Demo, or experiment freely in Circuit Lab.',
     position: 'center',
     actionHint: 'Choose your next step below to begin your journey.'
   }

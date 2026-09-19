@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../../ui/Button';
 import { CheckCircle2, Sparkles, BookOpen, Cpu, RotateCcw } from 'lucide-react';
+import { CircuitLabIcon } from '../../quantum/CircuitLabIcon';
 
 interface DemoCompletionProps {
   onRestart: () => void;
@@ -99,13 +100,13 @@ export const DemoCompletion: React.FC<DemoCompletionProps> = ({
         <Button
           variant="quantum"
           size="sm"
-          leftIcon={<Cpu className="w-3.5 h-3.5" />}
+          leftIcon={<CircuitLabIcon className="w-3.5 h-3.5" />}
           onClick={() => {
             onClose();
             navigate('/lab');
           }}
         >
-          Explore Quantum Lab 2.0
+          Explore Circuit Lab
         </Button>
       </div>
     </div>

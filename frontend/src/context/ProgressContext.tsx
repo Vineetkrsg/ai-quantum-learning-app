@@ -320,7 +320,7 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         id: `act-${Date.now()}`,
         type: 'circuit',
         title: `Completed Experiment: ${experimentTitle}`,
-        detail: 'Finished quantum lab experimentation & challenge',
+        detail: 'Finished Circuit Lab experimentation & challenge',
         time: 'Just now'
       };
 

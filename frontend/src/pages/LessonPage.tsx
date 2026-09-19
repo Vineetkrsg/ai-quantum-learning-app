@@ -368,7 +368,7 @@ export const LessonPage: React.FC = () => {
         />
       </section>
 
-      {/* 9. Open in Quantum Lab CTA & Module Navigation */}
+      {/* 9. Open in Circuit Lab CTA & Module Navigation */}
       <section id="lesson-navigation" className="pt-4">
         <LessonNavigation
           labPresetId={lessonContent.labPresetId}

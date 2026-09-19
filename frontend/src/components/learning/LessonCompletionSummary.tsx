@@ -15,6 +15,7 @@ import {
   Code,
   BookOpen
 } from 'lucide-react';
+import { CircuitLabIcon } from '../quantum/CircuitLabIcon';
 
 interface LessonCompletionSummaryProps {
   moduleTitle: string;
@@ -179,9 +180,9 @@ export const LessonCompletionSummary: React.FC<LessonCompletionSummaryProps> = (
                 if (lessonId) url += `&lessonId=${lessonId}`;
                 navigate(url);
               }}
-              leftIcon={<Atom className="w-3.5 h-3.5" />}
+              leftIcon={<CircuitLabIcon className="w-3.5 h-3.5" />}
             >
-              Open in Quantum Lab
+              Open in Circuit Lab
             </Button>
           )}
         </div>

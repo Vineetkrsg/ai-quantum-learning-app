@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
 import { useOnboarding } from '../../context/OnboardingContext';
+import { CircuitLabIcon } from '../quantum/CircuitLabIcon';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -30,7 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, badge: undefined },
     { to: '/learn', label: 'Interactive Learning', icon: BookOpen, badge: '7 Modules' },
-    { to: '/lab', label: 'Quantum Lab', icon: Cpu, badge: 'Studio' },
+    { to: '/lab', label: 'Quantum Circuit Lab', icon: CircuitLabIcon, badge: 'Studio' },
     { to: '/challenges', label: 'Challenges', icon: Trophy, badge: '4 New' },
     { to: '/progress', label: 'Progress Tracking', icon: TrendingUp, badge: `${overallProgress}%` },
     { to: '/tutor', label: 'AI Quantum Tutor', icon: Bot, badge: 'Gemini' },
@@ -157,7 +158,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           >
             <div className="flex items-center gap-2.5">
               <Sparkles className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-              <span>Launch Bell State Lab</span>
+              <span>Launch Circuit Lab</span>
             </div>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
           </Link>

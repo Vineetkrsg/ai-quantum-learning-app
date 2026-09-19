@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { ArrowRight, ArrowLeft, Cpu, CheckCircle2, BookOpen } from 'lucide-react';
+import { CircuitLabIcon } from '../quantum/CircuitLabIcon';
 
 interface LessonNavigationProps {
   labPresetId: string;
@@ -46,17 +47,17 @@ export const LessonNavigation: React.FC<LessonNavigationProps> = ({
 
   return (
     <Card variant="default" className="p-6 space-y-6">
-      {/* Top action: Open in Quantum Lab banner */}
+      {/* Top action: Open in Circuit Lab banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-card)]">
         <div>
           <div className="flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
+            <CircuitLabIcon className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
             <h4 className="text-sm sm:text-base font-bold text-[var(--fg-main)]">
               Ready for Open-Ended Experimentation?
             </h4>
           </div>
           <p className="text-xs text-[var(--fg-muted)] mt-1 max-w-xl leading-relaxed">
-            Transfer this example circuit directly into the full Quantum Circuit Studio to append gates, inspect Python Qiskit code, and run custom shots.
+            Transfer this example circuit directly into the full Circuit Lab to append gates, inspect Python Qiskit code, and run custom shots.
           </p>
         </div>
 
@@ -64,10 +65,11 @@ export const LessonNavigation: React.FC<LessonNavigationProps> = ({
           variant="quantum"
           size="md"
           onClick={handleOpenInLab}
+          leftIcon={<CircuitLabIcon className="w-4 h-4" />}
           rightIcon={<ArrowRight className="w-4 h-4" />}
           className="whitespace-nowrap flex-shrink-0"
         >
-          Open in Quantum Lab
+          Open in Circuit Lab
         </Button>
       </div>
 

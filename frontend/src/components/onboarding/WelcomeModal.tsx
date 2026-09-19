@@ -61,7 +61,7 @@ export const WelcomeModal: React.FC = () => {
               <span>Guided Learning Tour</span>
             </div>
             <p className="text-[11px] text-[var(--fg-muted)] leading-tight">
-              2-minute overview of dashboard, curriculum, and Quantum Lab 2.0.
+              2-minute overview of dashboard, curriculum, and Circuit Lab.
             </p>
           </div>
 

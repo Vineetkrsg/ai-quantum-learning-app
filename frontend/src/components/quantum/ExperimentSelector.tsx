@@ -14,6 +14,7 @@ import {
   Sparkles,
   Sliders
 } from 'lucide-react';
+import { CircuitLabIcon } from './CircuitLabIcon';
 
 interface ExperimentSelectorProps {
   currentExperimentId: string | null;
@@ -86,7 +87,7 @@ export const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
             }`}
           >
             <Sliders className="w-3.5 h-3.5" />
-            <span>Freeform Studio</span>
+            <span>Freeform Lab</span>
           </button>
         </div>
       </div>
@@ -195,8 +196,8 @@ export const ExperimentSelector: React.FC<ExperimentSelectorProps> = ({
       {mode === 'freeform' && (
         <div className="p-3 rounded-xl bg-[var(--surface-sunken)] border border-[var(--border-card)] flex items-center justify-between text-xs text-[var(--fg-muted)]">
           <div className="flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
-            <span>Freeform Circuit Studio mode active: place any gates, customize shots, and simulate freely.</span>
+            <CircuitLabIcon className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
+            <span>Freeform Circuit Lab mode active: place any gates, customize shots, and simulate freely.</span>
           </div>
           <button
             type="button"

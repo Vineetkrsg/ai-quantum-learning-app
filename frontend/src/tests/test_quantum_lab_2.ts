@@ -1,4 +1,4 @@
-// Comprehensive Acceptance Test Suite for Quantum Lab 2.0
+// Comprehensive Acceptance Test Suite for Circuit Lab
 // Tests state isolation, mathematical simulator fidelity, guided experiments, and progress integration
 
 import { GUIDED_EXPERIMENTS } from '../mock/experimentsData';
@@ -23,7 +23,7 @@ function assertNear(actual: number, expected: number, tolerance: number, message
   }
 }
 
-console.log('--- STARTING QUANTUM LAB 2.0 TEST SUITE ---\n');
+console.log('--- STARTING CIRCUIT LAB ACCEPTANCE TEST SUITE ---\n');
 
 // =========================================================================
 // TEST 1: Guided Experiments Curriculum Completeness & Structure
@@ -264,7 +264,7 @@ console.log('✓ Test 3 Passed: Strict state isolation verified between differen
 // =========================================================================
 // TEST 4: Lesson -> Lab Scoped State Isolation
 // =========================================================================
-console.log('Executing Test 4: Lesson -> Quantum Lab Scoped Isolation...');
+console.log('Executing Test 4: Lesson -> Circuit Lab Scoped Isolation...');
 
 // Lesson 1 launching exp-h-gate
 const lessonKey1 = 'module-superposition/lesson-intro/quantum-lab/exp-h-gate';
@@ -335,4 +335,4 @@ assertEqual(store.xp, 70, 'Should award additional 35 XP for new experiment');
 
 console.log('✓ Test 6 Passed: Progress updates accurately and guards against duplication.\n');
 
-console.log('ALL QUANTUM LAB 2.0 ACCEPTANCE TESTS PASSED SUCCESSFULLY!');
+console.log('ALL CIRCUIT LAB ACCEPTANCE TESTS PASSED SUCCESSFULLY!');

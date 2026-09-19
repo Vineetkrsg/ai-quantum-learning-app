@@ -260,7 +260,7 @@ export const CircuitCodeConnection: React.FC<CircuitCodeConnectionProps> = ({ ci
             </pre>
 
             <p className="text-[11px] text-[var(--fg-muted)] leading-relaxed">
-              Synthesized directly from your circuit. Paste this into IBM Quantum Lab or Jupyter Notebook!
+              Synthesized directly from your circuit. Paste this into IBM Quantum Platform or Jupyter Notebook!
             </p>
           </div>
         </div>

@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { Cpu, ArrowRight, Play, Layers } from 'lucide-react';
+import { ArrowRight, Play, Layers } from 'lucide-react';
+import { CircuitLabIcon } from '../quantum/CircuitLabIcon';
 
 export const QuickLabCard: React.FC = () => {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ export const QuickLabCard: React.FC = () => {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm">
-            <Cpu className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
-            <span>Interactive Quantum Lab</span>
+            <CircuitLabIcon className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
+            <span>Interactive Circuit Lab</span>
           </CardTitle>
           <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-sunken)] border border-[var(--border-card)] text-[var(--fg-muted)] font-semibold">
             Studio
@@ -52,7 +53,7 @@ export const QuickLabCard: React.FC = () => {
           onClick={() => navigate('/lab')}
           rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
         >
-          Open Circuit Studio
+          Open Circuit Lab
         </Button>
       </div>
     </Card>

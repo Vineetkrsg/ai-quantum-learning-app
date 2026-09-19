@@ -17,7 +17,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/Button';
 import { Tabs } from '../components/ui/Tabs';
 
-// Quantum Lab 2.0 Components
+// Circuit Lab Components
 import { ExperimentSelector } from '../components/quantum/ExperimentSelector';
 import { ExperimentGoalCard } from '../components/quantum/ExperimentGoalCard';
 import { PredictionCard } from '../components/quantum/PredictionCard';
@@ -28,6 +28,7 @@ import { ExperimentComparison } from '../components/quantum/ExperimentComparison
 import { ExperimentChallengeCard } from '../components/quantum/ExperimentChallengeCard';
 import { ExperimentCompletionBanner } from '../components/quantum/ExperimentCompletionBanner';
 import { CircuitExplanationModal } from '../components/quantum/CircuitExplanationModal';
+import { CircuitLabIcon } from '../components/quantum/CircuitLabIcon';
 
 import { 
   Cpu, 
@@ -429,8 +430,8 @@ export const LabPage: React.FC = () => {
             </span>
           </div>
           <h2 className="text-2xl font-bold text-[var(--fg-main)] tracking-tight flex items-center gap-2">
-            <Atom className="w-6 h-6 text-sciteal-600 dark:text-sciteal-400" />
-            <span>Quantum Circuit Studio 2.0</span>
+            <CircuitLabIcon className="w-6 h-6 text-sciteal-600 dark:text-sciteal-400" />
+            <span>Circuit Lab</span>
           </h2>
         </div>
 
@@ -627,7 +628,7 @@ export const LabPage: React.FC = () => {
                 currentCircuitName: circuit.name,
                 qubitCount: circuit.numberOfQubits,
                 gateCount: circuit.gates.length,
-                activeLessonTitle: mode === 'experiment' ? activeExperiment.title : 'Quantum Circuit Studio',
+                activeLessonTitle: mode === 'experiment' ? activeExperiment.title : 'Circuit Lab',
                 gates: circuit.gates,
                 circuitContext: {
                   numberOfQubits: circuit.numberOfQubits,

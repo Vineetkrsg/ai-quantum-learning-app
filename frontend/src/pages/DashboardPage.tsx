@@ -18,6 +18,7 @@ import { RecommendedLessonCard } from '../components/dashboard/RecommendedLesson
 import { RecentActivityCard } from '../components/dashboard/RecentActivityCard';
 import { NewUserOnboardingCard } from '../components/dashboard/NewUserOnboardingCard';
 import { TutorPanel } from '../components/tutor/TutorPanel';
+import { CircuitLabIcon } from '../components/quantum/CircuitLabIcon';
 import { USER_OVERVIEW } from '../mock/progressData';
 import { LEARNING_MODULES } from '../mock/modulesData';
 import { useProgress } from '../context/ProgressContext';
@@ -67,8 +68,8 @@ export const DashboardPage: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <Link to="/lab">
-            <Button variant="quantum" size="sm" leftIcon={<Cpu className="w-4 h-4" />}>
-              Open Quantum Lab
+            <Button variant="quantum" size="sm" leftIcon={<CircuitLabIcon className="w-4 h-4" />}>
+              Open Circuit Lab
             </Button>
           </Link>
         </div>

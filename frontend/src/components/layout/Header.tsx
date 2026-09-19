@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
     switch (pathname) {
       case '/dashboard': return { title: 'Dashboard', category: 'Overview' };
       case '/learn': return { title: 'Interactive Learning', category: 'Curriculum' };
-      case '/lab': return { title: 'Quantum Circuit Studio', category: 'Lab Environment' };
+      case '/lab': return { title: 'Circuit Lab', category: 'Lab Environment' };
       case '/challenges': return { title: 'Challenges & Assessments', category: 'Practice' };
       case '/progress': return { title: 'Skill Tree & Progress', category: 'Analytics' };
       case '/tutor': return { title: 'AI Quantum Tutor', category: 'Pedagogical Assistant' };
