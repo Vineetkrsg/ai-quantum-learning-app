@@ -7,7 +7,11 @@ import { BookOpen, Clock, ArrowRight, Sparkles } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
 import { LEARNING_MODULES } from '../../mock/modulesData';
 
-export const RecommendedLessonCard: React.FC = () => {
+interface RecommendedLessonCardProps {
+  className?: string;
+}
+
+export const RecommendedLessonCard: React.FC<RecommendedLessonCardProps> = ({ className = '' }) => {
   const navigate = useNavigate();
   const { moduleProgress, completedLessonsByModule } = useProgress();
 
@@ -26,7 +30,7 @@ export const RecommendedLessonCard: React.FC = () => {
   };
 
   return (
-    <Card variant="interactive" className="h-full flex flex-col justify-between">
+    <Card variant="interactive" className={`flex flex-col ${className}`.trim()}>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm">

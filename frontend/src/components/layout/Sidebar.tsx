@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     { to: '/lab', label: 'Quantum Circuit Lab', icon: CircuitLabIcon, badge: 'Studio' },
     { to: '/challenges', label: 'Challenges', icon: Trophy, badge: '4 New' },
     { to: '/progress', label: 'Progress Tracking', icon: TrendingUp, badge: `${overallProgress}%` },
-    { to: '/tutor', label: 'AI Quantum Tutor', icon: Bot, badge: 'Gemini' },
+    { to: '/tutor', label: 'AI Quantum Tutor', icon: Bot, badge: 'Assistant' },
   ];
 
   return (
@@ -67,7 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   Lab
                 </span>
               </div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">SIH Quantum Platform</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Quantum Learning Platform</p>
             </div>
           </Link>
 
@@ -101,14 +101,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-100/80 dark:hover:bg-[#1b2636]/60 border border-transparent'}
                 `}
               >
-                <div className="flex items-center gap-3">
-                  <Icon className="w-4 h-4 transition-transform group-hover:scale-105" />
-                  <span>{item.label}</span>
-                </div>
-                {item.badge && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#1b2636] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-[#2b3a4f]">
-                    {item.badge}
-                  </span>
+                {({ isActive }) => (
+                  <>
+                    <div className="flex items-center gap-3">
+                      <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
+                      <span>{item.label}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-teal-600 dark:bg-teal-400 animate-pulse" />
+                      )}
+                      {item.badge && (
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-[#1b2636] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-[#2b3a4f]">
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
+                  </>
                 )}
               </NavLink>
             );
@@ -197,7 +206,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
               <span>Simulator Ready</span>
             </div>
-            <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">Qiskit Aer</span>
+            <span className="font-mono text-[10px] text-slate-400 dark:text-slate-500">Statevector</span>
           </div>
         </div>
       </aside>

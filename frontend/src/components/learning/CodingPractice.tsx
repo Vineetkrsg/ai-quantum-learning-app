@@ -523,7 +523,7 @@ export const CodingPractice: React.FC<CodingPracticeProps> = ({
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-[var(--fg-main)] flex items-center gap-1.5 font-mono">
                     <BarChart3 className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
-                    <span>Simulated Qiskit Aer Run (1,024 Shots)</span>
+                    <span>Statevector Simulation Run (1,024 Shots)</span>
                   </span>
                   <Badge variant="teal" size="sm">
                     {practiceData.simulatedRun.expectedState}

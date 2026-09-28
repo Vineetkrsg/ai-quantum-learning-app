@@ -5,6 +5,8 @@ import { Tabs } from '../components/ui/Tabs';
 import { Card } from '../components/ui/Card';
 import { Trophy, Zap, CheckCircle2, Flame, Award } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
+import { ChallengesAtmosphere } from '../components/challenges/ChallengesAtmosphere';
+import { QuantumBackground } from '../components/quantum/visual/QuantumBackground';
 
 export const ChallengesPage: React.FC = () => {
   const [filterDifficulty, setFilterDifficulty] = useState('all');
@@ -26,7 +28,10 @@ export const ChallengesPage: React.FC = () => {
   const totalXpAvailable = CHALLENGES_DATA.reduce((sum, c) => sum + c.xp, 0);
 
   return (
-    <div className="space-y-6" data-tour="challenges-area">
+    <div className="space-y-6 relative" data-tour="challenges-area">
+      {/* Background ambient quantum traces */}
+      <QuantumBackground variant="subtle" />
+
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -95,6 +100,12 @@ export const ChallengesPage: React.FC = () => {
           </div>
         </Card>
       </div>
+
+      {/* Quantum Proving Grounds Interactive Verification Atmosphere */}
+      <ChallengesAtmosphere
+        completedCount={completedCount}
+        totalCount={CHALLENGES_DATA.length}
+      />
 
       {/* Filter Tabs */}
       <Tabs

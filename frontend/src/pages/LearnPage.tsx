@@ -6,6 +6,8 @@ import { Card } from '../components/ui/Card';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import { Search, Sparkles } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
+import { ConceptGraphExplorer } from '../components/learning/ConceptGraphExplorer';
+import { QuantumBackground } from '../components/quantum/visual/QuantumBackground';
 
 export const LearnPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -36,7 +38,10 @@ export const LearnPage: React.FC = () => {
   const completedCount = completedLessons.length;
 
   return (
-    <div className="space-y-6" data-tour="learn-curriculum">
+    <div className="space-y-6 relative" data-tour="learn-curriculum">
+      {/* Background ambient quantum traces */}
+      <QuantumBackground variant="subtle" />
+
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -83,6 +88,9 @@ export const LearnPage: React.FC = () => {
           </div>
         </div>
       </Card>
+
+      {/* Concept Relationship Graph (Interactive Topology) */}
+      <ConceptGraphExplorer />
 
       {/* Filter Tabs */}
       <div className="flex items-center justify-between">

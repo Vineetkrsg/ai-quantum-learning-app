@@ -107,3 +107,13 @@ export interface ExperimentUserState {
   showSolution: boolean;
 }
 
+export interface CircuitStepState {
+  stepIndex: number; // 0 = initial state |0...0>
+  gate: GateOperation | null;
+  stepLabel: string;
+  description: string;
+  stateVector: StateVectorElement[];
+  theoreticalProbabilities: Record<string, number>;
+  blochCoordinates?: { theta: number; phi: number; x: number; y: number; z: number };
+  isEntangled?: boolean;
+}

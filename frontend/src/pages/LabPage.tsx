@@ -423,7 +423,7 @@ export const LabPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-[var(--surface-sunken)] text-sciteal-700 dark:text-sciteal-300 border border-[var(--border-card)] font-mono font-semibold">
-              Aer Statevector Simulator
+              Statevector Simulator
             </span>
             <span className="text-xs text-[var(--fg-muted)] font-mono">
               {circuit.numberOfQubits} Qubits • {circuit.gates.length} Gates
@@ -609,6 +609,7 @@ export const LabPage: React.FC = () => {
             <QuantumVisualizer
               result={simulationResult}
               experiment={mode === 'experiment' ? activeExperiment : undefined}
+              circuit={circuit}
             />
           )}
 

@@ -10,7 +10,6 @@ import {
   User, 
   Atom, 
   Lightbulb, 
-  BookOpen, 
   Code, 
   Cpu, 
   HelpCircle, 
@@ -24,9 +23,18 @@ import { askAITutor } from '../../services/api';
 interface TutorPanelProps {
   context?: TutorContext;
   compact?: boolean;
+  externalPrompt?: string | null;
+  onClearExternalPrompt?: () => void;
+  onTypingStateChange?: (isTyping: boolean) => void;
 }
 
-export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false }) => {
+export const TutorPanel: React.FC<TutorPanelProps> = ({
+  context,
+  compact = false,
+  externalPrompt = null,
+  onClearExternalPrompt,
+  onTypingStateChange
+}) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'msg-1',
@@ -51,6 +59,11 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
   useEffect(() => {
     scrollToBottom();
   }, [messages, isTyping]);
+
+  useEffect(() => {
+    onTypingStateChange?.(isTyping);
+  }, [isTyping, onTypingStateChange]);
+
 
   const suggestedPrompts: SuggestedPrompt[] = [
     {
@@ -156,6 +169,13 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
     }
   };
 
+  useEffect(() => {
+    if (externalPrompt && externalPrompt.trim()) {
+      handleSend(externalPrompt, 'chat');
+      onClearExternalPrompt?.();
+    }
+  }, [externalPrompt]);
+
   const handleAnswerOption = (questionId: string, optionId: string, isCorrect: boolean) => {
     setQuestionAnswers(prev => ({
       ...prev,
@@ -165,40 +185,20 @@ export const TutorPanel: React.FC<TutorPanelProps> = ({ context, compact = false
 
   return (
     <Card variant="default" className={`flex flex-col ${compact ? 'h-[520px]' : 'h-[640px]'}`}>
-      <CardHeader className="py-3 px-5 border-b border-[var(--border-card)] flex items-center justify-between bg-[var(--surface-sunken)]">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 border border-sciteal-500/30 flex items-center justify-center font-bold">
+      <CardHeader className="py-3 px-4 sm:px-5 border-b border-[var(--border-card)] bg-[var(--surface-sunken)]">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 border border-sciteal-500/30 flex items-center justify-center font-bold shrink-0">
             <Bot className="w-4 h-4 text-sciteal-700 dark:text-sciteal-300" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <CardTitle className="text-sm">AI Quantum Tutor</CardTitle>
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-semibold border ${
-                lastProvider === 'gemini' 
-                  ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30' 
-                  : 'bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 border-sciteal-500/30'
-              }`}>
-                {lastProvider === 'gemini' ? '● Gemini Live' : '● Pedagogical Engine'}
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <CardTitle className="text-sm font-semibold text-[var(--fg-main)]">AI Quantum Tutor</CardTitle>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-semibold border bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 border-sciteal-500/30 whitespace-nowrap shrink-0">
+                Pedagogical Engine
               </span>
             </div>
-            <p className="text-[11px] text-[var(--fg-muted)]">Pedagogical Assistant with Quantum Context</p>
+            <p className="text-[11px] text-[var(--fg-muted)] truncate">Pedagogical Assistant with Quantum Context</p>
           </div>
-        </div>
-
-        {/* Context Badges */}
-        <div className="hidden sm:flex items-center gap-2">
-          {context?.currentCircuitName && (
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-subtle)] border border-[var(--border-card)] text-[var(--fg-main)] flex items-center gap-1 font-semibold">
-              <Atom className="w-3 h-3 text-sciteal-600 dark:text-sciteal-400" />
-              <span>Circuit: {context.currentCircuitName}</span>
-            </span>
-          )}
-          {context?.activeLessonTitle && (
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-subtle)] border border-[var(--border-card)] text-[var(--fg-main)] flex items-center gap-1 font-semibold">
-              <BookOpen className="w-3 h-3 text-sciteal-600 dark:text-sciteal-400" />
-              <span>{context.activeLessonTitle}</span>
-            </span>
-          )}
         </div>
       </CardHeader>
 

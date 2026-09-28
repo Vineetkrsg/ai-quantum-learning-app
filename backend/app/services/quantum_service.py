@@ -5,8 +5,13 @@ from backend.app.models.quantum import CircuitModel, SimulationResultModel
 
 class QuantumSimulationService(ABC):
     """
-    Abstract interface for quantum circuit simulation.
-    Allows seamlessly swapping between MockSimulator and Qiskit/Aer simulator.
+    Abstract interface for quantum circuit simulation in the FastAPI backend extensibility layer.
+
+    Architecture Note:
+    QuLearn AI currently uses a custom TypeScript state-vector simulator for Circuit Lab
+    (frontend/src/services/quantumSimulator.ts). The FastAPI backend provides service abstractions
+    and API infrastructure that can support planned future simulation-engine integrations
+    (such as Qiskit/Aer or external quantum backends).
     """
     @abstractmethod
     async def simulate(self, circuit: CircuitModel, shots: int = 1024) -> SimulationResultModel:
@@ -14,8 +19,10 @@ class QuantumSimulationService(ABC):
 
 class MockSimulationService(QuantumSimulationService):
     """
-    Mock quantum simulation service providing realistic state distributions
-    until Qiskit/Aer integration is plugged in.
+    Mock quantum simulation service providing realistic state distributions for the
+    backend simulation endpoint abstraction.
+
+    Planned future integrations (such as Qiskit/Aer) can implement QuantumSimulationService here.
     """
     async def simulate(self, circuit: CircuitModel, shots: int = 1024) -> SimulationResultModel:
         start_time = time.time()

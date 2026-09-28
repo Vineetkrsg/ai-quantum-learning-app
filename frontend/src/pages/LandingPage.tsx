@@ -19,6 +19,8 @@ import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { CircuitLabIcon } from '../components/quantum/CircuitLabIcon';
 import { useTheme } from '../context/ThemeContext';
+import { QuantumBackground } from '../components/quantum/visual/QuantumBackground';
+import { QuantumExplorerHero } from '../components/quantum/visual/QuantumExplorerHero';
 
 export const LandingPage: React.FC = () => {
   const { theme, cycleTheme } = useTheme();
@@ -26,7 +28,7 @@ export const LandingPage: React.FC = () => {
   const learningLoop = [
     { step: '01', title: 'Learn', desc: 'Interactive concept modules with mathematical Dirac notation and Bloch sphere visualization.', icon: BookOpen },
     { step: '02', title: 'Build', desc: 'Drag-and-drop Circuit Lab with single and multi-qubit unitary gate placement.', icon: CircuitLabIcon },
-    { step: '03', title: 'Simulate', desc: 'Execute state vector simulation and projective measurement sampling powered by Aer.', icon: Play },
+    { step: '03', title: 'Simulate', desc: 'Execute state-vector simulation and projective measurement sampling powered by our custom TypeScript simulator.', icon: Play },
     { step: '04', title: 'Visualize', desc: 'Real-time probability histograms, Dirac state distributions, and phase angles.', icon: BarChart3 },
     { step: '05', title: 'Ask AI', desc: 'AI Quantum Tutor trained on quantum mechanics to unblock conceptual hurdles in real time.', icon: Bot },
     { step: '06', title: 'Practice', desc: 'Gamified circuit puzzles, Bell state synthesis, and algorithmic optimization challenges.', icon: Trophy },
@@ -35,6 +37,9 @@ export const LandingPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-canvas)] text-[var(--fg-main)] selection:bg-sciteal-500/20 selection:text-[var(--fg-main)] transition-colors duration-200">
+      {/* Background Ambient Quantum Particle & Trace Lattice */}
+      <QuantumBackground variant="hero" />
+
       {/* Top Navbar */}
       <nav className="border-b border-[var(--border-card)] bg-[var(--bg-canvas)]/90 backdrop-blur-md sticky top-0 z-50 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -49,7 +54,7 @@ export const LandingPage: React.FC = () => {
                   AI
                 </span>
               </div>
-              <span className="text-[10px] text-[var(--fg-muted)] hidden sm:inline">Smart India Hackathon</span>
+              <span className="text-[10px] text-[var(--fg-muted)] hidden sm:inline">Quantum Learning Platform</span>
             </div>
           </div>
 
@@ -91,34 +96,59 @@ export const LandingPage: React.FC = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-16 pb-24 overflow-hidden border-b border-[var(--border-card)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--surface-sunken)] border border-[var(--border-card)] text-xs text-[var(--fg-muted)] mb-6 shadow-sm font-medium">
-            <Sparkles className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
-            <span>Interactive Quantum Algorithm Learning Platform</span>
-            <Badge variant="teal" size="sm">v1.0 Platform</Badge>
-          </div>
+      <section className="relative pt-12 pb-20 overflow-hidden border-b border-[var(--border-card)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left 7 Columns: Core Message & Value Prop */}
+            <div className="lg:col-span-7 text-left space-y-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--surface-sunken)] border border-[var(--border-card)] text-xs text-[var(--fg-muted)] shadow-sm font-medium">
+                <Sparkles className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
+                <span>Interactive Quantum Algorithm Learning Platform</span>
+                <Badge variant="teal" size="sm">v1.0 Platform</Badge>
+              </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-[var(--fg-main)] max-w-4xl mx-auto leading-[1.1]">
-            Demystify Quantum Computing with <span className="text-sciteal-700 dark:text-sciteal-400">Interactive Simulation & AI Guidance</span>
-          </h1>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[var(--fg-main)] leading-[1.12]">
+                Learn Quantum Computing <span className="text-sciteal-700 dark:text-sciteal-400">by actually experiencing it.</span>
+              </h1>
 
-          <p className="mt-6 text-base sm:text-lg text-[var(--fg-muted)] max-w-2xl mx-auto leading-relaxed">
-            Move beyond static textbooks. Build quantum circuits, simulate superposition and entanglement in your browser, and receive pedagogical guidance from an AI tutor powered by Gemini architecture.
-          </p>
+              <p className="text-base sm:text-lg text-[var(--fg-muted)] leading-relaxed max-w-2xl">
+                Move beyond static textbooks. Build quantum circuits, simulate superposition and entanglement in your browser, and receive pedagogical guidance from QuLearn AI's intelligent Quantum Pedagogical Engine.
+              </p>
 
-          {/* Primary CTAs */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Link to="/learn">
-              <Button variant="quantum" size="lg" leftIcon={<BookOpen className="w-4 h-4" />}>
-                Start Learning
-              </Button>
-            </Link>
-            <Link to="/lab">
-              <Button variant="secondary" size="lg" leftIcon={<CircuitLabIcon className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />}>
-                Open Circuit Lab
-              </Button>
-            </Link>
+              {/* The 6-stage sequence banner (Prompt Section 9) */}
+              <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono text-[var(--fg-muted)] pt-1">
+                <span className="px-2.5 py-1 rounded-md bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-300 font-semibold">Learn</span>
+                <span>→</span>
+                <span className="px-2.5 py-1 rounded-md bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-300 font-semibold">Build</span>
+                <span>→</span>
+                <span className="px-2.5 py-1 rounded-md bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-300 font-semibold">Simulate</span>
+                <span>→</span>
+                <span className="px-2.5 py-1 rounded-md bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-300 font-semibold">Visualize</span>
+                <span>→</span>
+                <span className="px-2.5 py-1 rounded-md bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-300 font-semibold">Understand</span>
+                <span>→</span>
+                <span className="px-2.5 py-1 rounded-md bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-300 font-semibold">Practice</span>
+              </div>
+
+              {/* Primary CTAs */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
+                <Link to="/learn">
+                  <Button variant="quantum" size="lg" leftIcon={<BookOpen className="w-4 h-4" />}>
+                    Start Learning
+                  </Button>
+                </Link>
+                <Link to="/lab">
+                  <Button variant="secondary" size="lg" leftIcon={<CircuitLabIcon className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />}>
+                    Explore Circuit Lab
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Right 5 Columns: 3D/2D Quantum Explorer Hero Experience */}
+            <div className="lg:col-span-5 flex justify-center items-center">
+              <QuantumExplorerHero />
+            </div>
           </div>
 
           {/* Interactive Circuit Hero Mockup */}
@@ -130,7 +160,7 @@ export const LandingPage: React.FC = () => {
                   <span className="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-slate-600" />
                   <span className="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-slate-600" />
                   <span className="w-2.5 h-2.5 rounded-full bg-slate-400 dark:bg-slate-600" />
-                  <span className="text-xs font-mono text-[var(--fg-muted)] ml-2">bell_state_circuit.py — Qiskit Aer Simulator</span>
+                  <span className="text-xs font-mono text-[var(--fg-muted)] ml-2">bell_state_circuit — Quantum Statevector Simulator</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-400 font-semibold">
@@ -197,14 +227,14 @@ export const LandingPage: React.FC = () => {
           {learningLoop.slice(0, 4).map((item) => {
             const Icon = item.icon;
             return (
-              <Card key={item.step} variant="interactive" className="p-6">
+              <Card key={item.step} variant="interactive" className="p-6 group hover:-translate-y-1 hover:shadow-md transition-all duration-200">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-mono text-sciteal-700 dark:text-sciteal-400 font-bold">{item.step}</span>
-                  <div className="p-2 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-400">
+                  <div className="p-2 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] group-hover:border-sciteal-500/40 group-hover:scale-110 text-sciteal-700 dark:text-sciteal-400 transition-all">
                     <Icon className="w-4 h-4" />
                   </div>
                 </div>
-                <h3 className="text-base font-bold text-[var(--fg-main)] mb-2">{item.title}</h3>
+                <h3 className="text-base font-bold text-[var(--fg-main)] group-hover:text-sciteal-600 dark:group-hover:text-sciteal-400 transition-colors mb-2">{item.title}</h3>
                 <p className="text-xs text-[var(--fg-muted)] leading-relaxed">{item.desc}</p>
               </Card>
             );
@@ -215,14 +245,14 @@ export const LandingPage: React.FC = () => {
           {learningLoop.slice(4).map((item) => {
             const Icon = item.icon;
             return (
-              <Card key={item.step} variant="interactive" className="p-6">
+              <Card key={item.step} variant="interactive" className="p-6 group hover:-translate-y-1 hover:shadow-md transition-all duration-200">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-mono text-sciteal-700 dark:text-sciteal-400 font-bold">{item.step}</span>
-                  <div className="p-2 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] text-sciteal-700 dark:text-sciteal-400">
+                  <div className="p-2 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] group-hover:border-sciteal-500/40 group-hover:scale-110 text-sciteal-700 dark:text-sciteal-400 transition-all">
                     <Icon className="w-4 h-4" />
                   </div>
                 </div>
-                <h3 className="text-base font-bold text-[var(--fg-main)] mb-2">{item.title}</h3>
+                <h3 className="text-base font-bold text-[var(--fg-main)] group-hover:text-sciteal-600 dark:group-hover:text-sciteal-400 transition-colors mb-2">{item.title}</h3>
                 <p className="text-xs text-[var(--fg-muted)] leading-relaxed">{item.desc}</p>
               </Card>
             );
@@ -246,7 +276,7 @@ export const LandingPage: React.FC = () => {
               <Bot className="w-8 h-8 text-sciteal-600 dark:text-sciteal-400 mb-4" />
               <h4 className="text-base font-bold text-[var(--fg-main)] mb-2">Context-Aware AI Quantum Tutor</h4>
               <p className="text-xs text-[var(--fg-muted)] leading-relaxed">
-                Integrated pedagogical assistant powered by Gemini architecture. The tutor inspects your active circuit state and active lesson to deliver hyper-specific guidance.
+                Integrated pedagogical assistant and intelligent quantum engine. The tutor inspects your active circuit state and active lesson to deliver hyper-specific guidance.
               </p>
             </Card>
 
@@ -267,10 +297,10 @@ export const LandingPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <Atom className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
             <span className="font-bold text-[var(--fg-main)] text-sm">QuLearn AI</span>
-            <span className="text-xs text-[var(--fg-muted)]">• Smart India Hackathon MVP</span>
+            <span className="text-xs text-[var(--fg-muted)]">• Quantum Learning Platform</span>
           </div>
           <p className="text-xs text-[var(--fg-muted)]">
-            Designed for interactive quantum education. Powered by React, TypeScript, FastAPI, Qiskit & Gemini architecture.
+            Designed for interactive quantum education. Powered by React, TypeScript, FastAPI & Quantum Pedagogical Engine (with Qiskit-compatible circuit code export).
           </p>
         </div>
       </footer>

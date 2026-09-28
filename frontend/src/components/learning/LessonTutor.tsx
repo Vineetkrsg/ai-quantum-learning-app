@@ -7,8 +7,6 @@ import {
   Sparkles, 
   Send, 
   Lightbulb, 
-  BookOpen, 
-  Atom, 
   HelpCircle,
   Cpu,
   Terminal,
@@ -127,33 +125,19 @@ export const LessonTutor: React.FC<LessonTutorProps> = ({
   return (
     <Card variant="default" className="overflow-hidden" data-testid="lesson-tutor-card">
       {/* Header */}
-      <CardHeader className="pb-3 border-b border-[var(--border-card)] bg-[var(--surface-sunken)]">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 border border-sciteal-500/30 flex items-center justify-center font-bold">
-              <Bot className="w-4 h-4 text-sciteal-700 dark:text-sciteal-300" />
-            </div>
-            <div>
-              <CardTitle className="text-sm sm:text-base flex items-center gap-2">
-                <span>AI Quantum Tutor</span>
-                <Badge variant={activeProvider === 'gemini' ? 'teal' : 'slate'} size="sm">
-                  {activeProvider === 'gemini' ? 'Gemini Live' : 'Pedagogical Engine'}
-                </Badge>
-              </CardTitle>
-              <p className="text-[11px] text-[var(--fg-muted)]">Context-aware guidance for quantum theory, circuits, and Python code</p>
-            </div>
+      <CardHeader className="py-3 px-4 sm:px-6 border-b border-[var(--border-card)] bg-[var(--surface-sunken)]">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 border border-sciteal-500/30 flex items-center justify-center font-bold shrink-0">
+            <Bot className="w-4 h-4 text-sciteal-700 dark:text-sciteal-300" />
           </div>
-
-          {/* Context badges */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-subtle)] border border-[var(--border-card)] text-[var(--fg-main)] flex items-center gap-1 font-semibold">
-              <BookOpen className="w-3 h-3 text-sciteal-600 dark:text-sciteal-400" />
-              <span>Lesson: {lessonContext}</span>
-            </span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-subtle)] border border-[var(--border-card)] text-[var(--fg-main)] flex items-center gap-1 font-semibold">
-              <Atom className="w-3 h-3 text-sciteal-600 dark:text-sciteal-400" />
-              <span>{exampleContext}</span>
-            </span>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2 flex-wrap">
+              <CardTitle className="text-sm sm:text-base font-semibold text-[var(--fg-main)]">AI Quantum Tutor</CardTitle>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full font-semibold border bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 border-sciteal-500/30 whitespace-nowrap shrink-0">
+                Pedagogical Engine
+              </span>
+            </div>
+            <p className="text-[11px] text-[var(--fg-muted)] truncate">Context-aware guidance for quantum theory, circuits, and Python code</p>
           </div>
         </div>
       </CardHeader>

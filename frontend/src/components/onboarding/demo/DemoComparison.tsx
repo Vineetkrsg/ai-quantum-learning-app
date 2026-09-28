@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SimulationResult } from '../../../types/quantum';
 import { Button } from '../../ui/Button';
 import { GitCompare, Play, CheckCircle2, ArrowRight, Sparkles, HelpCircle } from 'lucide-react';
+import { InteractiveBlochSphere } from '../../quantum/visualization/InteractiveBlochSphere';
 
 interface DemoComparisonProps {
   onRunSimulation: () => SimulationResult;
@@ -175,6 +176,17 @@ export const DemoComparison: React.FC<DemoComparisonProps> = ({
               </p>
             </div>
           </div>
+
+          {/* Interactive Statevector Visualizer: Return to Ground State */}
+          <InteractiveBlochSphere
+            coordinates={simResult.blochCoordinates}
+            initialTheta={0}
+            initialPhi={0}
+            showControls={false}
+            showPresets={false}
+            title="Interactive Statevector: Wave Interference Returns State to |0⟩ (North Pole)"
+            size={220}
+          />
 
           {/* Key Insight Box */}
           <div className="p-4 rounded-xl bg-sciteal-500/10 border border-sciteal-500/30 space-y-2">

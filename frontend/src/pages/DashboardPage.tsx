@@ -22,6 +22,8 @@ import { CircuitLabIcon } from '../components/quantum/CircuitLabIcon';
 import { USER_OVERVIEW } from '../mock/progressData';
 import { LEARNING_MODULES } from '../mock/modulesData';
 import { useProgress } from '../context/ProgressContext';
+import { QuantumLearningPath } from '../components/dashboard/QuantumLearningPath';
+import { QuantumBackground } from '../components/quantum/visual/QuantumBackground';
 
 export const DashboardPage: React.FC = () => {
   const { overallProgress, circuitsRun, xp, streakDays, moduleProgress, quizStats } = useProgress();
@@ -46,7 +48,10 @@ export const DashboardPage: React.FC = () => {
     : '0.0%';
 
   return (
-    <div className="space-y-6" data-tour="dashboard-overview">
+    <div className="space-y-6 relative" data-tour="dashboard-overview">
+      {/* Background ambient quantum traces */}
+      <QuantumBackground variant="subtle" />
+
       {/* Onboarding / Demo Launch Card */}
       <NewUserOnboardingCard />
 
@@ -88,7 +93,7 @@ export const DashboardPage: React.FC = () => {
         <StatCard
           label="Circuits Simulated"
           value={circuitsRun}
-          change="Aer Ready"
+          change="Simulator Ready"
           changeType="positive"
           icon={<Cpu className="w-5 h-5" />}
           description="1024 shots default"
@@ -110,6 +115,9 @@ export const DashboardPage: React.FC = () => {
           description={streakDays > 0 ? 'Keep up the momentum' : 'Complete 1 lesson today'}
         />
       </div>
+
+      {/* Connected Quantum Learning Pathway (Living Environment) */}
+      <QuantumLearningPath />
 
       {/* Primary 2-Column Dashboard Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -160,7 +168,7 @@ export const DashboardPage: React.FC = () => {
           {/* Quick Lab & Recommended Lesson Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <QuickLabCard />
-            <RecommendedLessonCard />
+            <RecommendedLessonCard className="h-full justify-between" />
           </div>
 
           {/* Recent Activity Card */}

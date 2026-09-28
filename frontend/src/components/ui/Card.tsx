@@ -15,10 +15,10 @@ export const Card: React.FC<CardProps> = ({
   const baseStyles = 'rounded-xl border transition-all duration-150';
   
   const variantStyles = {
-    default: 'bg-white dark:bg-[#151e2b] border-slate-200 dark:border-[#223043] text-slate-900 dark:text-[#e6edf4] shadow-sm',
-    glass: 'bg-white/95 dark:bg-[#151e2b]/95 border-slate-200 dark:border-[#223043] text-slate-900 dark:text-[#e6edf4] shadow-sm',
-    interactive: 'bg-white dark:bg-[#151e2b] border-slate-200 dark:border-[#223043] text-slate-900 dark:text-[#e6edf4] shadow-sm hover:border-teal-600/50 dark:hover:border-teal-500/50 cursor-pointer',
-    flat: 'bg-slate-50 dark:bg-[#111823] border-slate-200 dark:border-[#1e2a3b] text-slate-900 dark:text-[#e6edf4]'
+    default: 'bg-white dark:bg-[#151e2b] border-slate-200 dark:border-[#223043] text-slate-900 dark:text-[#e6edf4] shadow-sm transition-colors duration-150',
+    glass: 'bg-white/95 dark:bg-[#151e2b]/95 border-slate-200 dark:border-[#223043] text-slate-900 dark:text-[#e6edf4] shadow-sm transition-colors duration-150',
+    interactive: 'bg-white dark:bg-[#151e2b] border-slate-200 dark:border-[#223043] text-slate-900 dark:text-[#e6edf4] shadow-sm hover:border-teal-600/50 dark:hover:border-teal-500/50 hover:shadow-md hover:-translate-y-0.5 cursor-pointer transition-all duration-200',
+    flat: 'bg-slate-50 dark:bg-[#111823] border-slate-200 dark:border-[#1e2a3b] text-slate-900 dark:text-[#e6edf4] transition-colors duration-150'
   };
 
   return (

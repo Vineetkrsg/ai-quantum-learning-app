@@ -14,6 +14,10 @@ import { PracticeChallenge } from '../components/learning/PracticeChallenge';
 import { LessonNavigation } from '../components/learning/LessonNavigation';
 import { VisualExplanation } from '../components/learning/VisualExplanation';
 import { LessonCompletionSummary } from '../components/learning/LessonCompletionSummary';
+import { AdaptiveContentCard } from '../components/learning/AdaptiveContentCard';
+import { AdaptiveExplanation } from '../components/learning/AdaptiveExplanation';
+import { evaluateAdaptiveProfile } from '../services/adaptiveEngine';
+import { VisualizationSelector } from '../components/quantum/visualization';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Badge } from '../components/ui/Badge';
@@ -28,6 +32,7 @@ import {
 export const LessonPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const progress = useProgress();
+  const navigate = useNavigate();
 
   const lessonContent = slug ? LESSONS_DATA[slug] : undefined;
 
@@ -86,6 +91,14 @@ export const LessonPage: React.FC = () => {
     }
   };
 
+  // Evaluate explainable adaptive profile based on learner performance signals
+  const adaptiveProfile = evaluateAdaptiveProfile(
+    slug || 'fundamentals',
+    activeLesson.id,
+    progress.getAdaptiveRecord(slug || 'fundamentals')
+  );
+
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-12">
       {/* 1. Module Header */}
@@ -118,58 +131,32 @@ export const LessonPage: React.FC = () => {
 
       {/* 3. Active Mini-Lesson Body */}
       <div className="space-y-6 animate-in fade-in duration-200" data-tour="lesson-pattern">
-        {/* Core Lesson Card */}
-        <Card variant="default">
-          <CardHeader className="pb-3 border-b border-[var(--border-card)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[var(--surface-sunken)] text-sciteal-700 dark:text-sciteal-300 border border-[var(--border-card)] font-semibold">
-                  Lesson {activeLessonIndex + 1} of {lessonContent.miniLessons.length}
-                </span>
-                <span className="text-xs text-[var(--fg-muted)] font-mono">
-                  ~{activeLesson.durationMinutes} mins
-                </span>
-              </div>
-              <CardTitle className="text-base sm:text-lg font-bold text-[var(--fg-main)]">
-                {activeLesson.title}
-              </CardTitle>
-            </div>
+        {/* Adaptive Learning Recommendation Card */}
+        <AdaptiveContentCard
+          evaluation={adaptiveProfile}
+          moduleId={slug}
+          lessonId={activeLesson.id}
+        />
 
-            {isCurrentLessonComplete && (
-              <Badge variant="emerald">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                Lesson Completed
-              </Badge>
-            )}
-          </CardHeader>
+        {/* Core Lesson Card with Dynamic Adaptive Explanation */}
+        <AdaptiveExplanation
+          moduleSlug={slug || 'fundamentals'}
+          lessonId={activeLesson.id}
+          lessonTitle={activeLesson.title}
+          defaultExplanation={activeLesson.conceptExplanation}
+          defaultAnalogy={activeLesson.analogy}
+          defaultVisualNote={activeLesson.visualNote}
+        />
 
-          <CardContent className="p-6 space-y-5">
-            {/* Concept Explanation */}
-            <p className="text-sm sm:text-base text-[var(--fg-main)] leading-relaxed">
-              {activeLesson.conceptExplanation}
-            </p>
-
-            {/* Beginner-friendly Analogy Card if present */}
-            {activeLesson.analogy && (
-              <div className="p-4 rounded-xl bg-[var(--surface-sunken)] border border-amber-500/30 space-y-2 shadow-sm">
-                <div className="flex items-center gap-2 text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider font-mono">
-                  <Lightbulb className="w-4 h-4 text-amber-500 dark:text-amber-400" />
-                  <span>Intuitive Analogy</span>
-                </div>
-                <p className="text-xs sm:text-sm text-[var(--fg-main)] leading-relaxed italic">
-                  "{activeLesson.analogy}"
-                </p>
-              </div>
-            )}
-
-            {/* Visual Note if present */}
-            {activeLesson.visualNote && (
-              <div className="p-3 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] text-center font-mono text-xs sm:text-sm text-sciteal-700 dark:text-sciteal-400 font-bold">
-                {activeLesson.visualNote}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        {/* Concept-Specific 2D/3D Interactive Visualization Layer */}
+        <VisualizationSelector
+          key={`${slug}-${activeLesson.id}-selector`}
+          moduleId={slug || 'fundamentals'}
+          lessonId={activeLesson.id}
+          conceptId={slug}
+          title={activeLesson.title}
+          onExploreInLab={() => navigate(`/lab?moduleId=${slug || 'fundamentals'}&lessonId=${activeLesson.id}`)}
+        />
 
         {/* Visual Explanation if defined for this lesson */}
         {activeLesson.visualExplanation && (

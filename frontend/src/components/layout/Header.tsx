@@ -28,19 +28,17 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
   const { xp } = useProgress();
   const { startTour, startDemo } = useOnboarding();
 
-  const getPageTitle = (pathname: string) => {
-    switch (pathname) {
-      case '/dashboard': return { title: 'Dashboard', category: 'Overview' };
-      case '/learn': return { title: 'Interactive Learning', category: 'Curriculum' };
-      case '/lab': return { title: 'Circuit Lab', category: 'Lab Environment' };
-      case '/challenges': return { title: 'Challenges & Assessments', category: 'Practice' };
-      case '/progress': return { title: 'Skill Tree & Progress', category: 'Analytics' };
-      case '/tutor': return { title: 'AI Quantum Tutor', category: 'Pedagogical Assistant' };
-      default: return { title: 'Platform', category: 'QuLearn' };
-    }
+  const getPageTitle = (pathname: string): string => {
+    if (pathname.startsWith('/dashboard')) return 'Dashboard';
+    if (pathname.startsWith('/learn')) return 'Interactive Learning';
+    if (pathname.startsWith('/lab')) return 'Circuit Lab';
+    if (pathname.startsWith('/challenges')) return 'Challenges & Assessments';
+    if (pathname.startsWith('/progress')) return 'Progress Tracking';
+    if (pathname.startsWith('/tutor')) return 'AI Quantum Tutor';
+    return 'QuLearn AI';
   };
 
-  const { title, category } = getPageTitle(location.pathname);
+  const title = getPageTitle(location.pathname);
 
   const getThemeDetails = () => {
     switch (theme) {
@@ -69,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
 
   return (
     <header className="h-16 bg-white/95 dark:bg-[#0e141d]/95 backdrop-blur-md border-b border-slate-200 dark:border-[#223043] sticky top-0 z-30 px-4 lg:px-8 flex items-center justify-between transition-colors">
-      {/* Left section: Hamburger & Breadcrumbs */}
+      {/* Left section: Hamburger & Page Title */}
       <div className="flex items-center gap-3">
         <button
           onClick={onOpenSidebar}
@@ -79,13 +77,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="hidden sm:block">
-          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-            <span>QuLearn</span>
-            <span>/</span>
-            <span className="text-teal-700 dark:text-teal-400 font-semibold">{category}</span>
-          </div>
-          <h1 className="text-base lg:text-lg font-bold text-slate-900 dark:text-[#e6edf4] tracking-tight leading-none mt-0.5">
+        <div className="flex items-center">
+          <h1 className="text-base lg:text-lg font-bold text-slate-900 dark:text-[#e6edf4] tracking-tight leading-none">
             {title}
           </h1>
         </div>
@@ -133,7 +126,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
         {/* System status pill */}
         <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-[#151e2b] border border-slate-200 dark:border-[#223043] text-[11px] text-slate-700 dark:text-slate-300">
           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-          <span className="font-mono">Aer Sim Ready</span>
+          <span className="font-mono">Simulator Ready</span>
         </div>
 
         {/* 3-Way Theme Switcher Button */}

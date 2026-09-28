@@ -14,7 +14,7 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, isLoading = fals
     return (
       <Card variant="default" className="p-8 text-center flex flex-col items-center justify-center min-h-[220px]">
         <div className="w-10 h-10 border-2 border-teal-600 dark:border-teal-400 border-t-transparent rounded-full animate-spin mb-3" />
-        <p className="text-sm font-semibold text-slate-900 dark:text-[#e6edf4]">Simulating Circuit via Qiskit Aer Engine...</p>
+        <p className="text-sm font-semibold text-slate-900 dark:text-[#e6edf4]">Simulating Circuit via Statevector Engine...</p>
         <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Calculating state vector & sampling projective measurements</p>
       </Card>
     );

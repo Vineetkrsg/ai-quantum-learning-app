@@ -7,6 +7,9 @@ import { Play, RotateCcw, BarChart3, Clock, CheckCircle2, HelpCircle, Cpu, Arrow
 import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../../context/ProgressContext';
 
+import { simulateQuantumCircuit } from '../../services/quantumSimulator';
+import { Circuit, GateOperation } from '../../types/quantum';
+
 export interface InteractiveTryState {
   selectedPredictionId: string | null;
   hasRun: boolean;
@@ -53,6 +56,13 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
 
   const handleSelectPrediction = (id: string) => {
     if (hasRun) return;
+
+    // Record prediction accuracy in adaptive system
+    const opt = data.predictionOptions.find((p) => p.id === id);
+    if (opt) {
+      progress.recordAdaptiveSignal(moduleId || 'general-quantum', 'prediction', opt.isCorrect);
+    }
+
     progress.setActivityState<InteractiveTryState>(effectiveKey, {
       ...currentState,
       selectedPredictionId: id
@@ -63,36 +73,108 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
     setIsRunning(true);
 
     setTimeout(() => {
-      const counts: Record<string, number> = {};
-      const percentages: Record<string, number> = {};
-      const states = Object.keys(data.expectedDistribution);
-      const totalShots = data.shots;
+      let simResults: {
+        counts: Record<string, number>;
+        percentages: Record<string, number>;
+        executionTimeMs: number;
+      } | null = null;
 
-      if (states.length === 1) {
-        const st = states[0];
-        counts[st] = totalShots;
-        percentages[st] = 100;
-      } else {
-        let remaining = totalShots;
-        states.forEach((st, idx) => {
-          if (idx === states.length - 1) {
-            counts[st] = remaining;
-          } else {
-            const expectedProb = data.expectedDistribution[st] / 100;
-            const noise = Math.floor(Math.random() * 21) - 10;
-            const c = Math.max(0, Math.round(totalShots * expectedProb) + noise);
-            counts[st] = c;
-            remaining -= c;
+      try {
+        const preview = data.circuitPreview || '';
+        const isTwoQubit = preview.includes('q1') || preview.includes('q[1]');
+        const numQubits = isTwoQubit ? 2 : 1;
+        const gates: GateOperation[] = [];
+        let pos = 0;
+
+        if (preview.includes('X ─── ●') || (preview.includes('X') && preview.includes('●'))) {
+          gates.push({ id: 'g0', gateId: 'X', targetQubit: 0, position: pos++ });
+          gates.push({ id: 'g1', gateId: 'CX', targetQubit: 1, controlQubit: 0, position: pos++ });
+        } else if (preview.includes('H ─── ●') || (preview.includes('H') && preview.includes('●'))) {
+          gates.push({ id: 'g0', gateId: 'H', targetQubit: 0, position: pos++ });
+          if (preview.includes('X ─── ⊕')) {
+            gates.push({ id: 'g-x1', gateId: 'X', targetQubit: 1, position: 0 });
           }
-          percentages[st] = Number(((counts[st] / totalShots) * 100).toFixed(1));
-        });
+          gates.push({ id: 'g1', gateId: 'CX', targetQubit: 1, controlQubit: 0, position: pos++ });
+          if (preview.includes('● ─── H')) {
+            gates.push({ id: 'g-h0b', gateId: 'H', targetQubit: 0, position: pos++ });
+          }
+        } else if (preview.includes('H ─── H') || preview.includes('[ H ] ─── [ H ]')) {
+          gates.push({ id: 'g0', gateId: 'H', targetQubit: 0, position: pos++ });
+          gates.push({ id: 'g1', gateId: 'H', targetQubit: 0, position: pos++ });
+        } else if (preview.includes('X ─── X')) {
+          gates.push({ id: 'g0', gateId: 'X', targetQubit: 0, position: pos++ });
+          gates.push({ id: 'g1', gateId: 'X', targetQubit: 0, position: pos++ });
+        } else if (preview.includes('X ─── H')) {
+          gates.push({ id: 'g0', gateId: 'X', targetQubit: 0, position: pos++ });
+          gates.push({ id: 'g1', gateId: 'H', targetQubit: 0, position: pos++ });
+        } else if (preview.includes('H ─── X') || preview.includes('[ H ] ─── [ X ]')) {
+          gates.push({ id: 'g0', gateId: 'H', targetQubit: 0, position: pos++ });
+          gates.push({ id: 'g1', gateId: 'X', targetQubit: 0, position: pos++ });
+        } else if (preview.includes('H ─── Z ─── H') || preview.includes('[ H ] ─── [ Z ] ─── [ H ]')) {
+          gates.push({ id: 'g0', gateId: 'H', targetQubit: 0, position: pos++ });
+          gates.push({ id: 'g1', gateId: 'Z', targetQubit: 0, position: pos++ });
+          gates.push({ id: 'g2', gateId: 'H', targetQubit: 0, position: pos++ });
+        } else if (preview.includes('H') || preview.includes('[ H ]')) {
+          gates.push({ id: 'g0', gateId: 'H', targetQubit: 0, position: pos++ });
+        } else if (preview.includes('X') || preview.includes('[ X ]')) {
+          gates.push({ id: 'g0', gateId: 'X', targetQubit: 0, position: pos++ });
+        }
+
+        if (gates.length > 0) {
+          const circuit: Circuit = {
+            id: `sim-tryit-${data.presetId || 'act'}`,
+            name: data.title,
+            numberOfQubits: numQubits,
+            gates,
+            measurements: Array.from({ length: numQubits }, (_, i) => i)
+          };
+
+          const res = simulateQuantumCircuit(circuit, data.shots);
+          simResults = {
+            counts: res.counts,
+            percentages: Object.fromEntries(
+              Object.entries(res.probabilities).map(([k, v]) => [k, Number((v * 100).toFixed(1))])
+            ),
+            executionTimeMs: res.executionTimeMs
+          };
+        }
+      } catch (err) {
+        console.warn('Direct circuit simulation fallback:', err);
       }
 
-      const simResults = {
-        counts,
-        percentages,
-        executionTimeMs: Number((35 + Math.random() * 15).toFixed(1))
-      };
+      // If circuit was classical or not direct gates, sample from expectedDistribution
+      if (!simResults) {
+        const counts: Record<string, number> = {};
+        const percentages: Record<string, number> = {};
+        const states = Object.keys(data.expectedDistribution);
+        const totalShots = data.shots;
+
+        if (states.length === 1) {
+          const st = states[0];
+          counts[st] = totalShots;
+          percentages[st] = 100;
+        } else {
+          let remaining = totalShots;
+          states.forEach((st, idx) => {
+            if (idx === states.length - 1) {
+              counts[st] = remaining;
+            } else {
+              const expectedProb = data.expectedDistribution[st] / 100;
+              const noise = Math.floor(Math.random() * 15) - 7;
+              const c = Math.max(0, Math.round(totalShots * expectedProb) + noise);
+              counts[st] = c;
+              remaining -= c;
+            }
+            percentages[st] = Number(((counts[st] / totalShots) * 100).toFixed(1));
+          });
+        }
+
+        simResults = {
+          counts,
+          percentages,
+          executionTimeMs: Number((25 + Math.random() * 15).toFixed(1))
+        };
+      }
 
       progress.setActivityState<InteractiveTryState>(effectiveKey, {
         selectedPredictionId,
@@ -104,7 +186,7 @@ export const InteractiveTryIt: React.FC<InteractiveTryItProps> = ({
       if (onRunSuccess) {
         onRunSuccess();
       }
-    }, 550);
+    }, 450);
   };
 
   const handleReset = () => {

@@ -302,7 +302,7 @@ qc.measure(0, 0)`,
             }
           ],
           simulatedOutput: {
-            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            outputTitle: 'Statevector Simulator Execution (1,024 shots)',
             description: 'The Pauli-X gate rotated the state vector 180° to south pole |1⟩. Measurement collapses 100% of runs into outcome 1.',
             counts: { '1': 1024 },
             percentages: { '1': 100 },
@@ -534,7 +534,7 @@ qc.measure(0, 0)`,
             }
           ],
           simulatedOutput: {
-            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            outputTitle: 'Statevector Simulator Execution (1,024 shots)',
             description: 'Equal superposition produces roughly equal 0 and 1 outcomes due to quantum statistical sampling noise.',
             counts: { '0': 518, '1': 506 },
             percentages: { '0': 50.6, '1': 49.4 },
@@ -673,7 +673,7 @@ qc.measure(0, 0)`,
             }
           ],
           simulatedOutput: {
-            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            outputTitle: 'Statevector Simulator Execution (1,024 shots)',
             description: '100% of shots measured outcome 0. The second Hadamard gate completely un-did the first!',
             counts: { '0': 1024 },
             percentages: { '0': 100 },
@@ -946,7 +946,7 @@ qc.measure(0, 0)`,
             }
           ],
           simulatedOutput: {
-            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            outputTitle: 'Statevector Simulator Execution (1,024 shots)',
             description: 'The H-Z-H sequence converts relative phase into observable measurement outcome 1.',
             counts: { '1': 1024 },
             percentages: { '1': 100 },
@@ -1064,7 +1064,7 @@ qc.measure([0, 1], [0, 1])`,
             }
           ],
           simulatedOutput: {
-            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            outputTitle: 'Statevector Simulator Execution (1,024 shots)',
             description: 'Because control was 1, target was flipped. Outcome is 100% |11⟩.',
             counts: { '11': 1024 },
             percentages: { '11': 100 },
@@ -1270,7 +1270,7 @@ qc.measure(0, 0)`,
             }
           ],
           simulatedOutput: {
-            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            outputTitle: 'Statevector Simulator Execution (1,024 shots)',
             description: 'Sequential operations executed in order. The outcome remains a balanced 50/50 superposition.',
             counts: { '0': 508, '1': 516 },
             percentages: { '0': 49.6, '1': 50.4 },
@@ -1502,7 +1502,7 @@ qc.measure([0, 1], [0, 1])`,
             }
           ],
           simulatedOutput: {
-            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            outputTitle: 'Statevector Simulator Execution (1,024 shots)',
             description: 'Outcomes 01 and 10 NEVER appear! Whenever qubit 0 is 0, qubit 1 is 0. Whenever qubit 0 is 1, qubit 1 is 1.',
             counts: { '00': 514, '11': 510 },
             percentages: { '00': 50.2, '11': 49.8 },
@@ -1805,7 +1805,7 @@ qc.measure(0, 0)`,
             }
           ],
           simulatedOutput: {
-            outputTitle: 'Aer Simulator Execution (1,024 shots)',
+            outputTitle: 'Statevector Simulator Execution (1,024 shots)',
             description: '100% of shots measured outcome 1 in a single query! Destructive interference canceled 0 completely.',
             counts: { '1': 1024 },
             percentages: { '1': 100 },

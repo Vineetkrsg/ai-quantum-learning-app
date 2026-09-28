@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { LEARNING_MODULES } from '../mock/modulesData';
+import { ConceptAdaptiveRecord, AdaptiveMode, normalizeConceptKey } from '../services/adaptiveEngine';
 
 export interface RecentActivity {
   id: string;
@@ -32,6 +33,7 @@ export interface ProgressState {
   conceptMastery: Record<string, number>;
   quizStats: QuizRecord[];
   activityStates: Record<string, any>;
+  adaptiveRecords?: Record<string, ConceptAdaptiveRecord>;
 }
 
 interface ProgressContextType extends ProgressState {
@@ -47,6 +49,15 @@ interface ProgressContextType extends ProgressState {
   getActivityState: <T>(key: string, defaultValue: T) => T;
   setActivityState: <T>(key: string, value: T | ((prev: T) => T)) => void;
   clearActivityState: (key: string) => void;
+  recordAdaptiveSignal: (
+    conceptId: string,
+    signalType: 'knowledge_check' | 'prediction' | 'challenge' | 'circuit_practice',
+    isSuccess: boolean,
+    metadata?: Record<string, any>
+  ) => void;
+  getAdaptiveRecord: (conceptId: string) => ConceptAdaptiveRecord | undefined;
+  setAdaptiveMode: (conceptId: string, mode: AdaptiveMode) => void;
+  resetAdaptiveRecords: (conceptId?: string) => void;
 }
 
 const STORAGE_KEY = 'qulearn_student_progress_v2';
@@ -91,7 +102,8 @@ const INITIAL_STATE: ProgressState = {
     'Interference & Algorithms': 0,
     'Error Mitigation & Noise': 0,
   },
-  activityStates: {}
+  activityStates: {},
+  adaptiveRecords: {}
 };
 
 const ProgressContext = createContext<ProgressContextType | undefined>(undefined);
@@ -138,7 +150,8 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           experimentsCompleted: parsed.experimentsCompleted || [],
           predictionsMade: parsed.predictionsMade || 0,
           quizStats: parsed.quizStats || [],
-          activityStates: parsed.activityStates || {}
+          activityStates: parsed.activityStates || {},
+          adaptiveRecords: parsed.adaptiveRecords || {}
         };
       }
     } catch (e) {
@@ -420,6 +433,135 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     });
   };
 
+  const recordAdaptiveSignal = (
+    conceptId: string,
+    signalType: 'knowledge_check' | 'prediction' | 'challenge' | 'circuit_practice',
+    isSuccess: boolean,
+    metadata?: Record<string, any>
+  ) => {
+    setState((prev) => {
+      const existing: ConceptAdaptiveRecord = prev.adaptiveRecords?.[conceptId] || {
+        conceptId,
+        mode: 'standard',
+        attemptCount: 0,
+        mistakeCount: 0,
+        correctCount: 0,
+        consecutiveSuccesses: 0,
+        updatedAt: new Date().toISOString()
+      };
+
+      const attemptCount = existing.attemptCount + 1;
+      const mistakeCount = isSuccess ? existing.mistakeCount : existing.mistakeCount + 1;
+      const correctCount = isSuccess ? existing.correctCount + 1 : existing.correctCount;
+      const consecutiveSuccesses = isSuccess ? existing.consecutiveSuccesses + 1 : 0;
+
+      let mode: 'reinforcement' | 'standard' | 'advanced' = 'standard';
+      if (!isSuccess || mistakeCount > 0) {
+        mode = 'reinforcement';
+      } else if (consecutiveSuccesses >= 1 && mistakeCount === 0 && attemptCount <= 1) {
+        mode = 'advanced';
+      }
+
+      const updatedRecord: ConceptAdaptiveRecord = {
+        ...existing,
+        mode,
+        attemptCount,
+        mistakeCount,
+        correctCount,
+        consecutiveSuccesses,
+        lastSignal: `${signalType}:${isSuccess ? 'pass' : 'fail'}`,
+        updatedAt: new Date().toISOString()
+      };
+
+      const next: ProgressState = {
+        ...prev,
+        adaptiveRecords: {
+          ...(prev.adaptiveRecords || {}),
+          [conceptId]: updatedRecord
+        }
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed to save adaptive record to localStorage', e);
+      }
+
+      return next;
+    });
+  };
+
+  const getAdaptiveRecord = (conceptId: string): ConceptAdaptiveRecord | undefined => {
+    const normKey = normalizeConceptKey(conceptId);
+    return state.adaptiveRecords?.[normKey] || state.adaptiveRecords?.[conceptId];
+  };
+
+  const setAdaptiveMode = (conceptId: string, mode: AdaptiveMode) => {
+    setState((prev) => {
+      const normKey = normalizeConceptKey(conceptId);
+      const existing: ConceptAdaptiveRecord = prev.adaptiveRecords?.[normKey] || {
+        conceptId: normKey,
+        mode: 'standard',
+        attemptCount: 1,
+        mistakeCount: 0,
+        correctCount: 1,
+        consecutiveSuccesses: 1,
+        updatedAt: new Date().toISOString()
+      };
+
+      const updatedRecord: ConceptAdaptiveRecord = {
+        ...existing,
+        mode,
+        mistakeCount: mode === 'reinforcement' ? Math.max(1, existing.mistakeCount + 1) : 0,
+        correctCount: mode === 'extension' || mode === 'advanced' ? Math.max(1, existing.correctCount + 1) : existing.correctCount,
+        lastSignal: `manual_simulation:${mode}`,
+        updatedAt: new Date().toISOString()
+      };
+
+      const next: ProgressState = {
+        ...prev,
+        adaptiveRecords: {
+          ...(prev.adaptiveRecords || {}),
+          [normKey]: updatedRecord
+        }
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed to save adaptive mode to localStorage', e);
+      }
+
+      return next;
+    });
+  };
+
+  const resetAdaptiveRecords = (conceptId?: string) => {
+    setState((prev) => {
+      const nextRecords = { ...(prev.adaptiveRecords || {}) };
+      if (conceptId) {
+        const normKey = normalizeConceptKey(conceptId);
+        delete nextRecords[normKey];
+        delete nextRecords[conceptId];
+      } else {
+        Object.keys(nextRecords).forEach((k) => delete nextRecords[k]);
+      }
+
+      const next: ProgressState = {
+        ...prev,
+        adaptiveRecords: nextRecords
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (e) {
+        console.warn('Failed to reset adaptive records in localStorage', e);
+      }
+
+      return next;
+    });
+  };
+
   return (
     <ProgressContext.Provider
       value={{
@@ -435,7 +577,11 @@ export const ProgressProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         resetProgress,
         getActivityState,
         setActivityState,
-        clearActivityState
+        clearActivityState,
+        recordAdaptiveSignal,
+        getAdaptiveRecord,
+        setAdaptiveMode,
+        resetAdaptiveRecords
       }}
     >
       {children}

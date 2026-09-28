@@ -8,6 +8,8 @@ import { RecommendedLessonCard } from '../components/dashboard/RecommendedLesson
 import { LEARNING_MODULES } from '../mock/modulesData';
 import { TrendingUp, CheckCircle2, Clock, Award, BookOpen } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
+import { QuantumOrbitJourney } from '../components/progress/QuantumOrbitJourney';
+import { QuantumBackground } from '../components/quantum/visual/QuantumBackground';
 
 export const ProgressPage: React.FC = () => {
   const { overallProgress, xp, moduleProgress } = useProgress();
@@ -15,7 +17,10 @@ export const ProgressPage: React.FC = () => {
   const masteredCount = Object.values(moduleProgress).filter((p) => p === 100).length;
 
   return (
-    <div className="space-y-6" data-tour="progress-analytics">
+    <div className="space-y-6 relative" data-tour="progress-analytics">
+      {/* Background ambient quantum traces */}
+      <QuantumBackground variant="subtle" />
+
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
@@ -83,8 +88,11 @@ export const ProgressPage: React.FC = () => {
         </div>
       </Card>
 
+      {/* Dynamic Quantum Learning Orbit Journey */}
+      <QuantumOrbitJourney />
+
       {/* Two-Column Grid: Left is Module Completion List, Right is Concept Mastery & Quiz Stats */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Module Completion Breakdown (Span 7) */}
         <div className="lg:col-span-7 space-y-6">
           <Card variant="default">

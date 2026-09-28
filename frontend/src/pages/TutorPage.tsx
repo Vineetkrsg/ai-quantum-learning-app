@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { TutorPanel } from '../components/tutor/TutorPanel';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
-import { Bot, Atom, BookOpen, Sparkles, Layers, Info, CheckCircle2 } from 'lucide-react';
+import { Bot, Atom, BookOpen, Sparkles, Layers, Info, CheckCircle2, ArrowRight } from 'lucide-react';
+import { TutorAtmosphere } from '../components/tutor/TutorAtmosphere';
+import { QuantumBackground } from '../components/quantum/visual/QuantumBackground';
 
 export const TutorPage: React.FC = () => {
   const [selectedCircuit, setSelectedCircuit] = useState('Bell State (|Φ⁺⟩)');
   const [selectedLesson, setSelectedLesson] = useState('Module 3: Superposition');
+  const [isTyping, setIsTyping] = useState(false);
+  const [externalPrompt, setExternalPrompt] = useState<string | null>(null);
 
   const quantumFormulas = [
     { title: 'Superposition State', formula: '|ψ⟩ = α|0⟩ + β|1⟩', note: '|α|² + |β|² = 1' },
@@ -16,12 +21,21 @@ export const TutorPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative" data-tour="tutor-page">
+      {/* Background ambient quantum traces */}
+      <QuantumBackground variant="subtle" />
+
+      {/* Living Quantum Assistant Status & Atmospheric Header with live typing feedback */}
+      <TutorAtmosphere
+        isTyping={isTyping}
+        onSelectPrompt={(query) => setExternalPrompt(query)}
+      />
+
       {/* Page Header */}
       <div>
         <div className="flex items-center gap-2 mb-1">
           <span className="text-xs px-2.5 py-0.5 rounded-full bg-[var(--surface-sunken)] text-sciteal-700 dark:text-sciteal-300 border border-[var(--border-card)] font-mono font-semibold">
-            Gemini AI Integration Ready
+            AI Tutor · Pedagogical Engine Active
           </span>
         </div>
         <h2 className="text-2xl font-bold text-[var(--fg-main)] tracking-tight flex items-center gap-2">
@@ -46,7 +60,13 @@ export const TutorPage: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-3 pt-1 text-xs">
               <div className="p-3 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] space-y-1">
-                <span className="text-[10px] uppercase font-mono text-[var(--fg-muted)]">Active Circuit Context</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-mono text-[var(--fg-muted)]">Active Circuit Context</span>
+                  <Link to="/lab" className="text-[10px] font-mono text-sciteal-700 dark:text-sciteal-400 hover:underline flex items-center gap-0.5">
+                    <span>Open in Lab</span>
+                    <ArrowRight className="w-2.5 h-2.5" />
+                  </Link>
+                </div>
                 <div className="font-semibold text-[var(--fg-main)] flex items-center gap-2">
                   <Atom className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
                   <span>{selectedCircuit}</span>
@@ -57,7 +77,13 @@ export const TutorPage: React.FC = () => {
               </div>
 
               <div className="p-3 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)] space-y-1">
-                <span className="text-[10px] uppercase font-mono text-[var(--fg-muted)]">Active Curriculum Context</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-mono text-[var(--fg-muted)]">Active Curriculum Context</span>
+                  <Link to="/learn/superposition" className="text-[10px] font-mono text-sciteal-700 dark:text-sciteal-400 hover:underline flex items-center gap-0.5">
+                    <span>Open Module</span>
+                    <ArrowRight className="w-2.5 h-2.5" />
+                  </Link>
+                </div>
                 <div className="font-semibold text-[var(--fg-main)] flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-sciteal-600 dark:text-sciteal-400" />
                   <span>{selectedLesson}</span>
@@ -74,7 +100,7 @@ export const TutorPage: React.FC = () => {
             </CardContent>
           </Card>
 
-          {/* Quick Quantum Reference Formulas */}
+          {/* Quick Quantum Reference Formulas with click-to-ask interaction */}
           <Card variant="default">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm">
@@ -82,13 +108,27 @@ export const TutorPage: React.FC = () => {
                 <span>Dirac & State Reference</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 pt-1">
+            <CardContent className="space-y-2.5 pt-1">
+              <p className="text-[11px] text-[var(--fg-muted)]">
+                Click any formula to ask the AI Tutor for a step-by-step derivation:
+              </p>
               {quantumFormulas.map((f) => (
-                <div key={f.title} className="p-2.5 rounded-lg bg-[var(--surface-sunken)] border border-[var(--border-card)]">
-                  <div className="text-[11px] text-[var(--fg-muted)] font-medium">{f.title}</div>
-                  <div className="text-xs font-mono text-sciteal-700 dark:text-sciteal-400 font-bold mt-0.5">{f.formula}</div>
+                <button
+                  key={f.title}
+                  onClick={() => setExternalPrompt(`Explain the mathematical derivation and physical meaning of ${f.title}: ${f.formula}`)}
+                  className="w-full text-left p-2.5 rounded-lg bg-[var(--surface-sunken)] hover:bg-[var(--surface-subtle)] border border-[var(--border-card)] hover:border-sciteal-500/50 transition-all cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between text-[11px] text-[var(--fg-muted)] font-medium">
+                    <span>{f.title}</span>
+                    <span className="text-[10px] font-mono text-sciteal-700 dark:text-sciteal-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                      Ask Tutor →
+                    </span>
+                  </div>
+                  <div className="text-xs font-mono text-sciteal-700 dark:text-sciteal-400 font-bold mt-0.5 group-hover:text-sciteal-600">
+                    {f.formula}
+                  </div>
                   <div className="text-[10px] text-[var(--fg-muted)] mt-1">{f.note}</div>
-                </div>
+                </button>
               ))}
             </CardContent>
           </Card>
@@ -103,6 +143,9 @@ export const TutorPage: React.FC = () => {
               gateCount: 4,
               activeLessonTitle: selectedLesson
             }}
+            externalPrompt={externalPrompt}
+            onClearExternalPrompt={() => setExternalPrompt(null)}
+            onTypingStateChange={(typing) => setIsTyping(typing)}
           />
         </div>
       </div>

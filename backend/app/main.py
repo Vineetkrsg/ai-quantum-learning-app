@@ -14,7 +14,7 @@ from backend.app.api.routes import simulation, tutor
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version="1.0.0",
-    description="Backend API for SIH AI Quantum Algorithm Learning Platform"
+    description="Backend API for QuLearn AI Quantum Algorithm Learning Platform"
 )
 
 # CORS configuration for local development

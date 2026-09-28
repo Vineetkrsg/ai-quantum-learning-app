@@ -2,6 +2,7 @@ import React from 'react';
 import { SimulationResult } from '../../../types/quantum';
 import { Button } from '../../ui/Button';
 import { BarChart2, CheckCircle2, ArrowRight, Lightbulb, Sparkles } from 'lucide-react';
+import { InteractiveBlochSphere } from '../../quantum/visualization/InteractiveBlochSphere';
 
 interface DemoResultViewProps {
   result: SimulationResult | null;
@@ -35,7 +36,7 @@ export const DemoResultView: React.FC<DemoResultViewProps> = ({
             </h3>
           </div>
           <span className="text-xs font-mono text-[var(--fg-muted)]">
-            Execution: {result.executionTimeMs.toFixed(1)}ms • Aer Statevector
+            Execution: {result.executionTimeMs.toFixed(1)}ms • Statevector Simulator
           </span>
         </div>
 
@@ -78,6 +79,17 @@ export const DemoResultView: React.FC<DemoResultViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Interactive Quantum Visualization Layer */}
+      <InteractiveBlochSphere
+        coordinates={result.blochCoordinates}
+        initialTheta={result.blochCoordinates?.theta ?? Math.PI / 2}
+        initialPhi={result.blochCoordinates?.phi ?? 0}
+        showControls={false}
+        showPresets={false}
+        title="Interactive Statevector: Superposition on the Equator (|+⟩)"
+        size={230}
+      />
 
       {/* Explanation Cards: What happened & Why did it happen */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

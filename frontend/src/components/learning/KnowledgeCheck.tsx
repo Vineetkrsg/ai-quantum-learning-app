@@ -52,6 +52,11 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
     if (hasAnswered) return; // Prevent repeated clicks after evaluation
 
     const correct = optionId === data.correctOptionId;
+    
+    // Record adaptive signal for personalized learning loop
+    const conceptKey = moduleId || 'general-quantum';
+    progress.recordAdaptiveSignal(conceptKey, 'knowledge_check', correct);
+
     progress.setActivityState<KnowledgeCheckState>(effectiveKey, {
       selectedAnswer: optionId,
       answered: true,
@@ -171,19 +176,34 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
                 <>
                   <XCircle className="w-5 h-5 text-rose-600 dark:text-rose-400 flex-shrink-0" />
                   <span className="text-sm font-bold text-rose-900 dark:text-rose-300">
-                    Incorrect
+                    Incorrect — Let's Reinforce This Concept
                   </span>
                 </>
               )}
             </div>
             <Badge variant={isCorrect ? 'emerald' : 'rose'} size="sm">
-              {isCorrect ? '+25 XP' : 'Review & Retry'}
+              {isCorrect ? '+25 XP Earned' : 'Adaptive Review'}
             </Badge>
           </div>
 
           <p className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300">
             {isCorrect ? data.explanationCorrect : data.explanationIncorrect}
           </p>
+
+          {/* Visual Concept Reinforcement & Smaller Example on Incorrect */}
+          {!isCorrect && (
+            <div className="p-3 rounded-lg bg-white/70 dark:bg-[#111823]/60 border border-rose-200 dark:border-rose-900/50 space-y-2 text-xs">
+              <div className="flex items-center gap-1.5 font-mono font-semibold text-rose-900 dark:text-rose-300">
+                <span>Visual Concept Breakdown:</span>
+              </div>
+              <div className="p-2 rounded bg-slate-50 dark:bg-[#0c111a] border border-slate-200 dark:border-[#1e2a3b] font-mono text-[11px] text-slate-800 dark:text-slate-200">
+                Ground |0⟩ ──[ H Gate ]──→ |+⟩ = (|0⟩ + |1⟩)/√2 ──[ Measurement ]──→ 50% |0⟩, 50% |1⟩
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
+                <strong>Simplified intuition:</strong> Remember that quantum operations evolve the entire probability amplitude vector before any physical measurement collapses it.
+              </p>
+            </div>
+          )}
 
           {/* Action Row */}
           <div className="pt-2 flex items-center justify-between border-t border-slate-200 dark:border-[#223043]">
@@ -194,11 +214,11 @@ export const KnowledgeCheck: React.FC<KnowledgeCheckProps> = ({
                 onClick={handleRetry}
                 leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
               >
-                Try Again
+                Retry Question
               </Button>
             ) : (
               <span className="text-[11px] font-mono text-emerald-700 dark:text-emerald-400 font-semibold">
-                Topic Mastery Verified
+                ✓ Conceptual Foundation Verified
               </span>
             )}
 

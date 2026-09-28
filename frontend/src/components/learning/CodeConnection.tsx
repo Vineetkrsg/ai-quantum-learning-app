@@ -309,7 +309,7 @@ export const CodeConnection: React.FC<CodeConnectionProps> = ({
                 <span>Simulate Code in Browser</span>
               </h4>
               <p className="text-xs text-[var(--fg-muted)]">
-                Execute this circuit against the simulated Qiskit Aer backend to observe probability distribution.
+                Simulate this circuit using our custom TypeScript state-vector simulator to observe probability distribution.
               </p>
             </div>
 
@@ -352,7 +352,7 @@ export const CodeConnection: React.FC<CodeConnectionProps> = ({
                   </span>
                 </div>
                 <Badge variant="emerald" size="sm">
-                  Simulated Qiskit Aer · {data.simulatedOutput.shots || 1024} Shots
+                  Statevector Simulator · {data.simulatedOutput.shots || 1024} Shots
                 </Badge>
               </div>
 

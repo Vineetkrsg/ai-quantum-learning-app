@@ -77,7 +77,7 @@ export const ExpectedVsActual: React.FC<ExpectedVsActualProps> = ({
             <span>•</span>
             <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-sans">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>Simulated Aer Engine</span>
+              <span>Custom Statevector Simulator</span>
             </span>
           </div>
         </div>

@@ -102,7 +102,7 @@ export const DemoCircuitCanvas: React.FC<DemoCircuitCanvasProps> = ({
             Ready to Simulate
           </h4>
           <p className="text-xs text-[var(--fg-muted)]">
-            Execute the circuit using the exact Aer statevector simulator for 1,024 shots.
+            Execute the circuit using the exact custom state-vector simulator for 1,024 shots.
           </p>
         </div>
 

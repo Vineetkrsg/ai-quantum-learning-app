@@ -7,6 +7,7 @@ import { ProgressBar } from '../ui/ProgressBar';
 import { Button } from '../ui/Button';
 import { Clock, BookOpen, CheckCircle2, ChevronRight, Atom, Sparkles, Layers, Binary, GitCommit, Workflow, Cpu } from 'lucide-react';
 import { useProgress } from '../../context/ProgressContext';
+import { ModulePreviewVisual } from './ModulePreviewVisual';
 
 interface ModuleCardProps {
   module: LearningModule;
@@ -66,12 +67,17 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({ module }) => {
         <h3 className="text-base font-bold text-[var(--fg-main)] group-hover:text-sciteal-600 dark:group-hover:text-sciteal-400 transition-colors">
           {module.title}
         </h3>
-        <p className="text-xs text-[var(--fg-muted)] mt-2 leading-relaxed line-clamp-3">
+        <p className="text-xs text-[var(--fg-muted)] mt-2 leading-relaxed line-clamp-2">
           {module.description}
         </p>
 
+        {/* Concept-Specific Visual Preview */}
+        <div className="mt-3">
+          <ModulePreviewVisual slug={module.slug} />
+        </div>
+
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mt-4">
+        <div className="flex flex-wrap gap-1.5 mt-3">
           {module.tags.map((tag) => (
             <span
               key={tag}
