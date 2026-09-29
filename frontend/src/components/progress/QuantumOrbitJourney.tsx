@@ -175,20 +175,21 @@ export const QuantumOrbitJourney: React.FC = () => {
                     onMouseLeave={() => setHoveredSlug(null)}
                     onClick={() => setSelectedSlug(n.slug)}
                   >
-                    {/* Ring highlight if targeted */}
-                    {n.isTargeted && (
-                      <circle
-                        cx={n.x}
-                        cy={n.y}
-                        r="9"
-                        fill="none"
-                        stroke={strokeTeal}
-                        strokeWidth="1.5"
-                        strokeDasharray="2 2"
-                        className="animate-spin"
-                        style={{ transformOrigin: `${n.x}px ${n.y}px`, animationDuration: '6s' }}
-                      />
-                    )}
+                    {/* Stable Halo ring highlight */}
+                    <circle
+                      cx={n.x}
+                      cy={n.y}
+                      r="9"
+                      fill="none"
+                      stroke={strokeTeal}
+                      strokeWidth="1.5"
+                      className="transition-opacity duration-300 animate-satellite-halo"
+                      style={{ 
+                        transformOrigin: `${n.x}px ${n.y}px`,
+                        opacity: n.isTargeted ? 0.95 : 0,
+                        pointerEvents: 'none'
+                      }}
+                    />
 
                     {/* Node Core */}
                     <circle
@@ -198,6 +199,7 @@ export const QuantumOrbitJourney: React.FC = () => {
                       fill={nodeColor}
                       stroke="var(--surface-sunken)"
                       strokeWidth="1.5"
+                      className="transition-all duration-200"
                     />
                   </g>
                 );

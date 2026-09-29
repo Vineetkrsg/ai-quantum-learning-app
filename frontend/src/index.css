@@ -193,10 +193,106 @@ html.high-contrast .scientific-wire {
   .animate-pulse,
   .animate-pulse-subtle,
   .animate-spin,
-  .animate-ping {
+  .animate-ping,
+  .animate-orbit-spin,
+  .animate-satellite-halo,
+  .animate-topology-flow,
+  .animate-gentle-pulse,
+  .animate-waveguide-flow {
     animation: none !important;
   }
 }
+
+/* ==========================================================================
+   Smooth GPU-Accelerated Quantum Motion Utilities (Zero layout reflows)
+   ========================================================================== */
+
+/* 1. Orbit Continuous Rotation (calm, steady, 60fps compositor-only) */
+@keyframes quantum-orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-orbit-spin {
+  animation: quantum-orbit-spin 42s linear infinite;
+  will-change: transform;
+}
+
+/* 2. Orbit Satellite Halo Breathing (smooth, restrained, non-buffering) */
+@keyframes quantum-satellite-halo {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.16);
+    opacity: 0.8;
+  }
+}
+
+.animate-satellite-halo {
+  animation: quantum-satellite-halo 3.2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* 3. Topology Connection Energy Flow (seamless downward photon translation) */
+@keyframes topology-flow {
+  0% {
+    transform: translateY(0);
+    opacity: 0.15;
+  }
+  20% {
+    opacity: 0.95;
+  }
+  80% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translateY(16px);
+    opacity: 0.15;
+  }
+}
+
+.animate-topology-flow {
+  animation: topology-flow 2.2s linear infinite;
+  will-change: transform, opacity;
+}
+
+/* 4. Active Node / Conduit Gentle Breathing Pulse (replaces jarring animate-ping) */
+@keyframes quantum-gentle-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.9;
+  }
+}
+
+.animate-gentle-pulse {
+  animation: quantum-gentle-pulse 2.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* 5. Waveguide Dashed Flow (smooth SVG stroke animation) */
+@keyframes waveguide-flow {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-waveguide-flow {
+  animation: waveguide-flow 2s linear infinite;
+}
+
 
 
 

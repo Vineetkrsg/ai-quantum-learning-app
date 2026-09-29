@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LEARNING_MODULES } from '../../mock/modulesData';
 import { useProgress } from '../../context/ProgressContext';
@@ -99,12 +99,22 @@ const CONCEPT_NODES: ConceptNode[] = [
   }
 ];
 
-export const ConceptGraphExplorer: React.FC = () => {
+const ConceptGraphExplorerComponent: React.FC = () => {
   const navigate = useNavigate();
   const { moduleProgress } = useProgress();
   const { theme } = useTheme();
   const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(true);
+
+  // Reduced motion preference
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   const isDark = theme === 'dark';
   const isHighContrast = theme === 'high-contrast';
@@ -131,15 +141,15 @@ export const ConceptGraphExplorer: React.FC = () => {
 
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-xs font-mono text-sciteal-700 dark:text-sciteal-400 hover:underline px-2 py-1 rounded bg-[var(--surface-sunken)] border border-[var(--border-card)]"
+          className="text-xs font-mono text-sciteal-700 dark:text-sciteal-400 hover:underline px-2 py-1 rounded bg-[var(--surface-sunken)] border border-[var(--border-card)] transition-colors"
         >
           {isExpanded ? 'Hide Topology Map' : 'Show Topology Map'}
         </button>
       </div>
 
-      {/* Interactive Concept Relationship Explanation Banner on Hover (Prompt Section 7 & 8) */}
+      {/* Interactive Concept Relationship Explanation Banner on Hover */}
       {isExpanded && hoveredNode && (
-        <div className="mt-3 p-3 rounded-xl bg-sciteal-500/10 border border-sciteal-500/30 text-left animate-fadeIn">
+        <div className="mt-3 p-3 rounded-xl bg-sciteal-500/10 border border-sciteal-500/30 text-left transition-opacity duration-200">
           <div className="flex items-center justify-between text-xs mb-1">
             <span className="font-bold text-[var(--fg-main)] flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
@@ -157,7 +167,7 @@ export const ConceptGraphExplorer: React.FC = () => {
       {isExpanded && (
         <div className="pt-5 pb-2 relative">
           {/* Linear trunk: Fundamentals -> Qubits -> Superposition -> Gates -> Circuits */}
-          <div className="max-w-2xl mx-auto flex flex-col items-center space-y-3">
+          <div className="max-w-2xl mx-auto flex flex-col items-center space-y-2">
             {CONCEPT_NODES.slice(0, 5).map((node, index) => {
               const progress = moduleProgress[node.slug] || 0;
               const isDone = progress === 100;
@@ -180,9 +190,9 @@ export const ConceptGraphExplorer: React.FC = () => {
                     tabIndex={0}
                     role="button"
                     aria-label={`Concept ${node.title}: ${node.relationshipReason}`}
-                    className={`w-full max-w-md px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between outline-none focus:ring-2 focus:ring-sciteal-500 ${
+                    className={`w-full max-w-md px-4 py-2.5 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between outline-none focus:ring-2 focus:ring-sciteal-500 select-none ${
                       isHovered
-                        ? 'scale-[1.03] shadow-md border-sciteal-500 bg-sciteal-500/15 ring-2 ring-sciteal-500/20'
+                        ? 'scale-[1.02] shadow-md border-sciteal-500 bg-sciteal-500/15 ring-2 ring-sciteal-500/20'
                         : isRelated
                         ? 'border-sciteal-500/60 bg-sciteal-500/5'
                         : isDone
@@ -211,7 +221,8 @@ export const ConceptGraphExplorer: React.FC = () => {
                           Mastered
                         </span>
                       ) : progress > 0 ? (
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 font-semibold">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sciteal-500/15 text-sciteal-700 dark:text-sciteal-300 font-semibold flex items-center gap-1.5">
+                          <span className={`w-1.5 h-1.5 rounded-full bg-sciteal-500 ${prefersReducedMotion ? '' : 'animate-gentle-pulse'}`} />
                           {progress}%
                         </span>
                       ) : (
@@ -223,17 +234,49 @@ export const ConceptGraphExplorer: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Connecting Arrow Line */}
-                  <div className={`w-0.5 h-4 transition-colors duration-200 ${isRelated || isHovered ? 'bg-sciteal-500' : 'bg-[var(--circuit-wire)] opacity-70'} relative`}>
-                    <span className={`w-1.5 h-1.5 rounded-full absolute -bottom-1 -left-0.5 ${isRelated || isHovered ? 'bg-sciteal-400 animate-ping' : 'bg-sciteal-500'}`} />
+                  {/* Smooth Continuous Quantum Connection Conduit */}
+                  <div className="h-5 relative flex items-center justify-center my-0.5">
+                    {/* Conduit Trunk Line */}
+                    <div 
+                      className={`w-0.5 h-full transition-colors duration-300 ${
+                        isRelated || isHovered 
+                          ? 'bg-sciteal-500' 
+                          : 'bg-[var(--circuit-wire)] opacity-60'
+                      }`} 
+                    />
+                    
+                    {/* Continuous Smooth Downward Energy Packet (Compositor only, zero layout recalculation) */}
+                    {!prefersReducedMotion && (
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full absolute -left-[2px] transition-colors duration-300 pointer-events-none animate-topology-flow ${
+                          isRelated || isHovered 
+                            ? 'bg-sciteal-400 shadow-sm' 
+                            : 'bg-sciteal-500/75'
+                        }`}
+                        style={{
+                          animationDelay: `${index * 0.38}s`
+                        }}
+                      />
+                    )}
                   </div>
                 </React.Fragment>
               );
             })}
 
             {/* Fork to 2 branches: Entanglement & Algorithms */}
-            <div className="w-full max-w-md flex flex-col items-center">
-              <div className="flex items-center gap-1 text-[10px] font-mono text-[var(--fg-muted)] pb-2">
+            <div className="w-full max-w-md flex flex-col items-center pt-1">
+              {/* Branching Junction Indicator with Continuous Photon */}
+              <div className="h-4 relative flex items-center justify-center mb-1">
+                <div className="w-0.5 h-full bg-[var(--circuit-wire)] opacity-60" />
+                {!prefersReducedMotion && (
+                  <span
+                    className="w-1.5 h-1.5 rounded-full bg-sciteal-500/80 absolute -left-[2px] pointer-events-none animate-topology-flow"
+                    style={{ animationDelay: '1.5s' }}
+                  />
+                )}
+              </div>
+
+              <div className="flex items-center gap-1.5 text-[10px] font-mono text-[var(--fg-muted)] pb-2.5">
                 <GitFork className="w-3.5 h-3.5 text-sciteal-600 dark:text-sciteal-400" />
                 <span>Multi-Qubit Branching (Entanglement & Interference)</span>
               </div>
@@ -260,9 +303,9 @@ export const ConceptGraphExplorer: React.FC = () => {
                       tabIndex={0}
                       role="button"
                       aria-label={`Concept ${node.title}: ${node.relationshipReason}`}
-                      className={`p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col justify-between outline-none focus:ring-2 focus:ring-sciteal-500 ${
+                      className={`p-3.5 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col justify-between outline-none focus:ring-2 focus:ring-sciteal-500 select-none ${
                         isHovered
-                          ? 'scale-[1.03] shadow-md border-sciteal-500 bg-sciteal-500/15 ring-2 ring-sciteal-500/20'
+                          ? 'scale-[1.02] shadow-md border-sciteal-500 bg-sciteal-500/15 ring-2 ring-sciteal-500/20'
                           : isRelated
                           ? 'border-sciteal-500/60 bg-sciteal-500/5'
                           : isDone
@@ -282,7 +325,10 @@ export const ConceptGraphExplorer: React.FC = () => {
                             Done
                           </span>
                         ) : (
-                          <span className="text-[10px] font-mono text-sciteal-700 dark:text-sciteal-400 font-semibold">
+                          <span className="text-[10px] font-mono text-sciteal-700 dark:text-sciteal-400 font-semibold flex items-center gap-1.5">
+                            {progress > 0 && (
+                              <span className={`w-1.5 h-1.5 rounded-full bg-sciteal-500 ${prefersReducedMotion ? '' : 'animate-gentle-pulse'}`} />
+                            )}
                             {progress > 0 ? `${progress}%` : 'Upcoming'}
                           </span>
                         )}
@@ -303,3 +349,5 @@ export const ConceptGraphExplorer: React.FC = () => {
     </Card>
   );
 };
+
+export const ConceptGraphExplorer = memo(ConceptGraphExplorerComponent);
